@@ -31,12 +31,14 @@ FetchContent_MakeAvailable(SFML)
 add_executable (TrucoGame 
     "src/TrucoGame.cpp"  
     
-    "src/Gerenciador/Camera.cpp"
-    "src/Gerenciador/GerenciadorGrafico.cpp"
+    "src/views/Camera.cpp"
+    "src/views/GraphicManager.cpp"
+    "src/controllers/Application.cpp"
 
-    "include/Gerenciador/Camera.h"
-    "include/Gerenciador/GerenciadorGrafico.h"
- "src/Aplicação.cpp")
+    "include/views/Camera.h"
+    "include/views/GraphicManager.h"
+    "include/controllers/Application.h"
+)
 
 target_link_libraries(TrucoGame sfml-graphics)
 
