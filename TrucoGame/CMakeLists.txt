@@ -31,13 +31,25 @@ FetchContent_MakeAvailable(SFML)
 add_executable (TrucoGame 
     "src/TrucoGame.cpp"  
     
-    "src/views/Camera.cpp"
     "src/views/GraphicManager.cpp"
+    "src/views/trucoGameView/Animator.cpp"
+    "src/views/trucoGameView/CardView.cpp"
+    "src/views/trucoGameView/PlayerView.cpp"
+    "src/views/trucoGameView/TableView.cpp"
+    "src/views/trucoGameView/TrucoGameView.cpp"
+    "src/views/UtilsView.cpp"
     "src/controllers/Application.cpp"
+    "src/controllers/TableController.cpp"
 
-    "include/views/Camera.h"
     "include/views/GraphicManager.h"
+    "include/views/trucoGameView/Animator.h"
+    "include/views/trucoGameView/CardView.h"
+    "include/views/trucoGameView/PlayerView.h"
+    "include/views/trucoGameView/TableView.h"
+    "include/views/trucoGameView/TrucoGameView.h"
+    "include/views/UtilsView.h"
     "include/controllers/Application.h"
+    "include/controllers/TableController.h"
 )
 
 target_link_libraries(TrucoGame sfml-graphics)

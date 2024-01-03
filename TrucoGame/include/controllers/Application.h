@@ -1,16 +1,15 @@
 #pragma once
 
-//Controllers
-#include "../views/Camera.h"
+// Views
 #include "../views/GraphicManager.h"
 
 namespace TrucoGame {
 
     class Application {
     private:
-        static Controller::GraphicManager* pGraphicManager;
+        static View::GraphicManager* pGraphicManager;
 
-        void inicialize();
+        void initialize();
     public:
         Application();
         ~Application();
