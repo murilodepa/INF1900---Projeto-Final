@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+# IDE
+.vscode
+.vs
+/out
+
+# CMake
+**/build
+CMakeSettings.json
+
+# Doxygen Generated Documents
+docs/generated
