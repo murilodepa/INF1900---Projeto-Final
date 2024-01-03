@@ -32,3 +32,5 @@ Font TrucoGame::View::PlayerView::getNameFont()
 
 void TrucoGame::View::PlayerView::setNameFont(const std::string& fontPath)
 {
+	this->nameFont = utilsView->loadFont(fontPath);
+}
