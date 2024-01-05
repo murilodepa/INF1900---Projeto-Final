@@ -17,25 +17,23 @@ namespace TrucoGame {
         class TableView {
         private:
             Texture tableTexture;
-            Vector2u tableTextureSize;
-            Sprite tableCloth;
-
+            sf::Sprite tableCloth;
+            CardView cardView;
             UtilsView *utilsView;
 
-            void initialize();
+            void initialize(Vector2f windowSize);
 
         public:
-            TableView();
+            TableView(Vector2f windowSize);
             ~TableView();
 
             Texture getTableTexture();
             void setTableTexture(const std::string& texturePath);
 
-            Vector2u getTableTextureSize();
-            void setTableTextureSize(Vector2u tableTextureSize);
-
             Sprite getTableCloth();
             void setTableCloth(Sprite tableCloth);
+
+            void setTableClothScale(Vector2f windowSize, Vector2u textureSize);
         };
     }
 }

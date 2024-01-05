@@ -43,16 +43,7 @@ namespace TrucoGame {
                     // Moving the sprite in the normalized direction with the specified speed
                     sprite.move(normalizedDirection * speed);
 
-                    // Calculating the gradual rotation
-                    float rotation = sprite.getRotation();
-                    float rotationSpeed = std::min(speed, finalRotation - rotation) / initialDistance * 100;
-                    
-                    if (rotation < finalRotation - rotationSpeed) {
-                        sprite.rotate(rotationSpeed);
-                    }
-                    else if (rotation != finalRotation){
-                        sprite.setRotation(finalRotation);
-                    }
+                    rotateSpriteWithDistanceTo(sprite, finalRotation, speed, initialDistance);
 
                     // Sleeping to control the animation update rate
                     sf::sleep(sf::milliseconds(16));
@@ -62,6 +53,46 @@ namespace TrucoGame {
                     sprite.setRotation(finalRotation);
                 }
             }
+        }
+
+        void Animator::rotateSpriteTo(sf::Sprite& sprite, float finalRotation, float speed)
+        {
+            // Calculating the gradual rotation
+            float rotation = sprite.getRotation();
+            float rotationSpeed = std::min(speed, finalRotation - rotation);
+
+            if (rotation < finalRotation - rotationSpeed) {
+                sprite.rotate(rotationSpeed);
+            }
+            else if (rotation != finalRotation) {
+                sprite.setRotation(finalRotation);
+            }
+        }
+
+        void Animator::rotateSpriteWithDistanceTo(sf::Sprite& sprite, float finalRotation, float speed, float initialDistance)
+        {
+            // Calculating the gradual rotation
+            float rotation = sprite.getRotation();
+            float rotationSpeed = std::min(speed, finalRotation - rotation) / initialDistance * 100;
+
+            if (rotation < finalRotation - rotationSpeed) {
+                sprite.rotate(rotationSpeed);
+            }
+            else if (rotation != finalRotation) {
+                sprite.setRotation(finalRotation);
+            }
+        }
+
+        void Animator::moveAndFlipCardTurnedFaceUpTo(sf::Sprite& sprite, const sf::Vector2f& destinationPosition, float finalRotation, float speed)
+        {
+            moveSpriteTo(sprite, destinationPosition, speed);
+            flipCard(sprite, 1.5f);
+        }
+
+        void Animator::animationWithCardTurnedFaceUpAndInitialDeck(sf::Sprite& cardTurnedFaceUp, sf::Sprite& initialDeck, const sf::Vector2f& cardTurnedFaceUpDestinationPosition, const sf::Vector2f& initialDeckDestinationPosition, float finalRotation, float speed)
+        {
+            moveAndFlipCardTurnedFaceUpTo(cardTurnedFaceUp, cardTurnedFaceUpDestinationPosition, finalRotation, speed);
+            moveAndRotateSpriteTo(initialDeck, initialDeckDestinationPosition, finalRotation, speed);
         }
 
         void Animator::flipCard(sf::Sprite& card, float duration) {

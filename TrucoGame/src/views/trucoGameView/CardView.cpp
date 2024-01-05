@@ -1,11 +1,13 @@
 #include "../../../include/views/trucoGameView/CardView.h"
 
+#define CARD_BACK_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/cardBack.png"
+#define INITIAL_DECK_QUANTITY 14
+
 Sprite** initializeMatrix(int rows, int columns) {
 	Sprite** matrix = new Sprite * [rows];
 	for (int i = 0; i < rows; i++) {
 		matrix[i] = new Sprite[columns];
 		for (int j = 0; j < columns; j++) {
-			// Assuming Sprite has a default constructor
 			matrix[i][j] = Sprite();
 		}
 	}
@@ -21,7 +23,7 @@ void freeMatrix(Sprite** matrix, int rows) {
 
 void TrucoGame::View::CardView::initialize()
 {
-	setCardBackTexture("../../../../TrucoGame/resources/images/cards/cardBack.png");
+	setCardBackTexture(CARD_BACK_TEXTURE_PATH);
 	cardTurnedFaceUp.setTexture(cardBackTexture);
 	deck.setTexture(cardBackTexture);
 
@@ -32,7 +34,7 @@ void TrucoGame::View::CardView::initialize()
 	deck.setScale(cardScale, cardScale);
 	deck.setRotation(deckRotation);
 
-	setInitialDeckQuantity(14);
+	setInitialDeckQuantity(INITIAL_DECK_QUANTITY);
 	setInitialDeckPosition(Vector2u(200, 200));
 
 	initializeInitialDeck();
@@ -41,7 +43,8 @@ void TrucoGame::View::CardView::initialize()
 
 void TrucoGame::View::CardView::initializeInitialDeck()
 {
-	for (int i = 0; i < initialDeckQuantity; i++) {
+	initialDeck.resize(initialDeckQuantity);
+	for (size_t i = 0; i < initialDeck.size(); ++i) {
 		initialDeck[i].setTexture(cardBackTexture);
 		initialDeck[i].setScale(cardScale, cardScale);
 		initialDeck[i].setPosition(initialDeckPosition.x, initialDeckPosition.y);

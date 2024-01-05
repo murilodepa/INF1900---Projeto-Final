@@ -1,17 +1,18 @@
 #include "../../../include/views/trucoGameView/TableView.h"
 
+#define TABLE_TEXTURE_PATH "../../../../TrucoGame/resources/images/table/tablecloth_texture4.png"
 
-void TrucoGame::View::TableView::initialize()
+
+void TrucoGame::View::TableView::initialize(Vector2f windowSize)
 {
-	setTableTexture("../../../../TrucoGame/resources/images/table/tablecloth_texture4.png");
-	setTableTextureSize(tableTexture.getSize());
+	setTableTexture(TABLE_TEXTURE_PATH);
 	tableCloth.setTexture(tableTexture);
-
+	setTableClothScale(windowSize, tableTexture.getSize());
 }
 
-TrucoGame::View::TableView::TableView()
+TrucoGame::View::TableView::TableView(Vector2f windowSize) : cardView(NUM_PLAYERS, CARDS_IN_HAND)
 {
-	//initialize();
+	initialize(windowSize);
 }
 
 TrucoGame::View::TableView::~TableView()
@@ -28,22 +29,17 @@ void TrucoGame::View::TableView::setTableTexture(const std::string& texturePath)
 	this->tableTexture = utilsView->loadTexture(texturePath);
 }
 
-Vector2u TrucoGame::View::TableView::getTableTextureSize()
-{
-	return tableTexture.getSize();
-}
-
-void TrucoGame::View::TableView::setTableTextureSize(Vector2u tableTextureSize)
-{
-	this->tableTextureSize = tableTextureSize;
-}
-
 Sprite TrucoGame::View::TableView::getTableCloth()
 {
-	return tableCloth;
+	return this->tableCloth;
 }
 
 void TrucoGame::View::TableView::setTableCloth(Sprite tableCloth)
 {
 	this->tableCloth = tableCloth;
+}
+
+void TrucoGame::View::TableView::setTableClothScale(Vector2f windowSize, Vector2u textureSize)
+{
+	this->tableCloth.setScale(windowSize.x / textureSize.x, windowSize.y / textureSize.y);
 }

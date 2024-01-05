@@ -10,7 +10,7 @@ namespace TrucoGame {
 
     GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    Application::Application() {
+    Application::Application() : trucoGameView() {
         if (pGraphicManager == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
@@ -27,6 +27,22 @@ namespace TrucoGame {
     }
 
     void Application::run() {
+
+        while (pGraphicManager->checkWindowOpen()) {
+
+            // Check if the user intends to close the window
+            pGraphicManager->checkWindowClose();
+
+            //Clear the window
+            pGraphicManager->clearWindow();
+
+            //Draw
+            trucoGameView.drawTable();
+
+            pGraphicManager->showElements();
+        }
+
+        /*
         UtilsView util;
         sf::Texture mesaTexture = util.loadTexture("../../../../TrucoGame/resources/images/table/tablecloth_texture4.png");
         sf::Texture cardTexture = util.loadTexture("../../../../TrucoGame/resources/images/cards/cardBack.png");
@@ -149,6 +165,8 @@ namespace TrucoGame {
             //Clear the window
             pGraphicManager->clearWindow();
 
+           // TrucoGa
+
             // Desenhe a mesa
             //sf::RectangleShape mesa(sf::Vector2f(pGraphicManager->getWindowSize().x, pGraphicManager->getWindowSize().y));
             //mesa.setFillColor(sf::Color(139, 69, 19));  // Cor marrom para representar a madeira da mesa
@@ -157,7 +175,7 @@ namespace TrucoGame {
             // Desenha as cartas nas mãos dos jogadores
             for (int player = 0; player < 4; ++player) {
                 for (int card = 0; card < 3; ++card) {
-                    pGraphicManager->drawElement(playerHands[player][card]);
+                   // pGraphicManager->drawElement(playerHands[player][card]);
                 }
             }
 
@@ -202,6 +220,10 @@ namespace TrucoGame {
                 cardCount++;
                 std::thread animationThread12(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(initialDeck[cardCount]), playerHands[3][2].getPosition(), 90.0f, 15.0f);
                 cardCount++;
+                std::thread animationThread13(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, std::ref(initialDeck[cardCount]), std::ref(initialDeck[cardCount+1]), sf::Vector2f(cardTurnedFaceUp.getPosition().x+cardWidth, cardTurnedFaceUp.getPosition().y), deck.getPosition(), 35.0f, 15.0f);
+                cardCount++;
+                cardCount++;
+                
 
                 //std::thread animationThread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(initialDeck), cardTurnedFaceUp.getPosition(), 90.0f, 15.0f);
                 animationThread1.detach();
@@ -216,6 +238,7 @@ namespace TrucoGame {
                 animationThread10.detach();
                 animationThread11.detach();
                 animationThread12.detach();
+                animationThread13.detach();
 
                 //Animator::moveSpriteTo(std::ref(initialDeck[cardCount]), cardTurnedFaceUp.getPosition(), 15.0f);
                 //Animator::flipCard(std::ref(initialDeck[cardCount]), 1.5f);
@@ -234,6 +257,6 @@ namespace TrucoGame {
             }
 
             pGraphicManager->showElements();
-        }
+        }*/
     }
 }
