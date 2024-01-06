@@ -19,7 +19,7 @@ namespace TrucoGame {
         public:
             TrucoGameView();
             ~TrucoGameView();
-            void drawTable();
+            void drawElementsOnTheWindow(bool firstTimeFlag);
         };
     }
 }

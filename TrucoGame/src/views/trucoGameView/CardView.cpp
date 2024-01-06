@@ -1,4 +1,5 @@
 #include "../../../include/views/trucoGameView/CardView.h"
+#include "../../../include/views/UtilsView.h"
 
 #define CARD_BACK_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/cardBack.png"
 #define INITIAL_DECK_QUANTITY 14
@@ -14,18 +15,11 @@ Sprite** initializeMatrix(int rows, int columns) {
 	return matrix;
 }
 
-void freeMatrix(Sprite** matrix, int rows) {
-	for (int i = 0; i < rows; i++) {
-		delete[] matrix[i];
-	}
-	delete[] matrix;
-}
-
-void TrucoGame::View::CardView::initialize()
+void TrucoGame::View::CardView::initialize(Vector2u initialDeckPosition)
 {
 	setCardBackTexture(CARD_BACK_TEXTURE_PATH);
 	cardTurnedFaceUp.setTexture(cardBackTexture);
-	deck.setTexture(cardBackTexture);
+	deck.setTexture(cardBackTexture); 
 
 	setCardScale(0.4f);
 	setDeckRotation(35.0f);
@@ -35,13 +29,12 @@ void TrucoGame::View::CardView::initialize()
 	deck.setRotation(deckRotation);
 
 	setInitialDeckQuantity(INITIAL_DECK_QUANTITY);
-	setInitialDeckPosition(Vector2u(200, 200));
 
-	initializeInitialDeck();
+	initializeInitialDeck(initialDeckPosition);
 	initializePlayerHandsCards();
 }
 
-void TrucoGame::View::CardView::initializeInitialDeck()
+void TrucoGame::View::CardView::initializeInitialDeck(Vector2u initialDeckPosition)
 {
 	initialDeck.resize(initialDeckQuantity);
 	for (size_t i = 0; i < initialDeck.size(); ++i) {
@@ -53,6 +46,8 @@ void TrucoGame::View::CardView::initializeInitialDeck()
 
 void TrucoGame::View::CardView::initializePlayerHandsCards()
 {
+/*	playerHandsCards = UtilsView::initializeMatrix<Sprite>(numPlayers, cardsInHand);
+
 	for (int player = 0; player < numPlayers; player++) {
 		for (int card = 0; card < cardsInHand; card++) {
 			playerHandsCards[player][card].setTexture(cardBackTexture);
@@ -66,18 +61,19 @@ void TrucoGame::View::CardView::initializePlayerHandsCards()
 			}
 		}
 	}
+	*/
 }
 
-TrucoGame::View::CardView::CardView(int numPlayers, int cardsInHand)
+TrucoGame::View::CardView::CardView(int numPlayers, int cardsInHand, Vector2u initialDeckPosition)
 {
 	setNumPlayers(numPlayers);
-	playerHandsCards = initializeMatrix(numPlayers, cardsInHand);
-	initialize();
-}
+	playerHandsCards = UtilsView::initializeMatrix<Sprite>(numPlayers, cardsInHand);
+	initialize(initialDeckPosition);
+ }
 
 TrucoGame::View::CardView::~CardView()
 {
-	freeMatrix(playerHandsCards, numPlayers);
+	//UtilsView::freeMatrix(playerHandsCards, numPlayers);
 }
 
 Texture TrucoGame::View::CardView::getCardBackTexture()
@@ -87,7 +83,7 @@ Texture TrucoGame::View::CardView::getCardBackTexture()
 
 void TrucoGame::View::CardView::setCardBackTexture(const std::string& texturePath)
 {
-	this->cardBackTexture = utilsView->loadTexture(texturePath);
+	this->cardBackTexture = UtilsView::loadTexture(texturePath);
 }
 
 
@@ -98,7 +94,7 @@ Texture TrucoGame::View::CardView::getCardFrontTexture()
 
 void TrucoGame::View::CardView::setCardFrontTexture(const std::string& texturePath)
 {
-	this->cardFrontTexture = utilsView->loadTexture(texturePath);
+	this->cardFrontTexture =  UtilsView::loadTexture(texturePath);
 }
 
 Sprite TrucoGame::View::CardView::getCardTurnedFaceUp()
@@ -124,21 +120,6 @@ void TrucoGame::View::CardView::setDeck(Sprite deck)
 std::vector<Sprite> TrucoGame::View::CardView::getInitialDeck()
 {
 	return initialDeck;
-}
-
-void TrucoGame::View::CardView::setInitialDeck(std::vector<Sprite> initialDeck)
-{
-	this->initialDeck = initialDeck;
-}
-
-Vector2u TrucoGame::View::CardView::getInitialDeckPosition()
-{
-	return initialDeckPosition;
-}
-
-void TrucoGame::View::CardView::setInitialDeckPosition(Vector2u position)
-{
-	this->initialDeckPosition = position;
 }
 
 float TrucoGame::View::CardView::getCardScale()
@@ -171,6 +152,11 @@ void TrucoGame::View::CardView::setInitialDeckQuantity(int initialDeckQuantity)
 	this->initialDeckQuantity = initialDeckQuantity;
 }
 
+Vector2f TrucoGame::View::CardView::getCardPositionInHand(size_t player, size_t card)
+{
+	return playerHandsCards[player][card].getPosition();
+}
+
 void TrucoGame::View::CardView::setNumPlayers(int numPlayers)
 {
 	this->numPlayers = numPlayers;
@@ -181,17 +167,30 @@ void TrucoGame::View::CardView::setCardsInHand(int cardsInHand)
 	this->cardsInHand = cardsInHand;
 }
 
+void TrucoGame::View::CardView::setCardPositionsInPlayerHands(Vector2f** cardPositionsOnTable)
+{
+	for (int player = 0; player < numPlayers; player++) {
+		for (int card = 0; card < cardsInHand; card++) {
+			playerHandsCards[player][card].setPosition(cardPositionsOnTable[player][card]);
+		}
+	}
+}
+
 float TrucoGame::View::CardView::getCardWidth()
 {
-	return playerHandsCards[0][0].getGlobalBounds().width;
+	if (!initialDeck.empty()) {
+		return initialDeck[0].getGlobalBounds().width;
+	}
 }
 
 float TrucoGame::View::CardView::getCardHeight()
 {
-	return playerHandsCards[0][0].getGlobalBounds().height;
+	if (!initialDeck.empty()) {
+		return initialDeck[0].getGlobalBounds().height;
+	}
 }
 
-float TrucoGame::View::CardView::getHalfCard()
+float TrucoGame::View::CardView::getHalfCardWidth()
 {
 	return getCardWidth() / 2;
 }

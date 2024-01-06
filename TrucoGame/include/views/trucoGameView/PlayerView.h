@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../UtilsView.h"
 
 using namespace sf;
 
@@ -10,7 +9,6 @@ namespace TrucoGame {
         private:
             std::vector<Text> playerNames;
             Font nameFont;
-            UtilsView* utilsView;
             void initialize();
 
         public:

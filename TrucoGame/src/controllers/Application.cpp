@@ -28,6 +28,7 @@ namespace TrucoGame {
 
     void Application::run() {
 
+        bool firstTimeFlag = true;
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window
@@ -37,7 +38,7 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawTable();
+            trucoGameView.drawElementsOnTheWindow(firstTimeFlag);
 
             pGraphicManager->showElements();
         }

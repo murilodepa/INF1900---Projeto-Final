@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../UtilsView.h"
 
 using namespace sf;
 
@@ -14,7 +13,6 @@ namespace TrucoGame {
             Sprite cardTurnedFaceUp;
             Sprite deck;
             std::vector<Sprite> initialDeck;
-            Vector2u initialDeckPosition;
             Sprite** playerHandsCards;
 
             float cardScale;
@@ -22,8 +20,6 @@ namespace TrucoGame {
 
             int initialDeckQuantity;
 
-            UtilsView* utilsView;
-            
             int numPlayers;
             int cardsInHand;
 
@@ -31,27 +27,24 @@ namespace TrucoGame {
             float cardHeight; //= playerHands[0][0].getGlobalBounds().height; // 600
             float halfCard; // = cardWidth / 2;
 
-            void initialize();
-            void initializeInitialDeck();
+            void initialize(Vector2u initialDeckPosition);
+            void initializeInitialDeck(Vector2u initialDeckPosition);
             void initializePlayerHandsCards();
 
 
         public:
-            CardView(int numPlayers, int cardsInHand);
+            CardView(int numPlayers, int cardsInHand, Vector2u initialDeckPosition);
             ~CardView();
             Texture getCardBackTexture();
             void setCardBackTexture(const std::string& texturePath);
             Texture getCardFrontTexture();
             void setCardFrontTexture(const std::string& texturePath);
-            
+
             Sprite getCardTurnedFaceUp();
             void setCardTurnedFaceUp(Sprite cardTurnedFaceUp);
             Sprite getDeck();
             void setDeck(Sprite deck);
             std::vector<Sprite> getInitialDeck();
-            void setInitialDeck(std::vector<Sprite> initialDeck);
-            Vector2u getInitialDeckPosition();
-            void setInitialDeckPosition(Vector2u position);
 
             float getCardScale();
             void setCardScale(float cardScale);
@@ -61,12 +54,15 @@ namespace TrucoGame {
             int getInitialDeckQuantity();
             void setInitialDeckQuantity(int initialDeckQuantity);
 
+            Vector2f getCardPositionInHand(size_t player, size_t card);
+
             void setNumPlayers(int numPlayers);
             void setCardsInHand(int cardsInHand);
+            void setCardPositionsInPlayerHands(Vector2f** cardPositionsOnTable);
 
             float getCardWidth();
             float getCardHeight();
-            float getHalfCard();
+            float getHalfCardWidth();
         };
     }
 }

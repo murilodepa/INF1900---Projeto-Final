@@ -1,8 +1,11 @@
 #include "../../../include/views/trucoGameView/PlayerView.h"
+#include "../../../include/views/UtilsView.h"
+
+#define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"
 
 void TrucoGame::View::PlayerView::initialize()
 {
-	setNameFont("../../../../TrucoGame/resources/fonts/Arial.ttf");
+	setNameFont(NAME_FONT_PATH);
 }
 
 TrucoGame::View::PlayerView::PlayerView()
@@ -32,5 +35,5 @@ Font TrucoGame::View::PlayerView::getNameFont()
 
 void TrucoGame::View::PlayerView::setNameFont(const std::string& fontPath)
 {
-	this->nameFont = utilsView->loadFont(fontPath);
+	//this->nameFont = UtilsView::loadFont(fontPath);
 }
