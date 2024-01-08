@@ -25,6 +25,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+#JSON for modern C++
+FetchContent_Declare(
+        nlohmann
+        GIT_REPOSITORY  "https://github.com/onavratil-monetplus/json"
+        GIT_TAG         "master"
+)
+FetchContent_MakeAvailable(nlohmann)
+
 # Source code ============================================================================
 
 # Add source to this project's executable.
@@ -41,6 +49,7 @@ add_executable (TrucoGame
 )
 
 target_link_libraries(TrucoGame sfml-graphics)
+target_link_libraries(TrucoGame nlohmann_json::nlohmann_json)
 
 install(TARGETS TrucoGame 
 ARCHIVE DESTINATION "TrucoGame/lib"
