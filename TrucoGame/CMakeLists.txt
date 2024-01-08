@@ -42,10 +42,17 @@ add_executable (TrucoGame
     "src/views/Camera.cpp"
     "src/views/GraphicManager.cpp"
     "src/controllers/Application.cpp"
+    "src/models/server/Client.cpp"
+    "src/models/server/TcpServer.cpp"
+    "src/models/Packet.cpp"
 
     "include/views/Camera.h"
     "include/views/GraphicManager.h"
     "include/controllers/Application.h"
+    "include/models/ErrorCode.h"
+    "include/models/Packet.h"
+    "include/models/server/TcpServer.h"
+    "include/models/server/Client.h"
 )
 
 target_link_libraries(TrucoGame sfml-graphics)
