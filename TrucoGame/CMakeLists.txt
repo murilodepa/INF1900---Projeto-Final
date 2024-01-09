@@ -34,10 +34,14 @@ add_executable (TrucoGame
     "src/views/Camera.cpp"
     "src/views/GraphicManager.cpp"
     "src/controllers/Application.cpp"
+    "src/models/Card.cpp"
+    "src/models/Deck.cpp" 
 
     "include/views/Camera.h"
     "include/views/GraphicManager.h"
     "include/controllers/Application.h"
+    "include/models/Card.h"
+    "include/models/Deck.h" 
 )
 
 target_link_libraries(TrucoGame sfml-graphics)
