@@ -1,6 +1,10 @@
+#ifndef ANIMATOR_H
+#define ANIMATOR_H
+
 #pragma once
 
 #include <SFML/Graphics.hpp>
+using namespace sf;
 
 namespace TrucoGame {
     namespace View {
@@ -16,3 +20,5 @@ namespace TrucoGame {
         };
     }
 }
+
+#endif // ANIMATOR_H

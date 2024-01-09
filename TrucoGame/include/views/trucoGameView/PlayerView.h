@@ -1,3 +1,6 @@
+#ifndef PLAYER_VIEW_H
+#define PLAYER_VIEW_H
+
 #pragma once
 #include <SFML/Graphics.hpp>
 
@@ -22,3 +25,5 @@ namespace TrucoGame {
         };
     }
 }
+
+#endif // PLAYER_VIEW_H

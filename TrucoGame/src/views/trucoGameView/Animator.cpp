@@ -1,9 +1,11 @@
 #include "../../../include/views/trucoGameView/Animator.h"
+#include "../../../include/views/MutexView.h"
 
 namespace TrucoGame {
     namespace View {
-        void Animator::moveSpriteTo(sf::Sprite& sprite, const sf::Vector2f& destinationPosition, float speed) {
-            sf::Vector2f direction = destinationPosition - sprite.getPosition();
+        void Animator::moveSpriteTo(Sprite& sprite, const Vector2f& destinationPosition, float speed) {
+            //std::lock_guard<std::mutex> lock(mutexCardAnimations);
+            Vector2f direction = destinationPosition - sprite.getPosition();
             float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
             while (destinationPosition.x != sprite.getPosition().x && destinationPosition.y != sprite.getPosition().y) {
@@ -12,13 +14,13 @@ namespace TrucoGame {
                     distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
                     // Normalizing the direction to maintain a constant speed
-                    sf::Vector2f normalizedDirection = direction / distance;
+                    Vector2f normalizedDirection = direction / distance;
 
                     // Moving the sprite in the normalized direction with the specified speed
                     sprite.move(normalizedDirection * speed);
 
                     // Sleeping to control the animation update rate
-                    sf::sleep(sf::milliseconds(16));
+                    sleep(milliseconds(16));
                 }
                 else {
                     sprite.setPosition(destinationPosition);
@@ -26,9 +28,9 @@ namespace TrucoGame {
             }
         }
 
-        void Animator::moveAndRotateSpriteTo(sf::Sprite& sprite, const sf::Vector2f& destinationPosition, float finalRotation, float speed)
+        void Animator::moveAndRotateSpriteTo(Sprite& sprite, const Vector2f& destinationPosition, float finalRotation, float speed)
         {
-            sf::Vector2f direction = destinationPosition - sprite.getPosition();
+            Vector2f direction = destinationPosition - sprite.getPosition();
             float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
             float initialDistance = distance;
 
@@ -38,7 +40,7 @@ namespace TrucoGame {
                     distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
                     // Normalizing the direction to maintain a constant speed
-                    sf::Vector2f normalizedDirection = direction / distance;
+                    Vector2f normalizedDirection = direction / distance;
 
                     // Moving the sprite in the normalized direction with the specified speed
                     sprite.move(normalizedDirection * speed);
@@ -46,7 +48,7 @@ namespace TrucoGame {
                     rotateSpriteWithDistanceTo(sprite, finalRotation, speed, initialDistance);
 
                     // Sleeping to control the animation update rate
-                    sf::sleep(sf::milliseconds(16));
+                    sleep(milliseconds(16));
                 }
                 else {
                     sprite.setPosition(destinationPosition);
@@ -55,7 +57,7 @@ namespace TrucoGame {
             }
         }
 
-        void Animator::rotateSpriteTo(sf::Sprite& sprite, float finalRotation, float speed)
+        void Animator::rotateSpriteTo(Sprite& sprite, float finalRotation, float speed)
         {
             // Calculating the gradual rotation
             float rotation = sprite.getRotation();
@@ -69,7 +71,7 @@ namespace TrucoGame {
             }
         }
 
-        void Animator::rotateSpriteWithDistanceTo(sf::Sprite& sprite, float finalRotation, float speed, float initialDistance)
+        void Animator::rotateSpriteWithDistanceTo(Sprite& sprite, float finalRotation, float speed, float initialDistance)
         {
             // Calculating the gradual rotation
             float rotation = sprite.getRotation();
@@ -83,24 +85,24 @@ namespace TrucoGame {
             }
         }
 
-        void Animator::moveAndFlipCardTurnedFaceUpTo(sf::Sprite& sprite, const sf::Vector2f& destinationPosition, float finalRotation, float speed)
+        void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, const Vector2f& destinationPosition, float finalRotation, float speed)
         {
             moveSpriteTo(sprite, destinationPosition, speed);
             flipCard(sprite, 1.5f);
         }
 
-        void Animator::animationWithCardTurnedFaceUpAndInitialDeck(sf::Sprite& cardTurnedFaceUp, sf::Sprite& initialDeck, const sf::Vector2f& cardTurnedFaceUpDestinationPosition, const sf::Vector2f& initialDeckDestinationPosition, float finalRotation, float speed)
+        void Animator::animationWithCardTurnedFaceUpAndInitialDeck(Sprite& cardTurnedFaceUp, Sprite& initialDeck, const Vector2f& cardTurnedFaceUpDestinationPosition, const Vector2f& initialDeckDestinationPosition, float finalRotation, float speed)
         {
             moveAndFlipCardTurnedFaceUpTo(cardTurnedFaceUp, cardTurnedFaceUpDestinationPosition, finalRotation, speed);
             moveAndRotateSpriteTo(initialDeck, initialDeckDestinationPosition, finalRotation, speed);
         }
 
-        void Animator::flipCard(sf::Sprite& card, float duration) {
+        void Animator::flipCard(Sprite& card, float duration) {
             // Define a escala inicial da carta
             float initialScaleX = card.getScale().x;
 
             // Animação de virar a carta
-            sf::Clock clock;
+            Clock clock;
             while (clock.getElapsedTime().asSeconds() < duration) {
                 float progress = clock.getElapsedTime().asSeconds() / duration;
 
@@ -108,7 +110,7 @@ namespace TrucoGame {
                 card.setScale(initialScaleX * (0.4f - progress), 0.4f);
 
                 // Dorme para controlar a taxa de atualização da animação
-                sf::sleep(sf::milliseconds(16));
+                sleep(milliseconds(16));
             }
 
             // Garante que a escala final seja exatamente 0 para evitar erros numéricos

@@ -7,6 +7,7 @@ using namespace sf;
 namespace TrucoGame {
 
     namespace UtilsView {
+
         Texture loadTexture(const std::string texturePath);
         Font loadFont(const std::string fontPath);
         
@@ -28,6 +29,11 @@ namespace TrucoGame {
                 delete[] matrix[i];
             }
             delete[] matrix;
+        }
+
+        template <typename Function, typename... Args>
+        void createThread(Function&& function, Args&&... args) {
+            std::thread(std::forward<Function>(function), std::forward<Args>(args)...).detach();
         }
     }
 }

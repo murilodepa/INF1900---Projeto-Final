@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <SFML/Graphics.hpp>
+#include "trucoGameView/CardView.h"
 
 #define SCREEN_X 2267.2f
 #define SCREEN_Y 1512.0f
@@ -22,9 +23,10 @@ namespace TrucoGame {
             static GraphicManager* getGraphicManager();
             sf::RenderWindow* getWindow();
             void clearWindow();
-            void GraphicManager::drawElement(sf::Sprite sprite);
-            void drawElement(sf::RectangleShape rectangleShape);
-            void drawElement(sf::Text text);
+            void GraphicManager::drawElement(sf::Sprite& sprite);
+            void GraphicManager::drawElement(CardView& cardView);
+            void drawElement(sf::RectangleShape& rectangleShape);
+            void drawElement(sf::Text& text);
             void showElements();
             void closeWindow();
             const bool checkWindowOpen();

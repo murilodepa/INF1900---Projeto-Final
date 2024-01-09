@@ -1,3 +1,6 @@
+#ifndef TRUCO_GAME_VIEW_H
+#define TRUCO_GAME_VIEW_H
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../../../include/views/GraphicManager.h"
@@ -11,15 +14,16 @@ namespace TrucoGame {
     namespace View {
         class TrucoGameView {
         private:
-            View::GraphicManager* pGraphicManager;
             TableView tableView;
 
             void initialize();
 
         public:
-            TrucoGameView();
+            TrucoGameView(Vector2f windowSize);
             ~TrucoGameView();
-            void drawElementsOnTheWindow(bool firstTimeFlag);
+            void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag);
         };
     }
 }
+
+#endif // TRUCO_GAME_VIEW_H

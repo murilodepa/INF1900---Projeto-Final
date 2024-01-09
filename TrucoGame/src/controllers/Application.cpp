@@ -10,7 +10,7 @@ namespace TrucoGame {
 
     GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    Application::Application() : trucoGameView() {
+    Application::Application() : trucoGameView(pGraphicManager->getWindowSize()) {
         if (pGraphicManager == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
@@ -26,9 +26,10 @@ namespace TrucoGame {
         // TODO Define the initial state of the window
     }
 
-    void Application::run() {
+    void Application::run() 
+    {
+        std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
 
-        bool firstTimeFlag = true;
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window
@@ -38,16 +39,22 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawElementsOnTheWindow(firstTimeFlag);
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
+
+
+            //pGraphicManager->drawElement(cardDeck.cardsInHands[0][0]);
+            //std::thread animationThread1(&TrucoGame::View::Animator::moveSpriteTo, std::ref(cardDeck.cardsInHands[0][0]), Vector2f(200.0f, 200.0f), 15.0f);
+            //animationThread1.detach();
 
             pGraphicManager->showElements();
         }
+        
 
         /*
-        UtilsView util;
-        sf::Texture mesaTexture = util.loadTexture("../../../../TrucoGame/resources/images/table/tablecloth_texture4.png");
-        sf::Texture cardTexture = util.loadTexture("../../../../TrucoGame/resources/images/cards/cardBack.png");
-        sf::Font arialFont = util.loadFont("../../../../TrucoGame/resources/fonts/Arial.ttf");
+
+        sf::Texture mesaTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/table/tablecloth_texture4.png");
+        sf::Texture cardTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/cards/cardBack.png");
+        sf::Font arialFont = UtilsView::loadFont("../../../../TrucoGame/resources/fonts/Arial.ttf");
 
         sf::Sprite playerHands[4][3];  // Cartas nas mãos dos 4 jogadores
 

@@ -6,9 +6,8 @@ void TrucoGame::View::TrucoGameView::initialize()
 {
 }
 
-TrucoGame::View::TrucoGameView::TrucoGameView() :
-	pGraphicManager(pGraphicManager->getGraphicManager()),
-	tableView(Vector2f(static_cast<float>(pGraphicManager->getWindowSize().x), static_cast<float>(pGraphicManager->getWindowSize().y)))
+TrucoGame::View::TrucoGameView::TrucoGameView(Vector2f windowSize) :
+	tableView(Vector2f(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)))
 {
 
 }
@@ -18,12 +17,18 @@ TrucoGame::View::TrucoGameView::~TrucoGameView()
 {
 }
 
-void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(bool firstTimeFlag)
+void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag)
 {
-	pGraphicManager->drawElement(tableView.getTableCloth());
-	tableView.drawElementsOnTheTable();
-    
-    if (firstTimeFlag == true) {
-        tableView.distributeCardsAndFlip();
+    if (pGraphicManager) {
+        pGraphicManager->drawElement(tableView.getTableCloth());
+        tableView.drawElementsOnTheTable();
+
+        if (*firstTimeFlag == true) {
+            *firstTimeFlag = false;
+             tableView.distributeCardsAndFlip();
+        }
+
+
     }
+
 }

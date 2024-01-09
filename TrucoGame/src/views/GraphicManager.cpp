@@ -46,15 +46,19 @@ namespace TrucoGame {
             window->clear();
         }
 
-        void GraphicManager::drawElement(sf::Sprite sprite) {
+        void GraphicManager::drawElement(sf::Sprite& sprite) {
             window->draw(sprite);
         }
 
-        void GraphicManager::drawElement(sf::RectangleShape rectangleShape) {
+        void GraphicManager::drawElement(CardView& cardView) {
+            window->draw(cardView);
+        }
+        
+        void GraphicManager::drawElement(sf::RectangleShape& rectangleShape) {
             window->draw(rectangleShape);
         }
 
-        void GraphicManager::drawElement(sf::Text text) {
+        void GraphicManager::drawElement(sf::Text& text) {
             window->draw(text);
         }
 
