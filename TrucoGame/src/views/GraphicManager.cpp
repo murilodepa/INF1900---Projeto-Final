@@ -1,14 +1,14 @@
 #include "../../include/views/GraphicManager.h"
+#include <iostream>
 
 namespace TrucoGame {
 
-    namespace Controller {
+    namespace View {
 
         GraphicManager* GraphicManager::pGraphicManager = nullptr;
 
         GraphicManager::GraphicManager() :
-            window(new sf::RenderWindow(sf::VideoMode(SCREEN_X, SCREEN_Y), "Truco Game")),
-            camera(sf::Vector2f(SCREEN_X, SCREEN_Y))
+            window(new sf::RenderWindow(sf::VideoMode(SCREEN_X, SCREEN_Y), "Truco Game", sf::Style::Titlebar | sf::Style::Close))
         {
             if (window == nullptr) {
                 std::cout << "ERROR::TrucoGame::Controller::GraphicManager - Failed to create a graphical window." << std::endl;
@@ -42,33 +42,24 @@ namespace TrucoGame {
             return window;
         }
 
-        sf::Texture GraphicManager::loadTexture(const char* texturePath) {
-            sf::Texture texture;
-            if (!texture.loadFromFile(texturePath)) {
-                std::cout << "ERRO::TrucoGame::Gerenciador::GraphicManager - Failed to find the path of the texture: " << texturePath << std::endl;
-                exit(1);
-            }
-            return texture;
-        }
-
-        sf::Font GraphicManager::loadFont(const char* fontPath) {
-            sf::Font font;
-            if (!font.loadFromFile(fontPath)) {
-                throw std::runtime_error("ERROR::TrucoGame::Manager::GraphicManager - Failed to find the font file at path: " + std::string(fontPath));
-            }
-            return font;
-        }
-
         void GraphicManager::clearWindow() {
             window->clear();
         }
 
-        void GraphicManager::drawElement(sf::RectangleShape corpo) {
-            window->draw(corpo);
+        void GraphicManager::drawElement(sf::Sprite& sprite) {
+            window->draw(sprite);
         }
 
-        void GraphicManager::drawElement(sf::Text texto) {
-            window->draw(texto);
+        void GraphicManager::drawElement(CardView& cardView) {
+            window->draw(cardView);
+        }
+        
+        void GraphicManager::drawElement(sf::RectangleShape& rectangleShape) {
+            window->draw(rectangleShape);
+        }
+
+        void GraphicManager::drawElement(sf::Text& text) {
+            window->draw(text);
         }
 
         void GraphicManager::showElements() {
@@ -85,35 +76,13 @@ namespace TrucoGame {
             return window->isOpen();
         }
 
-        void GraphicManager::updateCamera(const sf::Vector2f pos) {
-            camera.update(pos);
-            window->setView(camera.getCamera());
-        }
-
-        void GraphicManager::updateCamera(const sf::Vector2f pos, sf::Vector2f tam) {
-            camera.update(pos, tam);
-            window->setView(camera.getCamera());
-        }
-
-        const sf::View GraphicManager::getCamera() {
-            return camera.getCamera();
-        }
-
-        void GraphicManager::resetWindow() {
-            camera.reset(sf::Vector2f(SCREEN_X / 2.0f, SCREEN_Y / 2.0f));
-            window->setView(camera.getCamera());
-        }
-
         const sf::Vector2f GraphicManager::getWindowSize() const {
             return (sf::Vector2f)window->getSize();
         }
 
-        void GraphicManager::setCameraBoundary(const sf::IntRect cameraBoundary) {
-            camera.setCameraBoundary(cameraBoundary);
-        }
-
-        void GraphicManager::setObjectBoundary(const sf::IntRect object) {
-            camera.setObjectBoundary(object);
+        const sf::Vector2f GraphicManager::getHalfWindowSize() const {
+            sf::Vector2u windowSize = window->getSize();
+            return sf::Vector2f(windowSize.x / 2.0f, windowSize.y / 2.0f);
         }
 
         void GraphicManager::checkWindowClose() {
