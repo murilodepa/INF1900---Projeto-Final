@@ -14,9 +14,9 @@ namespace TrucoGame {
             static void moveAndRotateSpriteTo(sf::Sprite& sprite, const sf::Vector2f& destinationPosition, float finalRotation, float speed);
             static void rotateSpriteTo(sf::Sprite& sprite, float finalRotation, float speed);
             static void rotateSpriteWithDistanceTo(sf::Sprite& sprite, float finalRotation, float speed, float initialDistance);
-            static void moveAndFlipCardTurnedFaceUpTo(sf::Sprite& sprite, const sf::Vector2f& destinationPosition, float finalRotation, float speed);
-            static void animationWithCardTurnedFaceUpAndInitialDeck(sf::Sprite& cardTurnedFaceUp, sf::Sprite& initialDeck, const sf::Vector2f& cardTurnedFaceUpDestinationPosition, const sf::Vector2f& initialDeckDestinationPosition, float finalRotation, float speed);
-            static void flipCard(sf::Sprite& card, float duration);
+            static void moveAndFlipCardTurnedFaceUpTo(sf::Sprite& sprite, Texture& newTextureOfCardTurnedFaceUp, const sf::Vector2f& destinationPosition, float finalRotation, float speed);
+            static void animationWithCardTurnedFaceUpAndInitialDeck(sf::Sprite& cardTurnedFaceUp, Texture& newTextureOfCardTurnedFaceUp, sf::Sprite& initialDeck, const sf::Vector2f& cardTurnedFaceUpDestinationPosition, const sf::Vector2f& initialDeckDestinationPosition, float finalRotation, float speed);
+            static void flipCard(sf::Sprite& card, float duration, Texture& newTextureOfCardTurnedFaceUp);
         };
     }
 }

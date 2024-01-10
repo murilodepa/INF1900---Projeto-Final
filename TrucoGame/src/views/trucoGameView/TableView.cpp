@@ -14,6 +14,10 @@ void TrucoGame::View::TableView::initialize(Vector2f windowSize)
 	if (cardDeck.cardsInHands != nullptr) {
 		setCardPositionsOnTheTable(windowSize.x, windowSize.y, cardDeck.cardsInHands[0][0].getCardWidth(), cardDeck.cardsInHands[0][0].getCardHeight(), CARDS_SPACING, TABLE_AND_CARDS_SPACING);
 	}
+	// TODO - Remove mocked names
+	std::vector<std::string> names = { "Caique", "Laert", "Murilo", "Vitor" };
+	playerName.setPlayerNames(names);
+	setNamesPositionsOnTheTable(windowSize.x, windowSize.y, TEXT_AND_TABLE_SPACING);
 }
 
 void TrucoGame::View::TableView::setCardPositionsOnTheTable(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing) {
@@ -40,23 +44,22 @@ void TrucoGame::View::TableView::setCardPositionsOnTheTable(float screenWidth, f
 	cardPositionsInPlayerHands[3][1] = Vector2f(screenWidth - cardAndTableSpacing, halfScreenHeight - halfCardWidth);
 	cardPositionsInPlayerHands[3][2] = Vector2f(screenWidth - cardAndTableSpacing, halfScreenHeight + halfCardWidth + cardsSpacing);
 
-	//std::ref(initialDeck[cardCount+1]), sf::Vector2f(cardTurnedFaceUp.getPosition().x+cardWidth, cardTurnedFaceUp.getPosition().y), deck.getPosition(), 35.0f, 15.0f);
-
 	cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition = Vector2f(halfScreenWidth - halfCardWidth + cardWidth, halfScreenHeight - halfCardWidth);
 	cardTurnedFaceUpAndDeck.deckPosition = Vector2f(halfScreenWidth + 20, halfScreenHeight - halfCardWidth - 20);
 	cardTurnedFaceUpAndDeck.deckRotation = 35.0f;
 }
 
-TrucoGame::View::TableView::TableView(Vector2f windowSize) :
+TrucoGame::View::TableView::TableView(Vector2f& windowSize) :
 	pGraphicManager(pGraphicManager->getGraphicManager()),
-	cardDeck(NUM_PLAYERS, CARDS_IN_HAND, InitialDeckPositionVector2f(200.0f, 200.0f))
+	cardDeck(NUM_PLAYERS, CARDS_IN_HAND, InitialDeckPositionVector2f(200.0f, 200.0f)),
+	playerName(NUM_PLAYERS)
 {
 	initialize(windowSize);
 }
 
 TrucoGame::View::TableView::~TableView()
 {
-	//UtilsView::freeMatrix(cardPositionsInPlayerHands, NUM_PLAYERS);
+	UtilsView::freeMatrix(cardPositionsInPlayerHands, NUM_PLAYERS);
 }
 
 void TrucoGame::View::TableView::setTableTexture(const std::string& texturePath)
@@ -69,7 +72,7 @@ Sprite TrucoGame::View::TableView::getTableCloth()
 	return this->tableCloth;
 }
 
-void TrucoGame::View::TableView::setTableClothScale(Vector2f windowSize, Vector2u textureSize)
+void TrucoGame::View::TableView::setTableClothScale(Vector2f& windowSize, Vector2u& textureSize)
 {
 	this->tableCloth.setScale(windowSize.x / textureSize.x, windowSize.y / textureSize.y);
 }
@@ -83,6 +86,10 @@ void TrucoGame::View::TableView::drawElementsOnTheTable()
 	}
 	pGraphicManager->drawElement(*cardDeck.getCardTurnedFaceUp());
 	pGraphicManager->drawElement(*cardDeck.getDeck());
+	for (int i = 0; i < NUM_PLAYERS; i++) {
+		//auto x = static_cast<Text>(playerName[i]);
+		pGraphicManager->drawElement(playerName.getPlayerName(i));
+	}
 }
 
 void TrucoGame::View::TableView::distributeCardsAndFlip()
@@ -102,28 +109,41 @@ void TrucoGame::View::TableView::distributeCardsAndFlip()
 		}
 	}
 
-	animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, 
-		std::ref(*cardDeck.getCardTurnedFaceUp()), std::ref(*cardDeck.getDeck()), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed));
+	Texture newTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/cards/Clubs/Ace.png");
+	animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck,
+		std::ref(*cardDeck.getCardTurnedFaceUp()), newTexture, std::ref(*cardDeck.getDeck()), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed));
 
-		//threads[threadCount] = std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, std::ref(initialDeck[cardCount]), std::ref(initialDeck[cardCount + 1]), sf::Vector2f(cardTurnedFaceUp.getPosition().x + cardWidth, cardTurnedFaceUp.getPosition().y), deck.getPosition(), 35.0f, 15.0f);
-		//cardCount += 2;
 
-	//	threads[threadCount] = std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, cardDeck.getCardTurnedFaceUp(), cardDeck.getDeck(), nds[player][card], 90.0f, 15.0f);
 
-		//threads[threadCount] = std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, std::ref(initialDeck[cardCount]), std::ref(initialDeck[cardCount + 1]), sf::Vector2f(cardTurnedFaceUp.getPosition().x + cardWidth, cardTurnedFaceUp.getPosition().y), deck.getPosition(), 35.0f, 15.0f);
-		//cardCount += 2;
-
-		for (std::thread* t : animationThreads) {
-			t->detach();
-			delete t;  // Libera a memória alocada para a thread
-		}
+	for (std::thread* t : animationThreads) {
+		t->detach();
+		delete t; 
+	}
 }
 
+void TrucoGame::View::TableView::setNamesPositionsOnTheTable(float screenWidth, float screenHeight, float textAndTableSpacing)
+{
+	float halfScreenWidth = screenWidth / 2;
+	float halfScreenHeight = screenHeight / 2;
+	float halfTextWidth;
+	
+	size_t playerIndex = 0;
+	halfTextWidth = playerName.getHalfTextWidth(playerIndex);
+	playerName.setPositionOfPlayerName(playerIndex, Vector2f(halfScreenWidth - halfTextWidth, textAndTableSpacing));
+	
+	playerIndex = 1;
+	halfTextWidth = playerName.getHalfTextWidth(playerIndex);
+	playerName.setPositionOfPlayerName(playerIndex, Vector2f(textAndTableSpacing, halfScreenHeight + halfTextWidth));
+	playerName.setRotationOfPlayerName(playerIndex, -90.0f);
 
+	playerIndex = 2;
+	halfTextWidth = playerName.getHalfTextWidth(playerIndex);
+	float textHeight = playerName.getTextHeight(playerIndex);
+	playerName.setPositionOfPlayerName(playerIndex, Vector2f(halfScreenWidth - halfTextWidth, screenHeight - textAndTableSpacing - textHeight - 5));
 
+	playerIndex = 3;
+	halfTextWidth = playerName.getHalfTextWidth(playerIndex);
+	playerName.setPositionOfPlayerName(playerIndex, Vector2f(screenWidth - textAndTableSpacing, halfScreenHeight - halfTextWidth));
+	playerName.setRotationOfPlayerName(playerIndex, 90.0f);
+}
 
-
-
-
-// std::thread animationThread1(&TrucoGame::View::Animator::moveSpriteTo, std::ref(cardDeck.cardsInHands[0][0]), Vector2f(500.0f, 500.0f), 15.0f);
-// animationThread1.detach();

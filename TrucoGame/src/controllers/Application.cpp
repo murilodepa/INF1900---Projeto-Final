@@ -28,6 +28,7 @@ namespace TrucoGame {
 
     void Application::run() 
     {
+        
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
 
         while (pGraphicManager->checkWindowOpen()) {
@@ -51,10 +52,10 @@ namespace TrucoGame {
         
 
         /*
-
         sf::Texture mesaTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/table/tablecloth_texture4.png");
         sf::Texture cardTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/cards/cardBack.png");
         sf::Font arialFont = UtilsView::loadFont("../../../../TrucoGame/resources/fonts/Arial.ttf");
+        sf::Texture newTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/cards/Clubs/Ace.png");
 
         sf::Sprite playerHands[4][3];  // Cartas nas mãos dos 4 jogadores
 
@@ -155,7 +156,6 @@ namespace TrucoGame {
 
         float halfText = text[0].getGlobalBounds().width / 2;
 
-
         text[0].setPosition(halfScreenWidth - halfText, textAndTableSpacing);
         text[1].setRotation(-90.0f);
         text[1].setPosition(textAndTableSpacing, halfScreenHeight + halfText);
@@ -228,7 +228,10 @@ namespace TrucoGame {
                 cardCount++;
                 std::thread animationThread12(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(initialDeck[cardCount]), playerHands[3][2].getPosition(), 90.0f, 15.0f);
                 cardCount++;
-                std::thread animationThread13(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, std::ref(initialDeck[cardCount]), std::ref(initialDeck[cardCount+1]), sf::Vector2f(cardTurnedFaceUp.getPosition().x+cardWidth, cardTurnedFaceUp.getPosition().y), deck.getPosition(), 35.0f, 15.0f);
+
+                Texture newTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/cards/Clubs/Ace.png");
+
+                std::thread animationThread13(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck, std::ref(initialDeck[cardCount]), newTexture, std::ref(initialDeck[cardCount+1]), sf::Vector2f(cardTurnedFaceUp.getPosition().x+cardWidth, cardTurnedFaceUp.getPosition().y), deck.getPosition(), 35.0f, 15.0f);
                 cardCount++;
                 cardCount++;
                 
@@ -263,7 +266,7 @@ namespace TrucoGame {
                 //animationThread2.detach();
 
             }
-
+            
             pGraphicManager->showElements();
         }*/
     }

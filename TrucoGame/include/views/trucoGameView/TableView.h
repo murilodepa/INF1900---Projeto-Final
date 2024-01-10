@@ -5,8 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include "../../../include/views/GraphicManager.h"
 #include "CardView.h"
-#include "PlayerView.h"
+
 #include "CardDeck.h"
+#include "PlayerName.h"
 
 using namespace sf;
 
@@ -25,8 +26,11 @@ using namespace sf;
 // Define the spacing between cards.
 #define CARDS_SPACING 16.0f
 
-// Define the spacing between the table and cards.
-#define TABLE_AND_CARDS_SPACING 20.0f
+// Define the spacing between the table and cards
+#define TABLE_AND_CARDS_SPACING 110.0f
+
+// Define the spacing between the player name table
+#define TEXT_AND_TABLE_SPACING 40.0f
 
 struct CardTurnedFaceUpAndDeck {
     sf::Vector2f cardTurnedFaceUpPosition;
@@ -42,6 +46,7 @@ namespace TrucoGame {
             Texture tableTexture;
             Sprite tableCloth;
             CardDeck cardDeck;
+            PlayerName playerName;
             Vector2f **cardPositionsInPlayerHands;
             CardTurnedFaceUpAndDeck cardTurnedFaceUpAndDeck;
 
@@ -49,14 +54,14 @@ namespace TrucoGame {
             void setCardPositionsOnTheTable(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
 
         public:
-            TableView(Vector2f windowSize);
+            TableView(Vector2f& windowSize);
             ~TableView();
             void setTableTexture(const std::string& texturePath);
             Sprite getTableCloth();
-            void setTableClothScale(Vector2f windowSize, Vector2u textureSize);
+            void setTableClothScale(Vector2f& windowSize, Vector2u& textureSize);
             void drawElementsOnTheTable();
-            //std::vector<CardView> initialDeck;
             void distributeCardsAndFlip();
+            void setNamesPositionsOnTheTable(float screenWidth, float screenHeight, float textAndTableSpacing);
         };
     }
 }
