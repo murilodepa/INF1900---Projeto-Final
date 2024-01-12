@@ -27,8 +27,22 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
             *firstTimeFlag = false;
              tableView.distributeCardsAndFlip();
         }
+        drawScore(pGraphicManager);
+    }
+}
 
+void TrucoGame::View::TrucoGameView::drawScore(GraphicManager* pGraphicManager)
+{
+    pGraphicManager->drawElement(scoreView.getScoreRectangle());
+    pGraphicManager->drawElement(scoreView.getRectangleDivWidth());
+    pGraphicManager->drawElement(scoreView.getRectangleDivHeight());
 
+    for (int i = 0; i < 3; i++) {
+       pGraphicManager->drawElement(scoreView.getOurCircles(i));
+       pGraphicManager->drawElement(scoreView.getTheirCircles(i));
     }
 
+    pGraphicManager->drawElement(scoreView.getRoundScoreText());
+    pGraphicManager->drawElement(scoreView.getWeText());
+    pGraphicManager->drawElement(scoreView.getTheyText());
 }

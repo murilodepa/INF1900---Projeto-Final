@@ -87,7 +87,6 @@ void TrucoGame::View::TableView::drawElementsOnTheTable()
 	pGraphicManager->drawElement(*cardDeck.getCardTurnedFaceUp());
 	pGraphicManager->drawElement(*cardDeck.getDeck());
 	for (int i = 0; i < NUM_PLAYERS; i++) {
-		//auto x = static_cast<Text>(playerName[i]);
 		pGraphicManager->drawElement(playerName.getPlayerName(i));
 	}
 }
