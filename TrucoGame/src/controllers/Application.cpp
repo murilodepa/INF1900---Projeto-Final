@@ -42,11 +42,6 @@ namespace TrucoGame {
             //Draw
             trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
 
-
-            //pGraphicManager->drawElement(cardDeck.cardsInHands[0][0]);
-            //std::thread animationThread1(&TrucoGame::View::Animator::moveSpriteTo, std::ref(cardDeck.cardsInHands[0][0]), Vector2f(200.0f, 200.0f), 15.0f);
-            //animationThread1.detach();
-
             pGraphicManager->showElements();
         }
     }

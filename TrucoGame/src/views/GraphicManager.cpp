@@ -58,6 +58,10 @@ namespace TrucoGame {
             window->draw(rectangleShape);
         }
 
+        void GraphicManager::drawElement(sf::CircleShape& circleShape) {
+            window->draw(circleShape);
+        }
+
         void GraphicManager::drawElement(sf::Text& text) {
             window->draw(text);
         }

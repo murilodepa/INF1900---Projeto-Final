@@ -6,6 +6,7 @@
 #include "../../../include/views/GraphicManager.h"
 #include "../../../include/views/UtilsView.h"
 #include "TableView.h"
+#include "ScoreView.h"
 
 using namespace sf;
 
@@ -15,8 +16,10 @@ namespace TrucoGame {
         class TrucoGameView {
         private:
             TableView tableView;
+            ScoreView scoreView;
 
             void initialize();
+            void drawScore(GraphicManager* pGraphicManager);
 
         public:
             TrucoGameView(Vector2f windowSize);

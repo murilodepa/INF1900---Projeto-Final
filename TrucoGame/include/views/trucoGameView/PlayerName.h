@@ -1,6 +1,12 @@
 #ifndef PLAYER_NAME_H
 #define PLAYER_NAME_H
 
+// File path for the Arial.ttf font used for names
+#define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"
+
+// Character size for the player name display
+#define PLAYER_NAME_CHARACTER_SIZE 50
+
 #pragma once
 #include <SFML/Graphics.hpp>
 
@@ -13,12 +19,11 @@ namespace TrucoGame {
             std::vector<Text> playerNamesText;
             Font font;
 
+            void setFontFromPath(const std::string& fontPath);
+
         public:
             PlayerName(size_t numPlayers);
             ~PlayerName();
-
-            Font getFont();
-            void setFontFromPath(const std::string& fontPath);
 
             Text getPlayerName(size_t playerIndex);
             void setPlayerNames(std::vector<std::string> names);

@@ -20,7 +20,7 @@ using namespace sf;
 // Define the total number of cards using the formula (NUM_PLAYERS * CARDS_IN_HAND + 2)
 #define TOTAL_CARDS_IN_INITIAL_DECK (NUM_PLAYERS * CARDS_IN_HAND + 2)  // 2 - One cart is to turn face up and another it to represents the deck on the tablhe.
 
-// Macro para facilitar a criação de uma posição inicial para o deck como sf::Vector2u
+// Macro to create a initial position to the deck like sf::Vector2f
 #define InitialDeckPositionVector2f(x, y) sf::Vector2f(x, y)
 
 // Define the spacing between cards.

@@ -1,10 +1,6 @@
 #include "../../../include/views/trucoGameView/PlayerName.h"
 #include "../../../include/views/UtilsView.h"
 
-#define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"
-
-#define PLAYER_NAME_CHARACTER_SIZE 30
-
 TrucoGame::View::PlayerName::PlayerName(size_t numPlayers)
 {
 	setFontFromPath(NAME_FONT_PATH);
@@ -15,9 +11,6 @@ TrucoGame::View::PlayerName::PlayerName(size_t numPlayers)
 		playerNamesText[i].setCharacterSize(PLAYER_NAME_CHARACTER_SIZE);
 		playerNamesText[i].setFillColor(sf::Color::White);
 		playerNamesText[i].setStyle(sf::Text::Bold);
-		//playerNames[i].setString(names[0]);
-		 //setTextWidth(PlayerViewgetGlobalBounds().width);
-		//setTextHeight(PlayerViewgetGlobalBounds().height);
 	}
 
 }
@@ -25,11 +18,6 @@ TrucoGame::View::PlayerName::PlayerName(size_t numPlayers)
 TrucoGame::View::PlayerName::~PlayerName()
 {
 
-}
-
-Font TrucoGame::View::PlayerName::getFont()
-{
-	return font;
 }
 
 void TrucoGame::View::PlayerName::setFontFromPath(const std::string& fontPath)

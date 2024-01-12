@@ -1,10 +1,8 @@
 #include "../../../include/views/trucoGameView/Animator.h"
-#include "../../../include/views/MutexView.h"
 
 namespace TrucoGame {
 	namespace View {
 		void Animator::moveSpriteTo(Sprite& sprite, const Vector2f& destinationPosition, float speed) {
-			//std::lock_guard<std::mutex> lock(mutexCardAnimations);
 			Vector2f direction = destinationPosition - sprite.getPosition();
 			float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
