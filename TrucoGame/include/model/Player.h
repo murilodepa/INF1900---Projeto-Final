@@ -1,5 +1,6 @@
 #pragma once 
 #include "Card.h"
+#include <string>
 
 namespace TrucoGame {
 	namespace Model {
@@ -7,6 +8,7 @@ namespace TrucoGame {
 		class Player
 		{
 		private:
+			std::string playerName;
 			int playerId;
 			Card hand[3];
 		};
