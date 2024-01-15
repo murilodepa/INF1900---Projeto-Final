@@ -1,20 +1,18 @@
 #pragma once 
 
-#define SCREEN_X 2000.0f
-#define SCREEN_Y 1600.0f
+#include <SFML/Graphics.hpp>
+#include "trucoGameView/CardView.h"
 
-#include "Camera.h"
+#define SCREEN_X 2267.2f
+#define SCREEN_Y 1512.0f
 
 namespace TrucoGame {
 
-    namespace Controller {
+    namespace View {
 
         class GraphicManager {
         private:
             sf::RenderWindow* window;
-
-            // Move the camera
-            Camera camera;
 
             // The private constructor is part of the Singleton design pattern.
             // It ensures that there is only one instance of the GraphicManager class.
@@ -24,21 +22,17 @@ namespace TrucoGame {
             ~GraphicManager();
             static GraphicManager* getGraphicManager();
             sf::RenderWindow* getWindow();
-            sf::Texture loadTexture(const char* texturePath);
-            sf::Font loadFont(const char* fontPath);
             void clearWindow();
-            void drawElement(sf::RectangleShape shape);
-            void drawElement(sf::Text text);
+            void GraphicManager::drawElement(sf::Sprite& sprite);
+            void GraphicManager::drawElement(CardView& cardView);
+            void drawElement(sf::RectangleShape& rectangleShape);
+            void GraphicManager::drawElement(sf::CircleShape& circleShape);
+            void drawElement(sf::Text& text);
             void showElements();
             void closeWindow();
             const bool checkWindowOpen();
-            void updateCamera(const sf::Vector2f pos);
-            void updateCamera(const sf::Vector2f pos, sf::Vector2f size);
-            const sf::View getCamera();
-            void resetWindow();
             const sf::Vector2f getWindowSize() const;
-            void setCameraBoundary(const sf::IntRect cameraBoundary);
-            void setObjectBoundary(const sf::IntRect object);
+            const sf::Vector2f getHalfWindowSize() const;
             void GraphicManager::checkWindowClose();
         };
     }
