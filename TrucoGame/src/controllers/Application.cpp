@@ -1,26 +1,35 @@
 #include "../../include/controllers/Application.h"
+#include "../../include/views/trucoGameView/Animator.h"
+#include "../../include/views/UtilsView.h"
+#include <thread>
+#include <iostream>
+
+using namespace TrucoGame::View;
 
 namespace TrucoGame {
 
-    Controller::GraphicManager* Application::pGraphicManager = Controller::GraphicManager::getGraphicManager();
+    GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    Application::Application() {
+    Application::Application() : trucoGameView(pGraphicManager->getWindowSize()) {
         if (pGraphicManager == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
         }
-        inicialize();
+        initialize();
     }
 
     Application::~Application() {
 
     }
 
-    void Application::inicialize() {
-        // TODO Define the inicial state of the window
+    void Application::initialize() {
+        // TODO Define the initial state of the window
     }
 
-    void Application::run() {
+    void Application::run() 
+    {
+        
+        std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
 
         while (pGraphicManager->checkWindowOpen()) {
 
@@ -30,7 +39,9 @@ namespace TrucoGame {
             //Clear the window
             pGraphicManager->clearWindow();
 
-            // Show everything on the screen
+            //Draw
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
+
             pGraphicManager->showElements();
         }
     }

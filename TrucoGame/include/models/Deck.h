@@ -9,12 +9,12 @@ namespace TrucoGame {
 
         class Deck {
         private:
-            vector<Card> cardDeck;
+            std::vector<Card> cards;
         public:
             Deck();
             ~Deck();
-            Card DrawCard();
-            void returnCard();
+            Card pop();
+            void push(Card card);
 
         };
     }
