@@ -107,7 +107,7 @@ void TrucoGame::View::TableView::distributeCardsAndFlip()
 			}
 		}
 	}
-
+	
 	Texture newTexture = UtilsView::loadTexture("../../../../TrucoGame/resources/images/cards/Clubs/Ace.png");
 	animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck,
 		std::ref(*cardDeck.getCardTurnedFaceUp()), newTexture, std::ref(*cardDeck.getDeck()), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed));

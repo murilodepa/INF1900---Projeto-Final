@@ -3,6 +3,7 @@
 #include "../../include/views/UtilsView.h"
 #include <thread>
 #include <iostream>
+#include "../../include/models/Deck.h"
 
 using namespace TrucoGame::View;
 
@@ -30,6 +31,7 @@ namespace TrucoGame {
     {
         
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
+        Models::Deck deck;
 
         while (pGraphicManager->checkWindowOpen()) {
 
