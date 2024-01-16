@@ -33,6 +33,7 @@ add_executable (TrucoGame
     
     "src/views/GraphicManager.cpp"
     "src/views/UtilsView.cpp"
+    "src/views/Button.cpp"
     "src/views/trucoGameView/Animator.cpp"
     "src/views/trucoGameView/CardDeck.cpp"
     "src/views/trucoGameView/CardView.cpp"
@@ -40,6 +41,8 @@ add_executable (TrucoGame
     "src/views/trucoGameView/TableView.cpp"
     "src/views/trucoGameView/TrucoGameView.cpp"
     "src/views/trucoGameView/ScoreView.cpp"
+    "src/views/State.cpp"
+
     "src/controllers/Application.cpp"
     "src/controllers/TableController.cpp"
     
@@ -48,20 +51,24 @@ add_executable (TrucoGame
 
     "include/views/GraphicManager.h"
     "include/views/UtilsView.h"
+    "include/views/Button.h"
     "include/views/trucoGameView/Animator.h"
     "include/views/trucoGameView/CardDeck.h"
-    "include/views/trucoGameView/CardView.h" 
+    "include/views/trucoGameView/CardView.h"
     "include/views/trucoGameView/PlayerName.h"
     "include/views/trucoGameView/TableView.h"
     "include/views/trucoGameView/TrucoGameView.h"
     "include/views/trucoGameView/ScoreView.h"
+    "include/views/State.h"
+
     "include/controllers/Application.h"
     "include/controllers/TableController.h"
     
     "include/models/Card.h"
     "include/models/Deck.h" 
-    "include/views/trucoGameView/CardsEnum.h"  
- )
+    "include/views/trucoGameView/CardsEnum.h"
+
+ "src/views/MainMenuState.cpp" "include/views/MainMenuState.h")
 
 
 target_link_libraries(TrucoGame sfml-graphics)
