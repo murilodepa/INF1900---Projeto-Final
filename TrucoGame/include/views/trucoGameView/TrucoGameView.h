@@ -23,6 +23,8 @@ namespace TrucoGame {
             void initialize();
             void drawScore(GraphicManager* pGraphicManager);
 
+            void setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
+
         public:
             TrucoGameView(Vector2f windowSize);
             ~TrucoGameView();
