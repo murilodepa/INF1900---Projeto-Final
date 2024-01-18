@@ -68,7 +68,11 @@ add_executable (TrucoGame
     "include/models/Deck.h" 
     "include/views/trucoGameView/CardsEnum.h"
 
- "src/views/MainMenuState.cpp" "include/views/MainMenuState.h")
+    "src/views/MainMenuState.cpp" 
+    "include/views/MainMenuState.h" 
+   
+    "include/views/trucoGameView/PlayerView.h"
+    "src/views/trucoGameView/PlayerView.cpp")
 
 
 target_link_libraries(TrucoGame sfml-graphics)

@@ -7,6 +7,7 @@
 #include "../../../include/views/UtilsView.h"
 #include "TableView.h"
 #include "ScoreView.h"
+#include "PlayerView.h"
 
 using namespace sf;
 
@@ -17,6 +18,7 @@ namespace TrucoGame {
         private:
             TableView tableView;
             ScoreView scoreView;
+            std::vector<PlayerView> players;
 
             void initialize();
             void drawScore(GraphicManager* pGraphicManager);
