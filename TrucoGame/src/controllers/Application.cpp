@@ -3,8 +3,10 @@
 #include "../../include/views/UtilsView.h"
 #include <thread>
 #include <iostream>
+#include "../../include/models/Score.h"
 
 using namespace TrucoGame::View;
+using namespace TrucoGame::Models;
 
 namespace TrucoGame {
 
@@ -30,6 +32,15 @@ namespace TrucoGame {
     {
         
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
+
+        Score score;
+        score.increaseStakes();
+        int x = score.updateTurnWon(1);
+        x = score.updateTurnWon(0);
+        x = score.updateTurnWon(0);
+        x = score.getStakes();
+        x = score.updateRoundWon(1);
+        score.resetRound();
 
         while (pGraphicManager->checkWindowOpen()) {
 

@@ -9,8 +9,8 @@ namespace TrucoGame {
             int team0GameScore;
             int team1GameScore;
             int stakes;
-            int team0RoundScore;
-            int team1RoundScore;
+            int team0TurnsWon;
+            int team1TurnsWon;
             bool isRoundDrawn = false;
         public:
             Score();
@@ -18,9 +18,9 @@ namespace TrucoGame {
             // Retuns stakes: (1, 3, 6, 9, 12)
             int getStakes();
             // Best of three turn score (max is 2)
-            int getTeam0RoundScore();
+            int getTeam0TurnsWon();
             // Best of three turn score (max is 2)
-            int getTeam1RoundScore();
+            int getTeam1TurnsWon();
             // Game score (max is 12)
             int getTeam0GameScore();
             // Game score (max is 12)
@@ -28,19 +28,18 @@ namespace TrucoGame {
 
             // Parameters:
             // winnerTeamId: (1 or 0) to winning team or (-1) if draw
-            // Returns: ID of the turn winner team or 0 if none won yet.
-            int updateTurnScore(int winnerTeamId);
+            // Returns: ID of the turn winner team or -1 if none won yet.
+            int updateTurnWon(int winnerTeamId);
             // Parameters:
             // winnerTeamId: (1 or 0) to winning team or (-1) if draw
-            // Returns: ID of the round winner team or 0 if none won yet.
-            int updateRoundScore(int winnerTeamId);
+            // Returns: ID of the round winner team or -1 if none won yet.
+            int updateRoundWon(int winnerTeamId);
 
             // 1 -> 3 -> 6 -> 9 -> 12
             void increaseStakes();
 
             void resetRound();
             void resetGame();
-            void resetStakes();
         };
     }
 }

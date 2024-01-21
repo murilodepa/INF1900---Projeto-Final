@@ -7,14 +7,13 @@ namespace TrucoGame {
     namespace Models {
 
         Score::Score() {
-            resetStakes();
             resetGame();
             resetRound();
         }
 
         int Score::getStakes() { return stakes; }
-        int Score::getTeam0RoundScore() { return team0RoundScore; }
-        int Score::getTeam1RoundScore() { return team1RoundScore; }
+        int Score::getTeam0TurnsWon() { return team0TurnsWon; }
+        int Score::getTeam1TurnsWon() { return team1TurnsWon; }
         int Score::getTeam0GameScore() { return team0GameScore; }
         int Score::getTeam1GameScore() { return team1GameScore; }
 
@@ -31,58 +30,54 @@ namespace TrucoGame {
         }
 
         
-        int Score::updateTurnScore(int winnerTeamId)
+        int Score::updateTurnWon(int winnerTeamId)
         {
             if (winnerTeamId == 0) //TEAM 0 WON TURN
             {
-                team0RoundScore += 1; 
-                if (team0RoundScore == 2 || isRoundDrawn) //check win round
+                team0TurnsWon += 1; 
+                if (team0TurnsWon == 2 || isRoundDrawn) //check win round
                     return 0;
             }
             else if (winnerTeamId == 1) //TEAM 1 WON TURN
             {
-                team1RoundScore += 1;
-                if (team1RoundScore == 2 || isRoundDrawn) //check win round
+                team1TurnsWon += 1;
+                if (team1TurnsWon == 2 || isRoundDrawn) //check win round
                     return 1;
             }
             else if (winnerTeamId == -1) // DRAW TURN
             {
                 isRoundDrawn = true;
             }
-            return 0; //none won
+            return -1; //none won
         }
 
-        int Score::updateRoundScore(int winnerTeamId) 
+        int Score::updateRoundWon(int winnerTeamId) 
         {
             if (winnerTeamId == 0)
             {
-                team0GameScore += 1;
+                team0GameScore += stakes;
                 if (team0GameScore >= POINT_TO_WIN) //check win game
                     return 0;
             }
             else if (winnerTeamId == 1)
             {
-                team1GameScore += 1;
+                team1GameScore += stakes;
                 if (team1GameScore >= POINT_TO_WIN) //check win game
                     return 1;
             }
-            return 0; //none won
+            return -1; //none won
         }
 
         void Score::resetRound() {
-            team0RoundScore = 0;
-            team1RoundScore = 0;
+            team0TurnsWon = 0;
+            team1TurnsWon = 0;
             isRoundDrawn = false;
+            stakes = 1;
         }
 
         void Score::resetGame() {
             team0GameScore = 0;
             team1GameScore = 0;
         }
-
-        void Score::resetStakes() {
-            stakes = 1;
-        }
-
     }
 }
