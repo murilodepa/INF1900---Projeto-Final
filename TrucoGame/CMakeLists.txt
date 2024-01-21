@@ -45,6 +45,7 @@ add_executable (TrucoGame
     
     "src/models/Card.cpp"
     "src/models/Deck.cpp"  
+    "src/models/Score.cpp" 
 
     "include/views/GraphicManager.h"
     "include/views/UtilsView.h"
@@ -60,6 +61,7 @@ add_executable (TrucoGame
     
     "include/models/Card.h"
     "include/models/Deck.h" 
+    "include/models/Score.h" 
     "include/views/trucoGameView/CardsEnum.h"  
  )
 
