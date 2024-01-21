@@ -8,13 +8,14 @@ namespace TrucoGame {
 			playedCardIndex = 0;
 		}
 
-		void Table::PlaceCard(Card* card, int playerId)
+		void Table::PlaceCard(Card* card, int playerId, bool isCovered)
 		{
 			if (playedCardIndex >= 4) return;
 
 			PlayedCard playedCard;
 			playedCard.card = card;
 			playedCard.playerId = playerId;
+			playedCard.isCovered = isCovered;
 			playedCards[playedCardIndex] = playedCard;
 			playedCardIndex++;
 		}
@@ -25,8 +26,8 @@ namespace TrucoGame {
 			winningCard = playedCards[0];
 			for(int i = 1; i < 4; i++)
 			{
-				int newCardValue = GetCardActualValue(playedCards[i].card);
-				int oldCardValue = GetCardActualValue(winningCard.card);
+				int newCardValue = GetCardActualValue(playedCards[i]);
+				int oldCardValue = GetCardActualValue(winningCard);
 				if (newCardValue > oldCardValue)
 				{
 					winningCard = playedCards[i];
@@ -39,15 +40,19 @@ namespace TrucoGame {
 			return winningCard.playerId;
 		}
 
-		int Table::GetCardActualValue(Card* card)
+		int Table::GetCardActualValue(PlayedCard playedCard)
 		{
-			int baseValue = card->getValue();
+			int baseValue = playedCard.card->getValue();
+
 			if (turnedCard == nullptr)
 				return baseValue;
 
+			if (playedCard.isCovered)
+				return -1;
+
 			//is manilha
-			if (card->getValue() == (turnedCard->getValue() + 1) % 10)
-				return baseValue + (10 * card->getSuit());
+			if (baseValue == (turnedCard->getValue() + 1) % 10)
+				return baseValue + (10 * playedCard.card->getSuit());
 			else
 				return baseValue;
 		}

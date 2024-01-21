@@ -11,15 +11,11 @@ namespace TrucoGame {
         private:
             int value;
             Suit suit;
-            sf::Sprite sprite;
-            sf::Texture texture;
         public:
             Card(int value, Suit suit);
             ~Card();
             Suit getSuit();
             int getValue();
-            sf::Sprite* getSprite();
-            std::string getSpritePath();
         };
 
         class ClubsCard : public Card {

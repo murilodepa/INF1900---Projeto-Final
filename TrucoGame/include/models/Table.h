@@ -6,6 +6,7 @@ namespace TrucoGame {
 		struct PlayedCard {
 			int playerId;
 			Card* card;
+			bool isCovered;
 		};
 
 		class Table
@@ -13,13 +14,13 @@ namespace TrucoGame {
 		public:
 			Table();
 			Card* turnedCard = nullptr;
-			void PlaceCard(Card* card, int playerId);
+			void PlaceCard(Card* card, int playerId, bool isCovered);
 			int CalculateWinner();
 			Card* GetAllCards();
 		private:
 			PlayedCard playedCards[4];
 			int playedCardIndex = 0;
-			int GetCardActualValue(Card* card);
+			int GetCardActualValue(PlayedCard playedCard);
 		};
 	}
 }
