@@ -3,8 +3,13 @@
 #include "../../include/views/UtilsView.h"
 #include <thread>
 #include <iostream>
+#include "../../include/models/Deck.h"
+#include "../../include/models/Player.h"
+#include "../../include/models/Table.h"
+#include "../../include/models/Card.h"
 
 using namespace TrucoGame::View;
+using namespace TrucoGame::Models;
 
 namespace TrucoGame {
 
@@ -30,7 +35,22 @@ namespace TrucoGame {
     {
         
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
+        std::vector<Player> players;
+        players.push_back(Player(0, "Laert"));
+        players.push_back(Player(1, "Caique"));
+        players.push_back(Player(2, "Vitor"));
+        players.push_back(Player(3, "Murilo"));
 
+        Table table;
+        Deck deck;        
+        Models::Card* cards[4];
+        table.turnedCard = deck.pop();
+
+        for (int i = 0; i < 4; i++) {
+            cards[i] = deck.pop();
+            table.PlaceCard(cards[i], i);
+        }
+        int winner = table.CalculateWinner();
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window
@@ -40,7 +60,7 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
+            //trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
 
             pGraphicManager->showElements();
         }

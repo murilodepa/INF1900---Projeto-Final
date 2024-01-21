@@ -5,7 +5,7 @@
 namespace TrucoGame {
 
     namespace Models {
-        enum Suit { Clubs, Spades, Diamonds, Hearts };
+        enum Suit { Clubs = 4, Spades = 2, Diamonds = 1, Hearts = 3};
 
         class Card {
         private:
