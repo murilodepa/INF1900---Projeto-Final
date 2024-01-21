@@ -11,6 +11,7 @@ namespace TrucoGame {
             int stakes;
             int team0RoundScore;
             int team1RoundScore;
+            bool isRoundDrawn = false;
         public:
             Score();
             
@@ -25,8 +26,12 @@ namespace TrucoGame {
             // Game score (max is 12)
             int getTeam1GameScore();
 
+            // Parameters:
+            // winnerTeamId: (1 or 0) to winning team or (-1) if draw
             // Returns: ID of the turn winner team or 0 if none won yet.
             int updateTurnScore(int winnerTeamId);
+            // Parameters:
+            // winnerTeamId: (1 or 0) to winning team or (-1) if draw
             // Returns: ID of the round winner team or 0 if none won yet.
             int updateRoundScore(int winnerTeamId);
 

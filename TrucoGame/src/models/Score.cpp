@@ -33,19 +33,23 @@ namespace TrucoGame {
         
         int Score::updateTurnScore(int winnerTeamId)
         {
-            if (winnerTeamId == 0)
+            if (winnerTeamId == 0) //TEAM 0 WON TURN
             {
                 team0RoundScore += 1; 
-                if (team0RoundScore == 2) //check win round
+                if (team0RoundScore == 2 || isRoundDrawn) //check win round
                     return 0;
             }
-            else if (winnerTeamId == 1)
+            else if (winnerTeamId == 1) //TEAM 1 WON TURN
             {
                 team1RoundScore += 1;
-                if (team1RoundScore == 2) //check win round
+                if (team1RoundScore == 2 || isRoundDrawn) //check win round
                     return 1;
             }
-            return 0; //none one
+            else if (winnerTeamId == -1) // DRAW TURN
+            {
+                isRoundDrawn = true;
+            }
+            return 0; //none won
         }
 
         int Score::updateRoundScore(int winnerTeamId) 
@@ -68,6 +72,7 @@ namespace TrucoGame {
         void Score::resetRound() {
             team0RoundScore = 0;
             team1RoundScore = 0;
+            isRoundDrawn = false;
         }
 
         void Score::resetGame() {
