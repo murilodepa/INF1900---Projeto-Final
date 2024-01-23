@@ -9,7 +9,7 @@ void TrucoGame::View::TrucoGameView::initialize()
 TrucoGame::View::TrucoGameView::TrucoGameView(Vector2f windowSize) :
 	tableView(Vector2f(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)))
 {
-	players.resize(NUM_PLAYERS);
+	//players.resize(NUM_PLAYERS);
 
 }
 
@@ -59,26 +59,26 @@ void TrucoGame::View::TrucoGameView::setCardPositionsOfThePlayers(float screenWi
 	cardsPositions.push_back(Vector2f(halfScreenWidth - halfCardWidth - cardsSpacing - cardWidth, cardAndTableSpacing));
 	cardsPositions.push_back(Vector2f(halfScreenWidth - halfCardWidth, cardAndTableSpacing));
 	cardsPositions.push_back(Vector2f(halfScreenWidth + halfCardWidth + cardsSpacing, cardAndTableSpacing));
-	players[0].setCardPositions(cardsPositions);
+	//players[0].setCardPositions(cardsPositions);
 
 	cardsPositions.clear();
 
 	cardsPositions.push_back(Vector2f(cardHeight + cardAndTableSpacing, halfScreenHeight - halfCardWidth - cardsSpacing - cardWidth));
 	cardsPositions.push_back(Vector2f(cardHeight + cardAndTableSpacing, halfScreenHeight - halfCardWidth));
 	cardsPositions.push_back(Vector2f(cardHeight + cardAndTableSpacing, halfScreenHeight + halfCardWidth + cardsSpacing));
-	players[1].setCardPositions(cardsPositions);
+	//players[1].setCardPositions(cardsPositions);
 
 	cardsPositions.clear();
 
 	cardsPositions.push_back(Vector2f(halfScreenWidth - halfCardWidth - cardsSpacing - cardWidth, screenHeight - cardAndTableSpacing - cardHeight));
 	cardsPositions.push_back(Vector2f(halfScreenWidth - halfCardWidth, screenHeight - cardAndTableSpacing - cardHeight));
 	cardsPositions.push_back(Vector2f(halfScreenWidth + halfCardWidth + cardsSpacing, screenHeight - cardAndTableSpacing - cardHeight));
-	players[2].setCardPositions(cardsPositions);
+	//players[2].setCardPositions(cardsPositions);
 
 	cardsPositions.clear();
 
 	cardsPositions.push_back(Vector2f(screenWidth - cardAndTableSpacing, halfScreenHeight - halfCardWidth - cardsSpacing - cardWidth));
 	cardsPositions.push_back(Vector2f(screenWidth - cardAndTableSpacing, halfScreenHeight - halfCardWidth));
 	cardsPositions.push_back(Vector2f(screenWidth - cardAndTableSpacing, halfScreenHeight + halfCardWidth + cardsSpacing));
-	players[3].setCardPositions(cardsPositions);
+	//players[3].setCardPositions(cardsPositions);
 }

@@ -18,7 +18,7 @@ namespace TrucoGame {
         private:
             TableView tableView;
             ScoreView scoreView;
-            std::vector<PlayerView> players;
+            //std::vector<PlayerView> players;
 
             void initialize();
             void drawScore(GraphicManager* pGraphicManager);
