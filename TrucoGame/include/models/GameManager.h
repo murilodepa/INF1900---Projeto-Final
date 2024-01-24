@@ -20,6 +20,9 @@ namespace TrucoGame {
 
         public:
             void playCard(int playerId, int cardIndex, bool isCovered);
+            void endTurn();
+            void endRound(int roundWinner);
+            void endGame(int gameWinner);
         };
     }
 }
