@@ -19,10 +19,17 @@ namespace TrucoGame {
             }
         }
 
+        void GameManager::startRound()
+        {
+            //Give players hand cards
+            table.turnedCard = deck.pop();
+            score.resetRound();
+        }
+
         void GameManager::endRound(int roundWinner) 
         {
             int gameWinner = score.updateRoundWon(roundWinner);
-            //TODO: CleanPlayerCards();
+            //TODO: CleanPlayerCards(); ClearTurnedCard();
             if(gameWinner != -1)
             {
                 endGame(gameWinner);
