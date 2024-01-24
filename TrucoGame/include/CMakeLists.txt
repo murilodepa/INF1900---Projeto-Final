@@ -2,22 +2,24 @@
 
 # Header files
 set(HEADER_FILES
+    # Controllers
     "controllers/Application.h"
     "controllers/TableController.h"
 
+    # Models
     "models/Card.h"
     "models/Deck.h"
 
+    # Views
+    "views/trucoGameView/player/PlayerCards.h"
+    "views/trucoGameView/player/PlayerView.h"
     "views/trucoGameView/Animator.h"
     "views/trucoGameView/CardDeck.h"
     "views/trucoGameView/CardsEnum.h"
     "views/trucoGameView/CardView.h"
-    "views/trucoGameView/PlayerName.h"
-    "views/trucoGameView/PlayerView.h"
     "views/trucoGameView/ScoreView.h"
     "views/trucoGameView/TableView.h"
     "views/trucoGameView/TrucoGameView.h"
-
     "views/Button.h"
     "views/GraphicManager.h"
     "views/MainMenuState.h"

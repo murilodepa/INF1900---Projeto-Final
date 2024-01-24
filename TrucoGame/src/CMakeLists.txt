@@ -2,6 +2,7 @@
 
 # Source files
 set(SRC_FILES
+    # Main
     "TrucoGame.cpp"
 
     # Controllers
@@ -13,11 +14,10 @@ set(SRC_FILES
     "models/Deck.cpp"
     
     # Views
+    "views/trucoGameView/Player/PlayerCards.cpp"
+    "views/trucoGameView/Player/PlayerView.cpp"
     "views/trucoGameView/Animator.cpp"
-    "views/trucoGameView/CardDeck.cpp"
     "views/trucoGameView/CardView.cpp"
-    "views/trucoGameView/PlayerName.cpp"
-    "views/trucoGameView/PlayerView.cpp"
     "views/trucoGameView/ScoreView.cpp"
     "views/trucoGameView/TableView.cpp"
     "views/trucoGameView/TrucoGameView.cpp"

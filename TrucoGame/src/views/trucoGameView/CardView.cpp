@@ -1,11 +1,13 @@
 #include "../../../include/views/trucoGameView/CardView.h"
 
+
 #define CARD_SCALE 0.4
 
-TrucoGame::View::CardView::CardView(Vector2f& cardPositionOnTable)
+TrucoGame::View::CardView::CardView(Vector2f& cardPositionOnTable, Texture& texture)
 {
 	this->setScale(CARD_SCALE, CARD_SCALE);
 	this->setPosition(cardPositionOnTable);
+	this->setTexture(texture);
 }
 
 TrucoGame::View::CardView::~CardView()

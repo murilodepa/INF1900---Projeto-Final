@@ -12,7 +12,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "CardView.h"
+#include "../CardView.h"
 
 using namespace sf;
 
@@ -39,6 +39,7 @@ namespace TrucoGame {
             float getTextWidth(size_t playerIndex) const;
             float getTextHeight(size_t playerIndex) const;
             float getHalfTextWidth(size_t playerIndex) const;
+            Vector2f getCardPosition(size_t cardIndex) const;
         };
     }
 }

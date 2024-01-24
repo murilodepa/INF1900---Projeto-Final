@@ -1,4 +1,4 @@
-#include "../../../include/views/trucoGameView/PlayerView.h"
+#include "../../../../include/views/trucoGameView/Player/PlayerView.h"
 
 void TrucoGame::View::PlayerView::setFontFromPath(const std::string& fontPath)
 {
@@ -60,4 +60,9 @@ float TrucoGame::View::PlayerView::getTextHeight(size_t playerIndex) const
 float TrucoGame::View::PlayerView::getHalfTextWidth(size_t playerIndex) const
 {
 	return playerName.getGlobalBounds().width / 2;
+}
+
+Vector2f TrucoGame::View::PlayerView::getCardPosition(size_t cardIndex) const
+{
+	return playerCards[cardIndex].getPosition();
 }

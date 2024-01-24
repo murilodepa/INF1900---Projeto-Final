@@ -6,9 +6,6 @@
 #include "../../../include/views/GraphicManager.h"
 #include "CardView.h"
 
-#include "CardDeck.h"
-#include "PlayerName.h"
-
 using namespace sf;
 
 // Define to represent the number of players
@@ -20,17 +17,11 @@ using namespace sf;
 // Define the total number of cards using the formula (NUM_PLAYERS * CARDS_IN_HAND + 2)
 #define TOTAL_CARDS_IN_INITIAL_DECK (NUM_PLAYERS * CARDS_IN_HAND + 2)  // 2 - One cart is to turn face up and another it to represents the deck on the tablhe.
 
-// Macro to create a initial position to the deck like sf::Vector2f
-#define InitialDeckPositionVector2f(x, y) sf::Vector2f(x, y)
+// Define the texture of a back card
+#define CARD_BACK_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/cardBack.png"
 
-// Define the spacing between cards.
-#define CARDS_SPACING 16.0f
-
-// Define the spacing between the table and cards
-#define TABLE_AND_CARDS_SPACING 110.0f
-
-// Define the spacing between the player name table
-#define TEXT_AND_TABLE_SPACING 40.0f
+// Define the texture of table cloth
+#define TABLE_TEXTURE_PATH "../../../../TrucoGame/resources/images/table/tablecloth_texture4.png"
 
 struct CardTurnedFaceUpAndDeck {
     sf::Vector2f cardTurnedFaceUpPosition;
@@ -42,26 +33,32 @@ namespace TrucoGame {
     namespace View {
         class TableView {
         private:
-            View::GraphicManager* pGraphicManager;
             Texture tableTexture;
-            Sprite tableCloth;
-            CardDeck cardDeck;
-            PlayerName playerName;
-            Vector2f **cardPositionsInPlayerHands;
-            CardTurnedFaceUpAndDeck cardTurnedFaceUpAndDeck;
+            Texture backCardTexture;
+            Texture turnedFaceUpCardTexture;
+            Texture* texture;
 
-            void initialize(Vector2f windowSize);
-            void setCardPositionsOnTheTable(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
+            Sprite tableCloth;
+            CardTurnedFaceUpAndDeck cardTurnedFaceUpAndDeck;
+            CardView* cardTurnedFaceUp;
+            CardView* deck;
+            Vector2f **cardPositionsInPlayerHands;
+            
+
+            void initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f);
+            void setDeckPositionOnTheTable(float screenWidth, float screenHeight, float cardWidth);
 
         public:
-            TableView(Vector2f& windowSize);
+            TableView(Vector2f& windowSize, Vector2f& initialDeckPositionVector2f);
             ~TableView();
             void setTableTexture(const std::string& texturePath);
+            void setBackCardTexture(const std::string& texturePath);
             Sprite getTableCloth();
             void setTableClothScale(Vector2f& windowSize, Vector2u& textureSize);
-            void drawElementsOnTheTable();
-            void distributeCardsAndFlip();
-            void setNamesPositionsOnTheTable(float screenWidth, float screenHeight, float textAndTableSpacing);
+            void drawElementsOnTheTable(GraphicManager* pGraphicManager) const;
+            void moveDeckAndTurnUpCard();
+            void setTurnedFaceUpCardTexture(std::string& texturePath);
+            void setTextureFromPath(const std::string& texturePath);
         };
     }
 }
