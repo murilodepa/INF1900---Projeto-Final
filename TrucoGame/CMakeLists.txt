@@ -46,7 +46,7 @@ add_executable (TrucoGame
     "src/models/Card.cpp"
     "src/models/Table.cpp"  
     "src/models/Deck.cpp"
-    "src/models/Deck.cpp"  
+    "src/models/Player.cpp"  
     "src/models/Score.cpp" 
     "src/models/GameManager.cpp" 
 
@@ -69,7 +69,7 @@ add_executable (TrucoGame
     "include/models/Score.h" 
     "include/models/GameManager.h" 
     "include/views/trucoGameView/CardsEnum.h"  
-    )
+     "src/models/Player.cpp")
 
 
 target_link_libraries(TrucoGame sfml-graphics)

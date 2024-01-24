@@ -1,10 +1,15 @@
 #include "../../include/models/GameManager.h"
+#include <iostream>
 
 namespace TrucoGame {
     namespace Models {
         void GameManager::playCard(int playerId, int cardIndex, bool isCovered)
         {
-            Card* card = players[playerId].hand[cardIndex];
+            Card* card = players[playerId].popCardByIndex(cardIndex);
+            if (card == nullptr) {
+                std::cout << "Can't play the card " << cardIndex << " of " << playerId << std::endl;
+                return;
+            }
             table.PlaceCard(card, playerId, isCovered);
         }
 
