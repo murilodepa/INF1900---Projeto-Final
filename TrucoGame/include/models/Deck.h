@@ -13,7 +13,7 @@ namespace TrucoGame {
         public:
             Deck();
             ~Deck();
-            Card pop();
+            Card* pop();
             void push(Card card);
 
         };
