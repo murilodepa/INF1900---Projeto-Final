@@ -15,16 +15,6 @@ Texture TrucoGame::View::CardDeck::getCardTexture()
     return this->cardTexture;
 }
 
-void TrucoGame::View::CardDeck::setCardTexture(Card& card)
-{
-    if (card.rank == CardRank::Back) {
-        this->cardTexture = UtilsView::loadTexture(CARD_BACK_TEXTURE_PATH);
-    }
-    else {
-        // TODO
-    }
-}
-
 TrucoGame::View::CardView* TrucoGame::View::CardDeck::getCardTurnedFaceUp()
 {
     return cardTurnedFaceUp;
@@ -43,9 +33,6 @@ size_t TrucoGame::View::CardDeck::getQuantityOfCards()
 void TrucoGame::View::CardDeck::initializeCardDeck(size_t numPlayer, size_t quantityOfCardsInHands, Vector2f& initialDeckPositionVector2f)
 {
     cardsInHands = UtilsView::initializeMatrix<CardView>(numPlayer, quantityOfCardsInHands);
-    Card card;
-    card.rank = CardRank::Back;
-    setCardTexture(card);
 
     quantityOfCards = 0;
 
