@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "../ErrorCode.h"
-#include "../Packet.h"
+#include "../packets/Packet.h"
 
 #pragma comment(lib,"WS2_32")
 
@@ -12,16 +12,19 @@ namespace TrucoGame {
 
     namespace Models {
 
-        class Client {
+        class Player {
         public:
             int id;
             SOCKET socket;
             sockaddr_in address;
             int addressSize = sizeof(address);
 
-            Client(int id) : id(id) {}
+            Player(int id) : id(id) {}
             ErrorCode StartListening();
-            ErrorCode Send(Packet packet);
+            ErrorCode Send(Packet* packet);
+
+            template<typename T>
+            T WaitFor();
 
             void Listen();
         private:

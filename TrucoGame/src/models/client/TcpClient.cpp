@@ -16,12 +16,12 @@ namespace TrucoGame {
             serverAddr.sin_port = htons(port);
 
             if (connect(clientSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-                std::cerr << "Error when trying to connect to server\n";
+                std::cerr << "[CLIENT] Error when trying to connect to server\n";
                 closesocket(clientSocket);
                 WSACleanup();
                 return SocketError;
             }
-            std::cout << "Connected to server\n";
+            std::cout << "[CLIENT] Connected to server\n";
             return result;
         }
 
@@ -31,20 +31,20 @@ namespace TrucoGame {
             char buffer[1024];
             size_t bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0);
             if (bytesRead > 0) {
-                std::cout << "Server Answer: " << std::string(buffer, bytesRead) << "\n";
+                std::cout << "[CLIENT] Server Answer: " << std::string(buffer, bytesRead) << "\n";
             }
             return Success;
         }
 
-        ErrorCode TcpClient::Send(const Packet& packet)
+        ErrorCode TcpClient::Send(const Packet* packet)
         {
             nlohmann::json jsonPacket;
-            packet.ToJson(jsonPacket);
+            packet->ToJson(jsonPacket);
             std::string jsonString = jsonPacket.dump();
 
             int result = send(clientSocket, jsonString.c_str(), jsonString.size(), 0);
             if (result == SOCKET_ERROR) {
-                std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
+                std::cerr << "[CLIENT] Error sending data: " << WSAGetLastError() << std::endl;
                 return SocketError;
             }
 
@@ -64,20 +64,60 @@ namespace TrucoGame {
         {
             char buffer[1024];
             int bytesRead;
-            Packet receivedPacket;
 
             while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0) {
                 std::string receivedData(buffer, bytesRead);
                 try {
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
-                    Packet receivedPacket;
-                    receivedPacket.FromJson(receivedJson);
+                    Packet receivedPacket(receivedJson);
 
-                    std::cout << "Received packet type" << receivedPacket.packetType
+                    switch (receivedPacket.packetType)
+                    {
+                    case StartGame:
+                    {
+                        StartGamePacket startGamePacket(receivedJson);
+                        break;
+                    }
+                    case StartRound:
+                    {
+                        StartRoundPacket startRoundPacket(receivedJson);
+                        break;
+                    }
+                    case EndRound:
+                    {
+                        EndRoundPacket endRoundPacket(receivedJson);
+                        break;
+                    }
+                    case EndTurn:
+                    {
+                        EndTurnPacket endTurn(receivedJson);
+                        break;
+                    }
+                    case PlayerPlay:
+                    {
+                        PlayerPlayPacket playPacket(receivedJson);
+                        break;
+                    }
+                    case PlayerCard:
+                    {
+                        CardPacket cardPacket(receivedJson);
+                        break;
+                    }
+                    case Truco:
+                    {
+                        TrucoPacket truco(receivedJson);
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+
+                    std::cout << "[CLIENT] Received packet type " << receivedPacket.packetType
                         << " from server" << std::endl;
+
                 }
                 catch (const std::exception& e) {
-                    std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+                    std::cerr << "[CLIENT] Error parsing JSON: " << e.what() << std::endl;
                 }
             }
         }

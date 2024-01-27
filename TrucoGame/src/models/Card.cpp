@@ -12,6 +12,11 @@ namespace TrucoGame {
             sprite.setScale(0.4f, 0.4f);
         }
 
+        Card::Card(const nlohmann::json& j):
+            Card(j.at("value").get<int>(), static_cast<Suit>(j.at("suit").get<int>()))
+        {
+        }
+
         Card::~Card() {
         }
 
@@ -54,6 +59,19 @@ namespace TrucoGame {
             pathToSprite.append(".png");
 
             return pathToSprite;
+        }
+
+        void Card::ToJson(nlohmann::json& j) const {
+            j["value"] = value;
+            j["suit"] = suit;
+        }
+
+        //USE: Card myCard = Card::FromJson(jsonData);
+        Card Card::FromJson(const nlohmann::json& j) {
+            int value = j.at("value").get<int>();
+            Suit suit = static_cast<Suit>(j.at("suit").get<int>());
+           
+            return Card(value, suit);
         }
     }
 }

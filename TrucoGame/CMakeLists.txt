@@ -69,18 +69,33 @@ add_executable (TrucoGame
     "include/models/Card.h"
     "include/models/Deck.h" 
     "include/views/trucoGameView/CardsEnum.h"  
-    
-    #TCP SERVER/CLIENT
-    "src/models/client/TcpClient.cpp"
-    "src/models/server/TcpServer.cpp"
-    "src/models/server/Client.cpp"
-    "src/models/Packet.cpp"
-    "include/models/client/TcpClient.h"
+
+     "include/models/ErrorCode.h"
+
+    #TCP SERVER
     "include/models/server/TcpServer.h"
-    "include/models/server/Client.h"
-    "include/models/Packet.h"
-    "include/models/ErrorCode.h"
-)
+    "include/models/server/Player.h"
+
+    "src/models/server/TcpServer.cpp"
+    "src/models/server/Player.cpp"
+
+
+    #TCP CLIENT
+    "include/models/client/TcpClient.h"
+    "src/models/client/TcpClient.cpp"
+
+    #Packets
+    "include/models/packets/Packet.h"
+    "include/models/packets/CardPacket.h"
+    "include/models/packets/EndRoundPacket.h"
+    "include/models/packets/EndTurnPacket.h"
+    "include/models/packets/PlayerPlayPacket.h"
+    "include/models/packets/StartRoundPacket.h"
+    "include/models/packets/TrucoPacket.h"
+
+    "src/models/packets/Packet.cpp"
+    "src/models/packets/CardPacket.cpp"
+ "include/models/packets/StartGamePacket.h")
 
 
 target_link_libraries(TrucoGame sfml-graphics)

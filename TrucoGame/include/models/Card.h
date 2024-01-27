@@ -1,6 +1,7 @@
 #pragma once 
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <nlohmann/json.hpp>
 
 namespace TrucoGame {
 
@@ -15,11 +16,16 @@ namespace TrucoGame {
             sf::Texture texture;
         public:
             Card(int value, Suit suit);
+            Card(const nlohmann::json& j);
             ~Card();
             Suit getSuit();
             int getValue();
             sf::Sprite* getSprite();
             std::string getSpritePath();
+
+            //IMPLEMENT THOSE IF YOU WILL SERIALISE THE OBJECT
+            void ToJson(nlohmann::json& j) const;
+            static Card FromJson(const nlohmann::json& j);
         };
 
         class ClubsCard : public Card {

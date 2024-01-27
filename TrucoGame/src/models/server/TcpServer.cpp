@@ -1,6 +1,6 @@
 #include "../../../include/models/server/TcpServer.h"
 
-#define MAX_CONNECTED_CLIENTS 2
+#define MAX_CONNECTED_CLIENTS 1
 
 namespace TrucoGame {
 
@@ -45,21 +45,10 @@ namespace TrucoGame {
             return Success;
         }
 
-        ErrorCode TcpServer::SendToAllClients(Packet packet)
+        ErrorCode TcpServer::SendToAllClients(Packet* packet)
         {
-            for (int i = 0; i < clients.size(); i++) {
-                clients[i]->Send(packet);
-            }
-            return Success;
-        }
-
-        ErrorCode TcpServer::SendToAllClientsBut(Packet packet, int clientId)
-        {
-            for (int i = 0; i < clients.size(); i++) {
-                if (clients[i]->id == clientId) {
-                    continue;
-                }
-                clients[i]->Send(packet);
+            for (int i = 0; i < players.size(); i++) {
+                players[i]->Send(packet);
             }
             return Success;
         }
@@ -67,17 +56,17 @@ namespace TrucoGame {
         ErrorCode TcpServer::StartListeningClients()
         {
             //TODO SUBSCRIBE TO CLIENT
-            for (int i = 0; i < clients.size(); i++) {
-                std::cout << "Reading Socket of client " << clients[i]->id << std::endl;
-                clients[i]->StartListening();
+            for (int i = 0; i < players.size(); i++) {
+                std::cout << "[SERVER] Reading Socket of client " << players[i]->id << std::endl;
+                players[i]->StartListening();
             }
             return Success;
         }
 
         ErrorCode TcpServer::Close()
         {
-            for (int i = 0; i < clients.size(); i++) {
-                delete clients[i];
+            for (int i = 0; i < players.size(); i++) {
+                delete players[i];
             }
             return ErrorCode();
         }
@@ -85,10 +74,10 @@ namespace TrucoGame {
         void TcpServer::AcceptClients()
         {
             int numberOfClients = 0;
-            std::cout << "Waiting for " << MAX_CONNECTED_CLIENTS << " clients to connect" << std::endl;
+            std::cout << "[SERVER] Waiting for " << MAX_CONNECTED_CLIENTS << " clients to connect\n";
 
-            while (clients.size() < MAX_CONNECTED_CLIENTS) {
-                Client* client = new Client(++numberOfClients);
+            while (players.size() < MAX_CONNECTED_CLIENTS) {
+                Player* client = new Player(++numberOfClients);
                 client->socket = accept(
                     serverSocket,
                     (struct sockaddr*)&client->address,
@@ -101,9 +90,9 @@ namespace TrucoGame {
                     return;
                 }
 
-                clients.push_back(client);
+                players.push_back(client);
 
-                std::cout << "Client " << client->id << " connected\n";
+                std::cout << "[SERVER] Client " << client->id << " connected\n";
             }
         }
 

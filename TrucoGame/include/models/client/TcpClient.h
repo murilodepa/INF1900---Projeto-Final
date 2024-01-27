@@ -4,7 +4,14 @@
 #include <iostream>
 
 #include "../ErrorCode.h"
-#include "../Packet.h"
+#include "../packets/Packet.h"
+#include "../packets/StartGamePacket.h"
+#include "../packets/StartRoundPacket.h"
+#include "../packets/EndRoundPacket.h"
+#include "../packets/EndTurnPacket.h"
+#include "../packets/PlayerPlayPacket.h"
+#include "../packets/CardPacket.h"
+#include "../packets/TrucoPacket.h"
 #include <nlohmann/json.hpp>
 
 #pragma comment(lib,"WS2_32")
@@ -24,7 +31,7 @@ namespace TrucoGame {
 		public:
 			ErrorCode Connect(const char* ipAddress, u_short port);
 			ErrorCode Send(const char* message);
-			ErrorCode Send(const Packet& packet);
+			ErrorCode Send(const Packet* packet);
 
 			ErrorCode StartListening();
 			void Listen();
