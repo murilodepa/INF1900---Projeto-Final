@@ -52,7 +52,8 @@ add_executable (TrucoGame
     "src/controllers/TableController.cpp"
     
     "src/models/Card.cpp"
-    "src/models/Deck.cpp"  
+    "src/models/Table.cpp"  
+    "src/models/Deck.cpp"
 
     "include/views/GraphicManager.h"
     "include/views/UtilsView.h"
@@ -67,7 +68,9 @@ add_executable (TrucoGame
     "include/controllers/TableController.h"
     
     "include/models/Card.h"
+    "include/models/Table.h"
     "include/models/Deck.h" 
+    "include/models/Player.h" 
     "include/views/trucoGameView/CardsEnum.h"  
 
      "include/models/ErrorCode.h"
