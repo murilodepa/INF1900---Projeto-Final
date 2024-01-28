@@ -16,6 +16,7 @@
 #include "../include/models/packets/PlayerPlayPacket.h"
 #include "../include/models/packets/EndTurnPacket.h"
 #include "../include/models/packets/TrucoPacket.h"
+#include "../include/models/server/GameManager.h"
 
 #define TEST_SERVER
 //#define TEST_CLIENT
@@ -122,6 +123,55 @@ void Server() {
     clientThread.join();
 }
 
+void Log(std::string msg) {
+    std::cout << "[SERVER] " << msg << std::endl;
+}
+
+void GameLoop() {
+    using namespace TrucoGame::Models;
+    GameManager gameManager;
+
+    std::thread clientThread(Client); //test
+    gameManager.waitForPlayersToConnect();
+
+    int gameWinner = -1;
+    int roundWinner = -1;
+
+    Log("Starting game");
+    gameManager.startGame();
+    while (gameWinner == -1)
+    {
+        Log("Starting round");
+        gameManager.startRound();
+        while (roundWinner == -1)
+        {
+            Log("Starting turn");
+            gameManager.startTurn();
+            roundWinner = gameManager.endTurn();
+            Log("Turn Ended");
+        }
+
+        gameWinner = gameManager.endRound(roundWinner);
+        Log("Round Ended");
+    }
+    gameManager.endGame(gameWinner);
+    Log("Game Ended");
+
+
+
+    while (true) {}
+    /*
+    Packet* packet = players[0]->WaitForPacket();
+    if (packet->packetType == PacketType::PlayerCard) {
+        CardPacket cardPacket(packet->payload);
+    }
+    else if (packet->packetType == PacketType::Truco) {
+        TrucoPacket trucoPacket(packet->payload);
+    }*/
+
+}
+
+
 #include <chrono>
 #include <thread>
 
@@ -136,7 +186,7 @@ void Client() {
     ErrorCode result = ErrorCode::SocketError;
 
     while (HAS_FAILED(result)) {
-        result = client.Connect("127.0.0.1", 12345);
+        result = client.Connect("127.0.0.1", 59821);
         std::this_thread::sleep_for(std::chrono::seconds(2));
     }
     client.StartListening();
@@ -182,7 +232,7 @@ void TestTcp() {
     std::cout << "1 - SERVER \n2 - CLIENT\n";
     std::cin >> choice;
     if (choice == 1) {
-        std::thread tcpThread(Server);
+        std::thread tcpThread(GameLoop);
         tcpThread.join();
     }
     else {
