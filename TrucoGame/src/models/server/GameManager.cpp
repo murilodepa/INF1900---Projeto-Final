@@ -1,4 +1,4 @@
-#include "../../include/models/GameManager.h"
+#include "../../../include/models/server/GameManager.h"
 #include <iostream>
 
 namespace TrucoGame {

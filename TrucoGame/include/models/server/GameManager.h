@@ -1,10 +1,10 @@
 #pragma once 
 
-#include "Card.h"
-#include "Deck.h"
-#include "Score.h"
-#include "Table.h"
-#include "Player.h"
+#include "../Card.h"
+#include "../Deck.h"
+#include "../Score.h"
+#include "../Table.h"
+#include "../Player.h"
 #include <vector>
 
 namespace TrucoGame {
