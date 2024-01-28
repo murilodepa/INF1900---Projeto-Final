@@ -39,7 +39,7 @@ namespace TrucoGame {
             return ErrorCode::Success;
         }
 
-        std::vector<Player*> TcpServer::AcceptPlayers(int numberOfClients)
+        std::vector<TcpClientPlayer*> TcpServer::AcceptPlayers(int numberOfClients)
         {
             if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
                 closesocket(serverSocket);
@@ -51,7 +51,7 @@ namespace TrucoGame {
             std::cout << "[SERVER] Waiting for " << numberOfClients << " clients to connect\n";
 
             while (players.size() < numberOfClients) {
-                Player* client = new Player(++playerId);
+                TcpClientPlayer* client = new TcpClientPlayer(++playerId);
                 client->socket = accept(
                     serverSocket,
                     (struct sockaddr*)&client->address,
@@ -109,7 +109,7 @@ namespace TrucoGame {
             std::cout << "[SERVER] Waiting for " << MAX_CONNECTED_CLIENTS << " clients to connect\n";
 
             while (players.size() < MAX_CONNECTED_CLIENTS) {
-                Player* client = new Player(++numberOfClients);
+                TcpClientPlayer* client = new TcpClientPlayer(++numberOfClients);
                 client->socket = accept(
                     serverSocket,
                     (struct sockaddr*)&client->address,

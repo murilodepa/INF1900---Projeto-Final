@@ -30,7 +30,7 @@ void Server() {
     server.Open(12345);
     std::thread clientThread(Client);
 
-    std::vector<Player*> players = server.AcceptPlayers(1);
+    std::vector<TcpClientPlayer*> players = server.AcceptPlayers(1);
     Packet* packet = players[0]->WaitForPacket();
     if (packet->packetType == PacketType::PlayerCard) {
         CardPacket cardPacket(packet->payload);

@@ -14,14 +14,14 @@ namespace TrucoGame {
 
     namespace Models {
 
-        class Player {
+        class TcpClientPlayer {
         public:
             int id;
             SOCKET socket;
             sockaddr_in address;
             int addressSize = sizeof(address);
 
-            Player(int id) : id(id) {}
+            TcpClientPlayer(int id) : id(id) {}
             ErrorCode StartListening();
             ErrorCode Send(Packet* packet);
 

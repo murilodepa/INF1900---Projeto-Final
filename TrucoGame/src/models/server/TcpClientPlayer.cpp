@@ -1,19 +1,19 @@
-#include "../../../include/models/server/Player.h"
+#include "../../../include/models/server/TcpClientPlayer.h"
 
 namespace TrucoGame {
 
     namespace Models {
 
-        ErrorCode Player::StartListening()
+        ErrorCode TcpClientPlayer::StartListening()
         {
-            mListenThread = std::thread(&Player::Listen, this);
+            mListenThread = std::thread(&TcpClientPlayer::Listen, this);
             if (!mListenThread.joinable()) {
                 return ErrorCode::ThreadError;
             }
             return Success;
         }
 
-        void Player::Listen()
+        void TcpClientPlayer::Listen()
         {
             char buffer[1024];
             int bytesRead;
@@ -33,7 +33,7 @@ namespace TrucoGame {
             }
         }
 
-        ErrorCode Player::Send(Packet* packet)
+        ErrorCode TcpClientPlayer::Send(Packet* packet)
         {
             nlohmann::json jsonPacket;
             packet->ToJson(jsonPacket);
@@ -47,7 +47,7 @@ namespace TrucoGame {
             return Success;
         }
 
-        Packet* Player::WaitForPacket() {
+        Packet* TcpClientPlayer::WaitForPacket() {
             char buffer[1024];
             int bytesRead;
             

@@ -73,7 +73,7 @@ add_executable (TrucoGame
     "include/models/Card.h"
     "include/models/Table.h"
     "include/models/Deck.h" 
-    "include/models/Player.h" 
+    "include/models/Player.h"
     "include/models/Score.h" 
     "include/models/GameManager.h" 
     "include/views/trucoGameView/CardsEnum.h"  
@@ -82,10 +82,10 @@ add_executable (TrucoGame
 
     #TCP SERVER
     "include/models/server/TcpServer.h"
-    "include/models/server/Player.h"
+    "include/models/server/TcpClientPlayer.h"
 
     "src/models/server/TcpServer.cpp"
-    "src/models/server/Player.cpp"
+    "src/models/server/TcpClientPlayer.cpp"
 
 
     #TCP CLIENT
