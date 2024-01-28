@@ -38,6 +38,7 @@ namespace TrucoGame {
             nlohmann::json jsonPacket;
             packet->ToJson(jsonPacket);
             std::string jsonString = jsonPacket.dump();
+            jsonString += "\n";
 
             int result = send(socket, jsonString.c_str(), jsonString.size(), 0);
             if (result == SOCKET_ERROR) {
