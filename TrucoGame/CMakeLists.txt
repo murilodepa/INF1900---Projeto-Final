@@ -25,6 +25,14 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+#JSON for modern C++
+FetchContent_Declare(
+        nlohmann
+        GIT_REPOSITORY  "https://github.com/onavratil-monetplus/json"
+        GIT_TAG         "master"
+)
+FetchContent_MakeAvailable(nlohmann)
+
 # Source code ============================================================================
 
 # Add source to this project's executable.
@@ -69,10 +77,37 @@ add_executable (TrucoGame
     "include/models/Score.h" 
     "include/models/GameManager.h" 
     "include/views/trucoGameView/CardsEnum.h"  
-     "src/models/Player.cpp")
+
+     "include/models/ErrorCode.h"
+
+    #TCP SERVER
+    "include/models/server/TcpServer.h"
+    "include/models/server/Player.h"
+
+    "src/models/server/TcpServer.cpp"
+    "src/models/server/Player.cpp"
+
+
+    #TCP CLIENT
+    "include/models/client/TcpClient.h"
+    "src/models/client/TcpClient.cpp"
+
+    #Packets
+    "include/models/packets/Packet.h"
+    "include/models/packets/CardPacket.h"
+    "include/models/packets/EndRoundPacket.h"
+    "include/models/packets/EndTurnPacket.h"
+    "include/models/packets/PlayerPlayPacket.h"
+    "include/models/packets/StartRoundPacket.h"
+    "include/models/packets/TrucoPacket.h"
+
+    "src/models/packets/Packet.cpp"
+    "include/models/packets/StartGamePacket.h"
+     )
 
 
 target_link_libraries(TrucoGame sfml-graphics)
+target_link_libraries(TrucoGame nlohmann_json::nlohmann_json)
 
 install(TARGETS TrucoGame 
 ARCHIVE DESTINATION "TrucoGame/lib"
