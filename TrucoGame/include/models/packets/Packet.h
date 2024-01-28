@@ -18,12 +18,12 @@ namespace TrucoGame {
         public:
             Packet(PacketType type) : packetType(type) {}
             Packet(const nlohmann::json& j):
-                packetType(static_cast<PacketType>(j["packetType"].get<int>())),
-                payload(j["payload"].dump())
+                payload(j),
+                packetType(static_cast<PacketType>(j["packetType"].get<int>()))
             {}
 
             PacketType packetType;
-            std::string payload;
+            nlohmann::json payload;
 
             virtual void ToJson(nlohmann::json& j) const;
         };

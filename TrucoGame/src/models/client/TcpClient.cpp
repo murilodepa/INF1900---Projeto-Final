@@ -75,37 +75,37 @@ namespace TrucoGame {
                     {
                     case StartGame:
                     {
-                        StartGamePacket startGamePacket(receivedJson);
+                        StartGamePacket startGamePacket(receivedPacket.payload);
                         break;
                     }
                     case StartRound:
                     {
-                        StartRoundPacket startRoundPacket(receivedJson);
+                        StartRoundPacket startRoundPacket(receivedPacket.payload);
                         break;
                     }
                     case EndRound:
                     {
-                        EndRoundPacket endRoundPacket(receivedJson);
+                        EndRoundPacket endRoundPacket(receivedPacket.payload);
                         break;
                     }
                     case EndTurn:
                     {
-                        EndTurnPacket endTurn(receivedJson);
+                        EndTurnPacket endTurn(receivedPacket.payload);
                         break;
                     }
                     case PlayerPlay:
                     {
-                        PlayerPlayPacket playPacket(receivedJson);
+                        PlayerPlayPacket playPacket(receivedPacket.payload);
                         break;
                     }
                     case PlayerCard:
                     {
-                        CardPacket cardPacket(receivedJson);
+                        CardPacket cardPacket(receivedPacket.payload);
                         break;
                     }
                     case Truco:
                     {
-                        TrucoPacket truco(receivedJson);
+                        TrucoPacket truco(receivedPacket.payload);
                         break;
                     }
                     default:

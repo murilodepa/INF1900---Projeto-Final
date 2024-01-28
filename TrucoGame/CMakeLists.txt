@@ -94,7 +94,6 @@ add_executable (TrucoGame
     "include/models/packets/TrucoPacket.h"
 
     "src/models/packets/Packet.cpp"
-    "src/models/packets/CardPacket.cpp"
  "include/models/packets/StartGamePacket.h")
 
 

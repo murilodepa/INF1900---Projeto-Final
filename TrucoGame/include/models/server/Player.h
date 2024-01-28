@@ -5,6 +5,8 @@
 
 #include "../ErrorCode.h"
 #include "../packets/Packet.h"
+#include "../packets/CardPacket.h"
+#include "../packets/TrucoPacket.h"
 
 #pragma comment(lib,"WS2_32")
 
@@ -23,8 +25,7 @@ namespace TrucoGame {
             ErrorCode StartListening();
             ErrorCode Send(Packet* packet);
 
-            template<typename T>
-            T WaitFor();
+            Packet* WaitForPacket();
 
             void Listen();
         private:

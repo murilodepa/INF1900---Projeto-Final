@@ -14,14 +14,13 @@ namespace TrucoGame {
                 Packet(j),
                 card(j["payload"]["card"]),
                 playerId(j["payload"]["playerId"].get<int>())
-            {
-            }
+            {}
+
             CardPacket(int playerId, Card card) :
                 Packet(PacketType::PlayerCard), 
                 card(card), 
                 playerId(playerId) 
-            {
-            }
+            {}
             void ToJson(nlohmann::json& j) const override {
                 Packet::ToJson(j);
                 j["payload"]["playerId"] = playerId;

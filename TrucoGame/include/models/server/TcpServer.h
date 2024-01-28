@@ -34,8 +34,7 @@ namespace TrucoGame {
             ErrorCode StartListeningClients();
             ErrorCode SendToAllClients(Packet* packet);
 
-            //ErrorCode SendMessageToClient(Client*);
-            //ErrorCode SendMessageToClient(int id);
+            std::vector<Player*> AcceptPlayers(int numberOfClients);
 
 
             ErrorCode Close();

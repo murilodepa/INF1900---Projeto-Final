@@ -47,34 +47,42 @@ namespace TrucoGame {
             return Success;
         }
 
-        template<typename T>
-        T Player::WaitFor() {
+        Packet* Player::WaitForPacket() {
             char buffer[1024];
             int bytesRead;
-            T packet;
-
+            
             while ((bytesRead = recv(socket, buffer, sizeof(buffer), 0)) > 0) {
                 std::string receivedData(buffer, bytesRead);
                 try {
-                    
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
-                    Packet basePacket(receivedJson);
+                    Packet receivedPacket(receivedJson);
 
-                    if (basePacket.packetType != packet.packetType) {
+                    std::cout << "Received packet type " << receivedPacket.packetType
+                        << " from client " << id << std::endl;
+
+                    switch (receivedPacket.packetType)
+                    {
+                    case PlayerCard:
+                    {
+                        CardPacket* cardPacket = new CardPacket(receivedPacket.payload);
+                        return cardPacket;
+                    }
+                    case Truco:
+                    {
+                        TrucoPacket* truco = new TrucoPacket(receivedPacket.payload);
+                        return truco;
+                    }
+                    default:
                         continue;
                     }
-
-                    packet.FromJson(receivedJson);
-                    std::cout << "Received packet type " << packet.packetType
-                        << " from client " << id << std::endl;
-                    return packet;
+                    
                 }
                 catch (const std::exception& e) {
                     std::cerr << "Error parsing JSON: " << e.what() << std::endl;
+                    return nullptr;
                 }
             }
-            return T();
+            return nullptr;
         }
-
     }
 }

@@ -39,6 +39,38 @@ namespace TrucoGame {
             return ErrorCode::Success;
         }
 
+        std::vector<Player*> TcpServer::AcceptPlayers(int numberOfClients)
+        {
+            if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
+                closesocket(serverSocket);
+                WSACleanup();
+                return players;
+            }
+
+            int playerId = 0;
+            std::cout << "[SERVER] Waiting for " << numberOfClients << " clients to connect\n";
+
+            while (players.size() < numberOfClients) {
+                Player* client = new Player(++playerId);
+                client->socket = accept(
+                    serverSocket,
+                    (struct sockaddr*)&client->address,
+                    &client->addressSize
+                );
+
+                if (client->socket == INVALID_SOCKET) {
+                    closesocket(serverSocket);
+                    WSACleanup();
+                    break;
+                }
+
+                players.push_back(client);
+
+                std::cout << "[SERVER] Client " << client->id << " connected\n";
+            }
+            return players;
+        }
+
         ErrorCode TcpServer::StopAcceptingClients()
         {
             acceptThread.join();

@@ -17,7 +17,9 @@
 #include "../include/models/packets/EndTurnPacket.h"
 #include "../include/models/packets/TrucoPacket.h"
 
-#define TEST_CLIENT
+#define TEST_SERVER
+//#define TEST_CLIENT
+
 void Client();
 void Server();
 
@@ -26,12 +28,20 @@ void Server() {
     std::cout << "[SERVER] Starting Server Thread" << std::endl;
     TrucoGame::Models::TcpServer server;
     server.Open(12345);
-
     std::thread clientThread(Client);
 
-    server.StartAcceptingClients();
+    std::vector<Player*> players = server.AcceptPlayers(1);
+    Packet* packet = players[0]->WaitForPacket();
+    if (packet->packetType == PacketType::PlayerCard) {
+        CardPacket cardPacket(packet->payload);
+    }
+    else if (packet->packetType == PacketType::Truco) {
+        TrucoPacket trucoPacket(packet->payload);
+    }
+
+    /*server.StartAcceptingClients();
     server.StopAcceptingClients();
-    server.StartListeningClients();
+    server.StartListeningClients();*/
 
 #ifdef TEST_CLIENT
     int choice;
@@ -132,6 +142,7 @@ void Client() {
     client.StartListening();
 
 #ifdef TEST_SERVER
+
     using namespace TrucoGame::Models;
     int choice;
     while (true) {
