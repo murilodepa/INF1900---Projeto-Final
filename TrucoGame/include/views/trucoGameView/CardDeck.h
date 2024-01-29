@@ -29,7 +29,7 @@ namespace TrucoGame {
             ~CardDeck();
 
             Texture getCardTexture();
-            void setCardTexture(Card &card);
+            //void setCardTexture(View::Card &card);
 
             CardView* getCardTurnedFaceUp();
             CardView* getDeck();

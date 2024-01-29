@@ -1,7 +1,12 @@
 #include "..\..\include\models\Table.h"
+#include "..\..\include\models\Card.h"
 
 namespace TrucoGame {
 	namespace Models {
+
+		Table::Table() {
+			playedCardIndex = 0;
+		}
 
 		std::vector<Card> Table::ShuffleHandCard()
 		{
@@ -14,47 +19,53 @@ namespace TrucoGame {
 			return shuffleHand;
 		}
 
-		void Table::PlaceCard(Card card, int playerId)
+		void Table::PlaceCard(Card* card, int playerId, bool isCovered)
 		{
+			if (playedCardIndex >= 4) return;
+
 			PlayedCard playedCard;
 			playedCard.card = card;
 			playedCard.playerId = playerId;
+			playedCard.isCovered = isCovered;
 			playedCards[playedCardIndex] = playedCard;
 			playedCardIndex++;
 		}
 
-
 		int Table::CalculateWinner()
 		{
-			int playerIdWinner = -1;
-			Card winningCard;
-			for(int i = 0; i < 4; i++)
+			PlayedCard winningCard;
+			winningCard = playedCards[0];
+			for(int i = 1; i < 4; i++)
 			{
-				if (playedCards[i].card.GetValue() > winningCard.GetValue() || IsManilha(playedCards[i].card)) //TODO: Improve how winner is calculated (maybe improve get value)
+				int newCardValue = GetCardActualValue(playedCards[i]);
+				int oldCardValue = GetCardActualValue(winningCard);
+				if (newCardValue > oldCardValue)
 				{
 					winningCard = playedCards[i];
-					playerIdWinner = playedCards[i].playerId;
 				}
-				if (playedCards[i].card.GetValue() == winningCard.GetValue())
+				else if (newCardValue == oldCardValue)
 				{
-					playerIdWinner = -1;
+					winningCard.playerId = -1;
 				}
 			}
-			return playerIdWinner;
+			return winningCard.playerId;
 		}
 
-		bool Table::IsManilha(Card card)
+		int Table::GetCardActualValue(PlayedCard playedCard)
 		{
-			return (card.GetValue() == (turnedCard.GetValue() + 1) % 10);
-		}
+			int baseValue = playedCard.card->getValue();
 
-		void Table::GetTableCards()
-		{
-			for (int i = 0; i < playedCards; i++)
-			{
-				deck.push(card);
-				PlayedCard[i] = NULL;
-			}
+			if (turnedCard == nullptr)
+				return baseValue;
+
+			if (playedCard.isCovered)
+				return -1;
+
+			//is manilha
+			if (baseValue == (turnedCard->getValue() + 1) % 10)
+				return baseValue + (10 * playedCard.card->getSuit());
+			else
+				return baseValue;
 		}
 	}
 }

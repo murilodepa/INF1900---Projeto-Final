@@ -6,21 +6,22 @@ namespace TrucoGame {
 	namespace Models {
 		struct PlayedCard {
 			int playerId;
-			Card card;
+			Card* card;
+			bool isCovered;
 		};
 
 		class Table {
 		public:
-			Deck deck;
-			Card turnedCard;
+			Table();
+			Card* turnedCard = nullptr;
+			void PlaceCard(Card* card, int playerId, bool isCovered);
 			std::vector<Card> ShuffleHandCard();
-			void PlaceCard(Card card, int playerId);
 			int CalculateWinner();
 		private:
 			PlayedCard playedCards[4];
 			int playedCardIndex = 0;
-			bool IsManilha(Card card);
-			void GetTableCards();
+			int GetCardActualValue(PlayedCard playedCard);
+			void CleanTableCards();
 		};
 	}
 }
