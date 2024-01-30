@@ -125,17 +125,18 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 
 	for (size_t player = 0; player < NUM_PLAYERS; player++) {
 		for (size_t card = 0; card < CARDS_IN_HAND; card++) {
+			CardView* cardView = &playerCards.cardsInHands[player][card];
 			if (player == 0) {
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(playerCards.cardsInHands[player][card]), players[player]->getCardPosition(card), speed));
+				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), speed));
 			}
 			else if (player == 2) {
 				std::string newTexturePath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
-				CardView* cardView = &playerCards.cardsInHands[player][card];
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo, 
-					std::ref(*cardView), playerCards.getCardTexture(player, card), newTexturePath, players[player]->getCardPosition(card), playerCards.cardsInHands[player][card].getRotation(), speed));
+
+				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo,
+					std::ref(*cardView), playerCards.getCardTexture(player, card), newTexturePath, players[player]->getCardPosition(card), cardView->getRotation(), speed));
 			}
 			else {
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(playerCards.cardsInHands[player][card]), players[player]->getCardPosition(card), 90.0f, speed));
+				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), 90.0f, speed));
 			}
 		}
 	}
