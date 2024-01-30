@@ -5,11 +5,12 @@ namespace TrucoGame {
     namespace Models {
         Card::Card(int value, Suit suit) : value(value), suit(suit)
         {
-            //Load file -> texture -> sprite
-            texture.loadFromFile(getSpritePath());
 
-            //Config sprite
-            sprite.setScale(0.4f, 0.4f);
+        }
+
+        Card::Card(const nlohmann::json& j):
+            Card(j.at("value").get<int>(), static_cast<Suit>(j.at("suit").get<int>()))
+        {
         }
 
         Card::~Card() {
@@ -23,37 +24,17 @@ namespace TrucoGame {
             return suit;
         }
 
-        sf::Sprite* Card::getSprite() {
-            sprite.setTexture(texture);
-
-            return &sprite;
+        void Card::ToJson(nlohmann::json& j) const {
+            j["value"] = value;
+            j["suit"] = suit;
         }
 
-        std::string Card::getSpritePath() {
-            std::string pathToSprite = "../../../../TrucoGame/resources/images/cards/";
-            std::string suitName;
-
-            switch (suit) {
-                case Suit::Clubs:
-                    suitName = "clubs";
-                    break;
-                case Suit::Spades:
-                    suitName = "spades";
-                    break;
-                case Suit::Diamonds:
-                    suitName = "diamonds";
-                    break;
-                case Suit::Hearts:
-                    suitName = "hearts";
-                    break;
-            }
-
-            pathToSprite.append(suitName);
-            pathToSprite.append("/");
-            pathToSprite.append(std::to_string(value));
-            pathToSprite.append(".png");
-
-            return pathToSprite;
+        //USE: Card myCard = Card::FromJson(jsonData);
+        Card Card::FromJson(const nlohmann::json& j) {
+            int value = j.at("value").get<int>();
+            Suit suit = static_cast<Suit>(j.at("suit").get<int>());
+           
+            return Card(value, suit);
         }
     }
 }

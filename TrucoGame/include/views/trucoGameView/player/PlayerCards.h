@@ -25,7 +25,7 @@ namespace TrucoGame {
             ~PlayerCards();
 
             Texture* getCardTexture(size_t player, size_t cardIndex);
-            void setCardTexture(Card &card, Texture* texture);
+            void setCardTexture(CardStruct &cardStruct, Texture* texture);
 
             void initializePlayerCards(Vector2f& initialDeckPositionVector2f);
         };

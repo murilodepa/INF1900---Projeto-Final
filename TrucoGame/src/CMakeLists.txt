@@ -1,5 +1,13 @@
 # CMakeLists.txt in the src directory
 
+cmake_minimum_required(VERSION 3.14)
+
+# C++ version ===========================================================================
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 # Source files
 set(SRC_FILES
     # Main
@@ -10,8 +18,13 @@ set(SRC_FILES
     "controllers/TableController.cpp"
 
     # Models
+    "models/client/TcpClient.cpp"
+    "models/packets/Packet.cpp"
+    "models/server/Player.cpp"
+    "models/server/TcpServer.cpp"
     "models/Card.cpp"
     "models/Deck.cpp"
+    "models/Table.cpp"
     
     # Views
     "views/trucoGameView/Player/PlayerCards.cpp"
@@ -31,7 +44,10 @@ set(SRC_FILES
 # Add source to this project's executable.
 add_executable (TrucoGame ${SRC_FILES})
 
-target_link_libraries(TrucoGame sfml-graphics)
+target_link_libraries(TrucoGame 
+sfml-graphics 
+nlohmann_json
+)
 
 install(TARGETS TrucoGame 
 ARCHIVE DESTINATION "TrucoGame/lib"

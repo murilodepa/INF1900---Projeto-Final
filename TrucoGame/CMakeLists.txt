@@ -25,6 +25,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
+#JSON for modern C++
+FetchContent_Declare(
+    nlohmann
+    URL ${SPASS_REPO_URL_PREFIX}/onavratil-monetplus/json/archive/e7b3b40b5a95bc74b9a7f662830a27c49ffc01b4.zip    
+)
+FetchContent_MakeAvailable(nlohmann)
+
 # Include subdirectories
 add_subdirectory(src)
 add_subdirectory(include)

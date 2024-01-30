@@ -22,7 +22,7 @@ enum class CardSuit {
     Spades
 };
 
-struct Card {
+struct CardStruct {
     CardRank rank;
     CardSuit suit;
 };
