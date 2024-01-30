@@ -13,7 +13,7 @@ using namespace sf;
 
 namespace TrucoGame {
     namespace View {
-        class PlayerCards : public CardView {
+        class PlayerCards {
         private:
             Texture*** cardsTexture;
             size_t numPlayers;
