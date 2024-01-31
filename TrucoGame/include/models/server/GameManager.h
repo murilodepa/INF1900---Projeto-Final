@@ -12,9 +12,6 @@
 #include "../packets/StartGamePacket.h"
 #include "../packets/StartRoundPacket.h"
 
-#define NUM_OF_PLAYERS 1
-#define DEFAULT_PORT 59821
-
 namespace TrucoGame {
 
     namespace Models {

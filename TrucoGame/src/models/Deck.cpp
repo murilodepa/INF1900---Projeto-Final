@@ -22,7 +22,7 @@ namespace TrucoGame {
             cards.clear();
         }
 
-        Card* Deck::pop() {
+        Card Deck::pop() {
             if (cards.empty()) {
                 std::cout << "Attempted to draw card on an empty deck." << std::endl;
             }
@@ -32,7 +32,7 @@ namespace TrucoGame {
             std::uniform_int_distribution<> distrib(0, cards.size() - 1);
             int randomIndex = distrib(gen);
 
-            Card* selectedCard = &cards[randomIndex];
+            Card selectedCard = cards[randomIndex];
             cards.erase(cards.begin() + randomIndex);
 
             return selectedCard;

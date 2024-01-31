@@ -36,36 +36,7 @@ namespace TrucoGame {
     {
         
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
-        // TEST CODE FOR THE MODELS, WILL BE REMOVED LATER
-        std::vector<Player> players;
-        players.push_back(Player(0, "Laert"));
-        players.push_back(Player(1, "Caique"));
-        players.push_back(Player(2, "Vitor"));
-        players.push_back(Player(3, "Murilo"));
-
-        Table table;
-        Deck deck;        
-        Models::Card* cards[4];
-        table.turnedCard = deck.pop();
-
-        // get 4 cards and place them at the table, (player 2 covers)
-        for (int i = 0; i < 4; i++) {
-            cards[i] = deck.pop();
-            bool isCovered = false;
-            if (i == 2) isCovered = true;
-            table.PlaceCard(cards[i], i, isCovered);
-        }
-        int winner = table.CalculateWinner(); //calculate winner and does nothing
-
-        Score score;
-        score.increaseStakes();
-        int x = score.updateTurnWon(1);
-        x = score.updateTurnWon(0);
-        x = score.updateTurnWon(0);
-        x = score.getStakes();
-        x = score.updateRoundWon(1);
-        score.resetRound();
-
+        
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window

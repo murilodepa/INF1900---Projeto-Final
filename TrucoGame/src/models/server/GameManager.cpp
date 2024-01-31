@@ -2,6 +2,9 @@
 #include <iostream>
 #include "../../../include/models/packets/PlayerPlayPacket.h"
 
+#define NUM_OF_PLAYERS 1
+#define DEFAULT_PORT 59821
+
 namespace TrucoGame {
     namespace Models {
         void GameManager::waitForPlayersToConnect() {
@@ -22,15 +25,15 @@ namespace TrucoGame {
         void GameManager::startRound()
         {
             //Give players hand cards
-            table.turnedCard = deck.pop();
+            table.turnedCard = &deck.pop();
             score.resetRound();
 
             for each (auto player in clients) {
                 std::vector<Card> hand;
-                hand.push_back(*deck.pop());
-                hand.push_back(*deck.pop());
-                hand.push_back(*deck.pop());
-                StartRoundPacket startRoundPacket(*(table.turnedCard), hand);
+                hand.push_back(deck.pop());
+                hand.push_back(deck.pop());
+                hand.push_back(deck.pop());
+                StartRoundPacket startRoundPacket(*table.turnedCard, hand);
                 player->Send(&startRoundPacket);
             }
         }
