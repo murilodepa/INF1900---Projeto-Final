@@ -1,5 +1,6 @@
 #include "../../include/models/Score.h"
 #include "..\..\include\models\Score.h"
+#include <iostream>
 
 #define POINT_TO_WIN 12
 
@@ -48,6 +49,9 @@ namespace TrucoGame {
             {
                 isRoundDrawn = true;
             }
+
+            std::cout << "Turns Won: " << std::endl;
+            std::cout << "Team0 " << team0TurnsWon << " x " << team1TurnsWon << " Team1" << std::endl;
             return -1; //none won
         }
 

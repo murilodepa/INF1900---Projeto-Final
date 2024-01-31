@@ -30,7 +30,6 @@ namespace TrucoGame {
             void startRound();
             void startTurn();
             void startPlay(int currentPlayer);
-            void playCard(int playerId, int cardIndex, bool isCovered);
             int endTurn();
             int endRound(int roundWinner);
             void endGame(int gameWinner);

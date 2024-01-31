@@ -99,16 +99,20 @@ namespace TrucoGame {
                         {
                             StartGamePacket startGamePacket(receivedPacket.payload);
                             std::cout << startGamePacket.playerId << " " << startGamePacket.teamId;
+                            if (startGamePacketReceived)
+                                startGamePacketReceived(startGamePacket);
                             break;
                         }
                         case StartRound:
                         {
                             StartRoundPacket startRoundPacket(receivedPacket.payload);
-                            std::cout << "Hand:\n";
-                            std::cout << ":" << startRoundPacket.handCards[0].getValue() << " " << startRoundPacket.handCards[0].getSuit();
+                            std::cout << "Hand [";
+                            std::cout << startRoundPacket.handCards[0].getValue() << " " << startRoundPacket.handCards[0].getSuit();
                             std::cout << ":" << startRoundPacket.handCards[1].getValue() << " " << startRoundPacket.handCards[1].getSuit();
-                            std::cout << ":" << startRoundPacket.handCards[2].getValue() << " " << startRoundPacket.handCards[2].getSuit() << std::endl;
+                            std::cout << ":" << startRoundPacket.handCards[2].getValue() << " " << startRoundPacket.handCards[2].getSuit() << "]" << std::endl;
                             std::cout << "Table Card: " << startRoundPacket.tableCard.getValue() << " " << startRoundPacket.tableCard.getSuit();
+                            if (startRoundPacketReceived)
+                                startRoundPacketReceived(startRoundPacket);
                             break;
                         }
                         case EndRound:
@@ -124,6 +128,8 @@ namespace TrucoGame {
                         case PlayerPlay:
                         {
                             PlayerPlayPacket playPacket(receivedPacket.payload);
+                            if (playerPlayPacketReceived)
+                                playerPlayPacketReceived(playPacket);
                             break;
                         }
                         case PlayerCard:

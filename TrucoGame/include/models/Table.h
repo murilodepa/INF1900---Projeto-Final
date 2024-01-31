@@ -3,10 +3,15 @@
 
 namespace TrucoGame {
 	namespace Models {
-		struct PlayedCard {
+		class PlayedCard {
+		public:
 			int playerId;
-			Card* card;
+			Card card;
 			bool isCovered;
+			PlayedCard(int playerId, Card card, bool isCovered) :
+				playerId(playerId),
+				card(card),
+				isCovered(isCovered){}
 		};
 
 		class Table
@@ -14,12 +19,12 @@ namespace TrucoGame {
 		public:
 			Table();
 			Card* turnedCard = nullptr;
-			void PlaceCard(Card* card, int playerId, bool isCovered);
+			void PlaceCard(Card card, int playerId, bool isCovered);
 			//Returns: playerId of the winner (0 ~ 3)
 			int CalculateWinner();
 			Card* GetAllCards();
+			std::vector<PlayedCard> playedCards;
 		private:
-			PlayedCard playedCards[4];
 			int playedCardIndex = 0;
 			int GetCardActualValue(PlayedCard playedCard);
 		};

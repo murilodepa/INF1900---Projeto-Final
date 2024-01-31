@@ -18,6 +18,7 @@
 #include "../include/models/packets/TrucoPacket.h"
 #include "../include/models/server/GameManager.h"
 
+
 #define TEST_SERVER
 //#define TEST_CLIENT
 
@@ -174,15 +175,31 @@ void GameLoop() {
 
 #include <chrono>
 #include <thread>
+using namespace TrucoGame::Models;
+TrucoGame::Models::Player* self;
+TrucoGame::Models::TcpClient client;
+void OnStartGamePacketReceived(TrucoGame::Models::StartGamePacket packet)
+{
+    self = new Player(packet.playerId, "Player " + packet.playerId);
+}
 
-void OnPacketReceived(TrucoGame::Models::Packet packet) {
-    //
+void OnStartRoundPacketReceived(TrucoGame::Models::StartRoundPacket packet)
+{
+    self->hand = packet.handCards;
+    //set table card
+}
+
+void OnPlayPacketReceived(TrucoGame::Models::PlayerPlayPacket packet)
+{
+    CardPacket p = CardPacket(self->playerId, self->popCardByIndex(0));
+    client.Send(&p);
 }
 
 void Client() {
+    
     std::cout << "[CLIENT] Starting client Thread" << std::endl;
 
-    TrucoGame::Models::TcpClient client;
+    
     ErrorCode result = ErrorCode::SocketError;
 
     while (HAS_FAILED(result)) {
@@ -191,6 +208,9 @@ void Client() {
     }
     client.StartListening();
 
+    client.playerPlayPacketReceived = OnPlayPacketReceived;
+    client.startGamePacketReceived = OnStartGamePacketReceived;
+    client.startRoundPacketReceived = OnStartRoundPacketReceived;
 #ifdef TEST_SERVER
 
     using namespace TrucoGame::Models;
@@ -226,6 +246,7 @@ void Client() {
     while (true) {}
 #endif
 }
+
 
 void TestTcp() {
     int choice;

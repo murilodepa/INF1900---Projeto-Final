@@ -24,8 +24,6 @@ namespace TrucoGame {
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
                     Packet receivedPacket(receivedJson);
 
-                    std::cout << "Received packet type" << receivedPacket.packetType
-                        << " from client " << id << std::endl;
                 }
                 catch (const std::exception& e) {
                     std::cerr << "Error parsing JSON: " << e.what() << std::endl;
@@ -56,26 +54,12 @@ namespace TrucoGame {
                 std::string receivedData(buffer, bytesRead);
                 try {
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
-                    Packet receivedPacket(receivedJson);
+                    Packet* receivedPacket = new Packet(receivedJson);
 
-                    std::cout << "Received packet type " << receivedPacket.packetType
+                    std::cout << "Received packet type " << receivedPacket->packetType
                         << " from client " << id << std::endl;
 
-                    switch (receivedPacket.packetType)
-                    {
-                    case PlayerCard:
-                    {
-                        CardPacket* cardPacket = new CardPacket(receivedPacket.payload);
-                        return cardPacket;
-                    }
-                    case Truco:
-                    {
-                        TrucoPacket* truco = new TrucoPacket(receivedPacket.payload);
-                        return truco;
-                    }
-                    default:
-                        continue;
-                    }
+                    return receivedPacket;
                     
                 }
                 catch (const std::exception& e) {

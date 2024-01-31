@@ -2,7 +2,7 @@
 #include <iostream>
 #include "../../../include/models/packets/PlayerPlayPacket.h"
 
-#define NUM_OF_PLAYERS 1
+#define NUM_OF_PLAYERS 4
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {
@@ -50,33 +50,25 @@ namespace TrucoGame {
 
             PlayerPlayPacket playerPlayPacket(currentPlayer);
             clients[currentPlayer]->Send(&playerPlayPacket);
-            clients[currentPlayer]->WaitForPacket();
 
             //Handle received packet
-            Packet* packet = clients[0]->WaitForPacket();
+            Packet* packet = clients[currentPlayer]->WaitForPacket();
             if (packet->packetType == PacketType::PlayerCard) {
                 CardPacket cardPacket(packet->payload);
-                table.PlaceCard(&cardPacket.card, currentPlayer, false); //TODO: card packet isCovered property
+                std::cout << "Card: [" << cardPacket.card.getValue() << " " << cardPacket.card.getSuit() << "]" << std::endl;
+
+                table.PlaceCard(cardPacket.card, cardPacket.playerId, false); //TODO: card packet isCovered property
             }
             else if (packet->packetType == PacketType::Truco) {
                 TrucoPacket trucoPacket(packet->payload);
             }
         }
 
-        void GameManager::playCard(int playerId, int cardIndex, bool isCovered)
-        {/*
-            Card* card = players[playerId].popCardByIndex(cardIndex);
-            if (card == nullptr) {
-                std::cout << "Can't play the card " << cardIndex << " of " << playerId << std::endl;
-                return;
-            }
-            table.PlaceCard(card, playerId, isCovered);*/
-        }
-
         int GameManager::endTurn() 
         {
             int turnWinner = table.CalculateWinner();
             int roundWinner = score.updateTurnWon(turnWinner % 2);
+            table.playedCards.clear();
             //TODO: clear table cards
             return roundWinner;
         }

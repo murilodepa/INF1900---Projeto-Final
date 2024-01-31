@@ -12,12 +12,12 @@ namespace TrucoGame {
 		{
 		public:
 			Player(int id, string name) : playerName(name), playerId(id) {};
-			vector<Card*> hand;
+			vector<Card> hand;
 
-			Card* popCardByIndex(int index);
+			Card popCardByIndex(int index);
+			int playerId;
 		private:
 			string playerName;
-			int playerId;
 		};
 	}
 }

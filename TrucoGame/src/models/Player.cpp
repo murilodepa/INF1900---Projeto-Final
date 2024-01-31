@@ -2,10 +2,10 @@
 
 namespace TrucoGame {
 	namespace Models {
-		Card* Player::popCardByIndex(int index) 
+		Card Player::popCardByIndex(int index) 
 		{
-			Card* card = hand[index];
-			hand[index] = nullptr;
+			Card card = hand[index];
+			hand.erase(hand.begin() + index);
 			return card;
 		}
 	}
