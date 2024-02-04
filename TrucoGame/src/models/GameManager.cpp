@@ -1,7 +1,9 @@
 #include "../../include/models/GameManager.h"
+#include <iostream>
+
+using namespace std;
 
 namespace TrucoGame {
-
     namespace Models {
 
         GameManager::GameManager()
@@ -10,26 +12,36 @@ namespace TrucoGame {
 
         GameManager::~GameManager()
         {
-            cards.clear();
         }
 
-        void GameManager::CleanPlayerCards() 
+        void GameManager::cleanTableCards()
         {
-            for each (Player player in players)
+            for (Card card : table.getPlayedCards())
             {
-                for each (Card card in player.GetHand())
+                deck.push(card);
+            }
+            //table.cleanPlayedCards();
+        }
+
+        void GameManager::cleanPlayerCards() 
+        {
+            for (Player& player : players)
+            {
+                for (Card* card : player.getHand())
                 {
-                    table.deck.push(card);
+                    deck.push(*card);
                 }
-                player.CleanHand();
+                player.cleanHand();
             }
         }
 
-        void GameManager::ShuffleCards() 
+        void GameManager::popAllPlayersCards()
         {
-            for each (Player player in players)
-            {
-                player.setHand(table.ShuffleHandCard());
+            for (Player& player : players) 
+            { 
+                player.getHand().push_back(deck.pop());
+                player.getHand().push_back(deck.pop());
+                player.getHand().push_back(deck.pop());
             }
         }
     }

@@ -1,5 +1,7 @@
 #include "..\..\include\models\Player.h"
 
+using namespace std;
+
 namespace TrucoGame {
 
 	namespace Models {
@@ -9,23 +11,19 @@ namespace TrucoGame {
 			playerId = id;
 		}
 
-		Player::~Player()
-		{
-		}
-
-		std::vector<Card> Player::GetHand()
+		vector<Card*> &Player::getHand()
 		{
 			return hand;
 		}
 
-		void Player::SetHand(std::vector<Card> shuffleCards)
+		void Player::setHand(vector<Card*> shuffleCards)
 		{
 			hand = shuffleCards;
 		}
 		
-		void Player::CleanHand()
+		void Player::cleanHand()
 		{
-			GetHand().clear();
+			 getHand().clear();
 		}
 	}
 }

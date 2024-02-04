@@ -6,6 +6,8 @@
 #include "Player.h"
 #include <vector>
 
+using namespace std;
+
 namespace TrucoGame {
 
     namespace Models {
@@ -13,12 +15,14 @@ namespace TrucoGame {
         class GameManager {
         private:
             Table table;
-            std::vector<Player> players;
+            Deck deck;
         public:
+            vector<Player> players;
             GameManager();
             ~GameManager();
-            void CleanPlayerCards();
-            void ShuffleCards();
+            void popAllPlayersCards();
+            void cleanTableCards();
+            void cleanPlayerCards();
         };
     }
 }

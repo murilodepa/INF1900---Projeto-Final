@@ -1,5 +1,5 @@
 #pragma once 
-#include "Card.h"
+#include "Card.h"   
 #include <string>
 #include <vector>
 
@@ -11,15 +11,14 @@ namespace TrucoGame {
 		class Player
 		{
 		public:
-			Player(int id, string name) : playerName(name), playerId(id) {};
-			vector<Card*> hand;
-			std::vector<Card> GetHand();
-			void SetHand(std::vector<Card> shuffleCards);
-			void CleanHand();
+			Player(string name, int id);
+			vector<Card*> &getHand();
+			void setHand(vector<Card*> shuffleCards);
+			void cleanHand();
 		private:
 			string playerName;
 			int playerId;
-			std::vector<Card> hand;
+			vector<Card*> hand;
 		};
 	}
 }
