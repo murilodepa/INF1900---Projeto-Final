@@ -15,8 +15,11 @@ namespace TrucoGame {
 
     GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    Application::Application() : trucoGameView(pGraphicManager->getWindowSize()) {
-        if (pGraphicManager == nullptr) {
+    Application::Application() : 
+        trucoGameView((pGraphicManager != nullptr) ? pGraphicManager->getWindowSize() : Vector2f(SCREEN_X, SCREEN_Y)),
+        mainMenuState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MainMenuState>(pGraphicManager->getWindow()) : nullptr)
+    {
+        if (pGraphicManager == nullptr || mainMenuState == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
         }
@@ -65,7 +68,11 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            //trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
+            mainMenuState->render();
+
+            //Update Mouse
+            mainMenuState->update();
 
             pGraphicManager->showElements();
         }
