@@ -8,7 +8,7 @@ namespace TrucoGame {
         GraphicManager* GraphicManager::pGraphicManager = nullptr;
 
         GraphicManager::GraphicManager() :
-            window(new sf::RenderWindow(sf::VideoMode(SCREEN_X, SCREEN_Y), "Truco Game", sf::Style::Titlebar | sf::Style::Close))
+            window(new sf::RenderWindow(sf::VideoMode((unsigned int)SCREEN_X, (unsigned int)SCREEN_Y), "Truco Game", sf::Style::Titlebar | sf::Style::Close))
         {
             if (window == nullptr) {
                 std::cout << "ERROR::TrucoGame::Controller::GraphicManager - Failed to create a graphical window." << std::endl;

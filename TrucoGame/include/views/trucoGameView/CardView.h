@@ -16,11 +16,10 @@ namespace TrucoGame {
             float cardScale;
             float cardWidth; //= playerHands[0][0].getGlobalBounds().width; // 427
             float cardHeight; //= playerHands[0][0].getGlobalBounds().height; // 600
-            float halfCard; // = cardWidth / 2;
 
         public:
             CardView() = default;
-            CardView(Vector2f& cardPositionOnTable);
+            CardView(Vector2f& cardPositionOnTable, Texture& texture);
             ~CardView();
 
             float getCardWidth() const;
