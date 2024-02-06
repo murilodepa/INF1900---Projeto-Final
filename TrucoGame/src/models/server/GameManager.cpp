@@ -25,7 +25,9 @@ namespace TrucoGame {
         void GameManager::startRound()
         {
             //Give players hand cards
-            table.turnedCard = &deck.pop();
+            deck.reset();
+            Card tableCard = deck.pop();
+            table.SetTableCard(tableCard);
             score.resetRound();
 
             for each (auto player in clients) {
@@ -33,7 +35,7 @@ namespace TrucoGame {
                 hand.push_back(deck.pop());
                 hand.push_back(deck.pop());
                 hand.push_back(deck.pop());
-                StartRoundPacket startRoundPacket(*table.turnedCard, hand);
+                StartRoundPacket startRoundPacket(tableCard, hand);
                 player->Send(&startRoundPacket);
             }
         }
@@ -47,7 +49,6 @@ namespace TrucoGame {
         }
 
         void GameManager::startPlay(int currentPlayer) {
-
             PlayerPlayPacket playerPlayPacket(currentPlayer);
             clients[currentPlayer]->Send(&playerPlayPacket);
 
@@ -57,7 +58,7 @@ namespace TrucoGame {
                 CardPacket cardPacket(packet->payload);
                 std::cout << "Card: [" << cardPacket.card.getValue() << " " << cardPacket.card.getSuit() << "]" << std::endl;
 
-                table.PlaceCard(cardPacket.card, cardPacket.playerId, false); //TODO: card packet isCovered property
+                table.PlaceCard(cardPacket.card, cardPacket.playerId, false); 
             }
             else if (packet->packetType == PacketType::Truco) {
                 TrucoPacket trucoPacket(packet->payload);
@@ -70,6 +71,9 @@ namespace TrucoGame {
             int roundWinner = score.updateTurnWon(turnWinner % 2);
             table.playedCards.clear();
             //TODO: clear table cards
+            std::cout << "===== TURN ENDED =====" << std::endl;
+            std::cout << "Team0 " << score.getTeam0TurnsWon() << " x " << score.getTeam1TurnsWon() << " Team1" << std::endl;
+            std::cout << "======================" << std::endl;
             return roundWinner;
         }
 
@@ -77,11 +81,19 @@ namespace TrucoGame {
         {
             int gameWinner = score.updateRoundWon(roundWinner);
             //TODO: CleanPlayerCards(); ClearTurnedCard();
+
+            std::cout << "========== ROUND ENDED ==========" << std::endl;
+            std::cout << "SCORE: " << std::endl;
+            std::cout << "Team0 " << score.getTeam0GameScore() << " x " << score.getTeam1GameScore() << " Team1" << std::endl;
+            std::cout << "=================================" << std::endl;
             return gameWinner;
         }
 
         void GameManager::endGame(int gameWinner)
         {
+            std::cout << "========== GAME ENDED ==========" << std::endl;
+            std::cout << "WINNER: " << gameWinner << std::endl;
+            std::cout << "=================================" << std::endl;
             //end the game based on the winner
         }
     }

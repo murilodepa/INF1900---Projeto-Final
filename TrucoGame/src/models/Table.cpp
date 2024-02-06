@@ -18,6 +18,10 @@ namespace TrucoGame {
 			playedCardIndex++;
 		}
 
+		void Table::SetTableCard(Card card) {
+			manilhaValue = (card.getValue() + 1) % 10;
+		}
+
 		int Table::CalculateWinner()
 		{
 			PlayedCard winningCard = playedCards[0];
@@ -38,6 +42,9 @@ namespace TrucoGame {
 			std::cout << "Calculated Winner:" << std::endl;
 			std::cout << "Card:" << winningCard.card.getValue() << " " << winningCard.card.getSuit() << std::endl;
 			std::cout << "Played by:" << winningCard.playerId << std::endl;
+			
+			playedCardIndex = 0;
+
 			return winningCard.playerId;
 		}
 
@@ -45,17 +52,21 @@ namespace TrucoGame {
 		{
 			int baseValue = playedCard.card.getValue();
 
-			if (turnedCard == nullptr)
+			if (manilhaValue == -1)
 				return baseValue;
 
 			if (playedCard.isCovered)
 				return -1;
 
+			int actualValue;
 			//is manilha
-			if (baseValue == (turnedCard->getValue() + 1) % 10)
-				return baseValue + (10 * playedCard.card.getSuit());
+			if (baseValue == manilhaValue)
+				actualValue = baseValue + (10 * playedCard.card.getSuit());
 			else
-				return baseValue;
+				actualValue = baseValue;
+
+			std::cout << baseValue << ":" << playedCard.card.getSuit() << " -> " << actualValue << std::endl;
+			return actualValue;
 		}
 
 	}

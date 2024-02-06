@@ -140,10 +140,12 @@ void GameLoop() {
 
     Log("Starting game");
     gameManager.startGame();
+    int currentRound = 0;
     while (gameWinner == -1)
     {
-        Log("Starting round");
+        Log("Starting round" + currentRound);
         gameManager.startRound();
+        roundWinner = -1;
         while (roundWinner == -1)
         {
             Log("Starting turn");
@@ -151,7 +153,7 @@ void GameLoop() {
             roundWinner = gameManager.endTurn();
             Log("Turn Ended");
         }
-
+        currentRound++;
         gameWinner = gameManager.endRound(roundWinner);
         Log("Round Ended");
     }
@@ -191,7 +193,7 @@ void OnStartRoundPacketReceived(TrucoGame::Models::StartRoundPacket packet)
 
 void OnPlayPacketReceived(TrucoGame::Models::PlayerPlayPacket packet)
 {
-    CardPacket p = CardPacket(self->playerId, self->popCardByIndex(0));
+    CardPacket p = CardPacket(self->playerId, self->popCardByIndex(0), false);
     client.Send(&p);
 }
 
@@ -227,7 +229,7 @@ void Client() {
         case 5:
         {
             ClubsCard card(3);
-            CardPacket cardPacket(2, card);
+            CardPacket cardPacket(2, card, false);
             std::cout << "[SERVER] Sending 3 of Clubs Card\n";
             client.Send(&cardPacket);
             break;

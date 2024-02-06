@@ -18,13 +18,14 @@ namespace TrucoGame {
 		{
 		public:
 			Table();
-			Card* turnedCard = nullptr;
 			void PlaceCard(Card card, int playerId, bool isCovered);
 			//Returns: playerId of the winner (0 ~ 3)
 			int CalculateWinner();
 			Card* GetAllCards();
+			void SetTableCard(Card card);
 			std::vector<PlayedCard> playedCards;
 		private:
+			int manilhaValue = -1;
 			int playedCardIndex = 0;
 			int GetCardActualValue(PlayedCard playedCard);
 		};
