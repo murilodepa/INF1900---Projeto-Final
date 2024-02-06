@@ -46,6 +46,7 @@ namespace TrucoGame {
                 int currentPlayer = (i + startingPlayer) % 4;
                 startPlay(currentPlayer);
             }
+            std::cout << std::endl;
         }
 
         void GameManager::startPlay(int currentPlayer) {
@@ -56,7 +57,7 @@ namespace TrucoGame {
             Packet* packet = clients[currentPlayer]->WaitForPacket();
             if (packet->packetType == PacketType::PlayerCard) {
                 CardPacket cardPacket(packet->payload);
-                std::cout << "Card: [" << cardPacket.card.getValue() << " " << cardPacket.card.getSuit() << "]" << std::endl;
+                std::cout << cardPacket.playerId << ": " << "[" << cardPacket.card.getValue() << " " << cardPacket.card.getSuit() << "] | ";
 
                 table.PlaceCard(cardPacket.card, cardPacket.playerId, false); 
             }
@@ -71,9 +72,8 @@ namespace TrucoGame {
             int roundWinner = score.updateTurnWon(turnWinner % 2);
             table.playedCards.clear();
             //TODO: clear table cards
-            std::cout << "===== TURN ENDED =====" << std::endl;
-            std::cout << "Team0 " << score.getTeam0TurnsWon() << " x " << score.getTeam1TurnsWon() << " Team1" << std::endl;
-            std::cout << "======================" << std::endl;
+            std::cout << "===== TURN ENDED ===== ";
+            std::cout << score.getTeam0TurnsWon() << " - " << score.getTeam1TurnsWon() << std::endl;
             return roundWinner;
         }
 
@@ -82,18 +82,16 @@ namespace TrucoGame {
             int gameWinner = score.updateRoundWon(roundWinner);
             //TODO: CleanPlayerCards(); ClearTurnedCard();
 
-            std::cout << "========== ROUND ENDED ==========" << std::endl;
-            std::cout << "SCORE: " << std::endl;
-            std::cout << "Team0 " << score.getTeam0GameScore() << " x " << score.getTeam1GameScore() << " Team1" << std::endl;
-            std::cout << "=================================" << std::endl;
+            std::cout << "========== ROUND ENDED ========== ";
+            std::cout << score.getTeam0GameScore() << " x " << score.getTeam1GameScore() << std::endl;
             return gameWinner;
         }
 
         void GameManager::endGame(int gameWinner)
         {
-            std::cout << "========== GAME ENDED ==========" << std::endl;
+            std::cout << "=============== GAME ENDED ================" << std::endl;
             std::cout << "WINNER: " << gameWinner << std::endl;
-            std::cout << "=================================" << std::endl;
+            std::cout << "===========================================" << std::endl;
             //end the game based on the winner
         }
     }

@@ -137,25 +137,25 @@ void GameLoop() {
 
     int gameWinner = -1;
     int roundWinner = -1;
+    int turnsPlayed = 0;
 
     Log("Starting game");
     gameManager.startGame();
     int currentRound = 0;
     while (gameWinner == -1)
     {
-        Log("Starting round" + currentRound);
         gameManager.startRound();
         roundWinner = -1;
-        while (roundWinner == -1)
+
+        turnsPlayed = 0;
+        while (roundWinner == -1 && turnsPlayed < 3)
         {
-            Log("Starting turn");
             gameManager.startTurn();
             roundWinner = gameManager.endTurn();
-            Log("Turn Ended");
+            turnsPlayed++;
         }
         currentRound++;
         gameWinner = gameManager.endRound(roundWinner);
-        Log("Round Ended");
     }
     gameManager.endGame(gameWinner);
     Log("Game Ended");

@@ -56,9 +56,6 @@ namespace TrucoGame {
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
                     Packet* receivedPacket = new Packet(receivedJson);
 
-                    std::cout << "Received packet type " << receivedPacket->packetType
-                        << " from client " << id << std::endl;
-
                     return receivedPacket;
                     
                 }

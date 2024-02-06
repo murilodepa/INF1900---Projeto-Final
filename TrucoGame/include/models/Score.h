@@ -12,6 +12,7 @@ namespace TrucoGame {
             int team0TurnsWon;
             int team1TurnsWon;
             bool isRoundDrawn = false;
+            int firstTurnWinner = -1;
         public:
             Score();
             

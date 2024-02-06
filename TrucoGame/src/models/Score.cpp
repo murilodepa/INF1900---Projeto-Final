@@ -33,6 +33,11 @@ namespace TrucoGame {
         
         int Score::updateTurnWon(int winnerTeamId)
         {
+            if (team0TurnsWon == 0 && team1TurnsWon == 0)
+            {
+                firstTurnWinner = winnerTeamId;
+            }
+
             if (winnerTeamId == 0) //TEAM 0 WON TURN
             {
                 team0TurnsWon += 1; 
@@ -47,11 +52,14 @@ namespace TrucoGame {
             }
             else if (winnerTeamId == -1) // DRAW TURN
             {
+                if (firstTurnWinner != -1) 
+                {
+                    return firstTurnWinner;
+                }
+
                 isRoundDrawn = true;
             }
 
-            std::cout << "Turns Won: " << std::endl;
-            std::cout << "Team0 " << team0TurnsWon << " x " << team1TurnsWon << " Team1" << std::endl;
             return -1; //none won
         }
 
@@ -76,6 +84,7 @@ namespace TrucoGame {
             team0TurnsWon = 0;
             team1TurnsWon = 0;
             isRoundDrawn = false;
+            firstTurnWinner = -1;
             stakes = 1;
         }
 

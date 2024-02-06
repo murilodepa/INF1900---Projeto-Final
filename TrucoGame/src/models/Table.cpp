@@ -39,9 +39,7 @@ namespace TrucoGame {
 				}
 			}
 
-			std::cout << "Calculated Winner:" << std::endl;
-			std::cout << "Card:" << winningCard.card.getValue() << " " << winningCard.card.getSuit() << std::endl;
-			std::cout << "Played by:" << winningCard.playerId << std::endl;
+			std::cout << "Winner: " << winningCard.playerId << ": " << winningCard.card.getValue() << " " << winningCard.card.getSuit() << std::endl;
 			
 			playedCardIndex = 0;
 
@@ -65,7 +63,6 @@ namespace TrucoGame {
 			else
 				actualValue = baseValue;
 
-			std::cout << baseValue << ":" << playedCard.card.getSuit() << " -> " << actualValue << std::endl;
 			return actualValue;
 		}
 
