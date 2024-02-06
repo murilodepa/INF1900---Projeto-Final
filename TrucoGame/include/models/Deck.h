@@ -15,6 +15,7 @@ namespace TrucoGame {
             ~Deck();
             Card pop();
             void push(Card card);
+            void reset();
 
         };
     }

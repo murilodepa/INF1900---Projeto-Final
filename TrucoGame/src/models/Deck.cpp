@@ -9,12 +9,7 @@ namespace TrucoGame {
 
         Deck::Deck()
         {
-            for (int i = 0; i <= 9; i++) {
-                cards.push_back(ClubsCard(i));
-                cards.push_back(SpadesCard(i));
-                cards.push_back(DiamondsCard(i));
-                cards.push_back(HeartsCard(i));
-            }
+            reset();
         }
 
         Deck::~Deck() 
@@ -40,6 +35,16 @@ namespace TrucoGame {
 
         void Deck::push(Card card) {
             cards.push_back(card);
+        }
+
+        void Deck::reset() {
+            cards.clear();
+            for (int i = 0; i <= 9; i++) {
+                cards.push_back(ClubsCard(i));
+                cards.push_back(SpadesCard(i));
+                cards.push_back(DiamondsCard(i));
+                cards.push_back(HeartsCard(i));
+            }
         }
     }
 }
