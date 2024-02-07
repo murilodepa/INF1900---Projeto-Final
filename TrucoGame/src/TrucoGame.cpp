@@ -7,19 +7,21 @@
 #include "../include/models/server/TcpServer.h"
 #include "../include/models/client/TcpClient.h"
 #include "../include/models/Card.h"
-#include "../include/models/server/GameManager.h"
+#include "../include/models/server/ServerGameManager.h"
 #include "../include/models/client/ClientGameManager.h"
 
 void Client() {
     using namespace TrucoGame::Models;
     ClientGameManager clientGameManager;
+
+    while (true) {}
 }
 
 void Server() {
     using namespace TrucoGame::Models;
-    GameManager gameManager;
+    ServerGameManager gameManager;
 
-    std::thread clientThread(Client); //test
+    std::thread clientThread(Client);
     gameManager.waitForPlayersToConnect();
 
     int gameWinner = -1;

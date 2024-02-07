@@ -1,4 +1,4 @@
-#include "../../../include/models/server/GameManager.h"
+#include "../../../include/models/server/ServerGameManager.h"
 #include <iostream>
 #include "../../../include/models/packets/PlayerPlayPacket.h"
 
@@ -7,14 +7,14 @@
 
 namespace TrucoGame {
     namespace Models {
-        void GameManager::waitForPlayersToConnect() {
+        void ServerGameManager::waitForPlayersToConnect() {
             std::cout << "[SERVER] Starting Server Thread" << std::endl;
             tcpServer.Open(DEFAULT_PORT);
 
             clients = tcpServer.AcceptPlayers(NUM_OF_PLAYERS);
         }
 
-        void GameManager::startGame() {
+        void ServerGameManager::startGame() {
             for (int i = 0; i < clients.size(); i++) {
                 StartGamePacket startGamePacket(i, i % 2);
                 clients[i]->Send(&startGamePacket);
@@ -22,7 +22,7 @@ namespace TrucoGame {
             }
         }
 
-        void GameManager::startRound()
+        void ServerGameManager::startRound()
         {
             //Give players hand cards
             deck.reset();
@@ -40,7 +40,7 @@ namespace TrucoGame {
             }
         }
 
-        void GameManager::startTurn() {
+        void ServerGameManager::startTurn() {
             int startingPlayer = 0;
             for (int i = 0; i < clients.size(); i++) {
                 int currentPlayer = (i + startingPlayer) % 4;
@@ -49,7 +49,7 @@ namespace TrucoGame {
             std::cout << std::endl;
         }
 
-        void GameManager::startPlay(int currentPlayer) {
+        void ServerGameManager::startPlay(int currentPlayer) {
             PlayerPlayPacket playerPlayPacket(currentPlayer);
             clients[currentPlayer]->Send(&playerPlayPacket);
 
@@ -66,7 +66,7 @@ namespace TrucoGame {
             }
         }
 
-        int GameManager::endTurn() 
+        int ServerGameManager::endTurn()
         {
             int turnWinner = table.CalculateWinner();
             int roundWinner = score.updateTurnWon(turnWinner % 2);
@@ -77,7 +77,7 @@ namespace TrucoGame {
             return roundWinner;
         }
 
-        int GameManager::endRound(int roundWinner) 
+        int ServerGameManager::endRound(int roundWinner)
         {
             int gameWinner = score.updateRoundWon(roundWinner);
             //TODO: CleanPlayerCards(); ClearTurnedCard();
@@ -87,7 +87,7 @@ namespace TrucoGame {
             return gameWinner;
         }
 
-        void GameManager::endGame(int gameWinner)
+        void ServerGameManager::endGame(int gameWinner)
         {
             std::cout << "=============== GAME ENDED ================" << std::endl;
             std::cout << "WINNER: " << gameWinner << std::endl;

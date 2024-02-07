@@ -16,7 +16,7 @@ namespace TrucoGame {
 
     namespace Models {
 
-        class GameManager {
+        class ServerGameManager {
         private:
             TcpServer tcpServer;
             Score score;
