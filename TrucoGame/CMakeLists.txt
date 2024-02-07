@@ -91,6 +91,9 @@ add_executable (TrucoGame
     #TCP CLIENT
     "include/models/client/TcpClient.h"
     "src/models/client/TcpClient.cpp"
+    
+    "include/models/client/ClientGameManager.h"
+    "src/models/client/ClientGameManager.cpp"
 
     #Packets
     "include/models/packets/Packet.h"
@@ -103,7 +106,7 @@ add_executable (TrucoGame
 
     "src/models/packets/Packet.cpp"
     "include/models/packets/StartGamePacket.h"
-     )
+    )
 
 
 target_link_libraries(TrucoGame sfml-graphics)
