@@ -24,6 +24,7 @@ namespace TrucoGame {
             Table table;
             vector<TcpClientPlayer*> clients;
 
+            TrucoResult calculateTrucoResult(TrucoResult a, TrucoResult b);
         public:
             void waitForPlayersToConnect();
             void startGame();

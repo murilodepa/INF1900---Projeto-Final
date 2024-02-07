@@ -16,6 +16,7 @@ namespace TrucoGame {
             void OnStartGamePacketReceived(StartGamePacket packet);
             void OnStartRoundPacketReceived(StartRoundPacket packet);
             void OnPlayPacketReceived(PlayerPlayPacket packet);
+            void OnTrucoPacketReceived(TrucoPacket packet);
         public:
             ClientGameManager();
         };

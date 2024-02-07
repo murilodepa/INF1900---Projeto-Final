@@ -1,4 +1,5 @@
 #include "../../../include/models/server/TcpServer.h"
+#include <future>
 
 #define MAX_CONNECTED_CLIENTS 1
 
@@ -37,6 +38,25 @@ namespace TrucoGame {
                 return ErrorCode::ThreadError;
             }
             return ErrorCode::Success;
+        }
+
+        std::pair<Packet*, Packet*> TcpServer::WaitForTeamPacket(int team)
+        {
+            Packet* packetA;
+            Packet* packetB;
+
+            std::thread threadPlayerA([this, &packetA, team]() {
+                packetA = players[team]->WaitForPacket();
+            });
+
+            std::thread threadPlayerB([this, &packetB, team]() {
+                packetB = players[team + 2]->WaitForPacket();
+            });
+
+            threadPlayerA.join();
+            threadPlayerB.join();
+
+            return { packetA, packetB };
         }
 
         std::vector<TcpClientPlayer*> TcpServer::AcceptPlayers(int numberOfClients)

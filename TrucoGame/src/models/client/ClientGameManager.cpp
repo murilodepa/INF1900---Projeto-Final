@@ -1,5 +1,6 @@
 #include "..\..\..\include\models\client\ClientGameManager.h"
 #include <chrono>
+#include <random>
 
 #define DEFAULT_PORT 59821
 
@@ -26,6 +27,9 @@ namespace TrucoGame {
             client.playerPlayPacketReceived = [this](PlayerPlayPacket packet) {
                 OnPlayPacketReceived(packet);
             };
+            client.trucoPacketReceived = [this](TrucoPacket packet) {
+                OnTrucoPacketReceived(packet);
+            };
         }
 
         void ClientGameManager::OnStartGamePacketReceived(StartGamePacket packet)
@@ -39,8 +43,50 @@ namespace TrucoGame {
         }
         void ClientGameManager::OnPlayPacketReceived(PlayerPlayPacket packet)
         {
-            CardPacket p = CardPacket(player->playerId, player->popCardByIndex(0), false);
-            client.Send(&p);
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> distrib(0, 100);
+            int randomIndex = distrib(gen);
+
+            if (randomIndex < 5)
+            {
+                std::cout << "I am requesting Truco" << std::endl;
+                int id = player->playerId;
+                TrucoPacket p(id, (id + 1) % 2, TrucoResult::Raise);
+                client.Send(&p);
+            }
+            else 
+            {
+                CardPacket p = CardPacket(player->playerId, player->popCardByIndex(0), false);
+                client.Send(&p);
+            }
+
+        }
+
+        void ClientGameManager::OnTrucoPacketReceived(TrucoPacket packet) 
+        {
+            std::cout << "Received Truco Packet" << std::endl;
+            if (packet.result == TrucoResult::Yes) {
+                std::cout << "Truco was accepted" << std::endl;
+                //Update Stakes
+                if (packet.requesterId == player->playerId)
+                {
+                    std::cout << "I am the player now." << std::endl;
+                    CardPacket p = CardPacket(player->playerId, player->popCardByIndex(0), false);
+                    client.Send(&p);
+                }
+            }
+            else
+            {
+                if (packet.responseTeamId == player->playerId % 2)
+                {
+                    std::cout << "Responding Truco with Yes" << std::endl;
+                    packet.result = TrucoResult::Yes;
+                    packet.responseTeamId = !packet.responseTeamId;
+                    client.Send(&packet);
+
+                }
+            }
         }
 
         

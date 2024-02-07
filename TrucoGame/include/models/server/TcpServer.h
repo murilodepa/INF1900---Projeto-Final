@@ -33,6 +33,7 @@ namespace TrucoGame {
 
             ErrorCode StartListeningClients();
             ErrorCode SendToAllClients(Packet* packet);
+            std::pair<Packet*, Packet*> TcpServer::WaitForTeamPacket(int team);
 
             std::vector<TcpClientPlayer*> AcceptPlayers(int numberOfClients);
 

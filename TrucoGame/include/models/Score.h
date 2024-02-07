@@ -16,6 +16,8 @@ namespace TrucoGame {
         public:
             Score();
             
+            const int maxStakes = 12;
+
             // Retuns stakes: (1, 3, 6, 9, 12)
             int getStakes();
             // Best of three turn score (max is 2)

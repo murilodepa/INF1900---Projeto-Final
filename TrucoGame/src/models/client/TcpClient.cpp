@@ -139,6 +139,7 @@ namespace TrucoGame {
                         case Truco:
                         {
                             TrucoPacket truco(receivedPacket.payload);
+                            trucoPacketReceived(truco);
                             break;
                         }
                         default:

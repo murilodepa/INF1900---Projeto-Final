@@ -23,6 +23,7 @@ namespace TrucoGame {
 		typedef std::function<void(StartGamePacket)> StartGamePacketEventHandler;
 		typedef std::function<void(PlayerPlayPacket)> PlayerPlayPacketEventHandler;
 		typedef std::function<void(StartRoundPacket)> StartRoundPacketEventHandler;
+		typedef std::function<void(TrucoPacket)> TrucoPacketEventHandler;
 
 		class TcpClient {
 		private:
@@ -44,6 +45,7 @@ namespace TrucoGame {
 			PlayerPlayPacketEventHandler playerPlayPacketReceived;
 			StartGamePacketEventHandler startGamePacketReceived;
 			StartRoundPacketEventHandler startRoundPacketReceived;
+			TrucoPacketEventHandler trucoPacketReceived;
 		};
 	}
 }

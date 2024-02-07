@@ -53,7 +53,7 @@ namespace TrucoGame {
             PlayerPlayPacket playerPlayPacket(currentPlayer);
             clients[currentPlayer]->Send(&playerPlayPacket);
 
-            //Handle received packet
+        waitForPlayerPacket:
             Packet* packet = clients[currentPlayer]->WaitForPacket();
             if (packet->packetType == PacketType::PlayerCard) {
                 CardPacket cardPacket(packet->payload);
@@ -63,7 +63,47 @@ namespace TrucoGame {
             }
             else if (packet->packetType == PacketType::Truco) {
                 TrucoPacket trucoPacket(packet->payload);
+                TrucoResult result = TrucoResult::Raise;
+
+                while (score.getStakes() < score.maxStakes && result == TrucoResult::Raise) {
+                    tcpServer.SendToAllClients(&trucoPacket);
+
+                    auto [playerAResponse, playerBResponse] = tcpServer.WaitForTeamPacket(trucoPacket.responseTeamId);
+                    TrucoPacket a(playerAResponse->payload);
+                    TrucoPacket b(playerBResponse->payload);
+
+                    result = calculateTrucoResult(a.result, b.result);
+
+                    if (result != TrucoResult::No) {
+                        score.increaseStakes();
+                    }
+
+                    trucoPacket.responseTeamId = a.responseTeamId;
+                    trucoPacket.result = result;
+
+                    delete playerAResponse;
+                    delete playerBResponse;
+                }
+
+                tcpServer.SendToAllClients(&trucoPacket);
+
+                if (result == TrucoResult::No) {
+                    endRound(!trucoPacket.responseTeamId);
+                    return;
+                }
+
+                goto waitForPlayerPacket; //After truco, wait for requester player card
             }
+        }
+
+        TrucoResult ServerGameManager::calculateTrucoResult(TrucoResult a, TrucoResult b)
+        {
+            if (a == TrucoResult::No || b == TrucoResult::No)
+                return TrucoResult::No;
+            if (a == TrucoResult::Raise || b == TrucoResult::Raise)
+                return TrucoResult::Raise;
+
+            return TrucoResult::Yes;
         }
 
         int ServerGameManager::endTurn()
