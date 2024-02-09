@@ -16,7 +16,8 @@ namespace TrucoGame {
 
         class Packet {
         public:
-            Packet(PacketType type) : packetType(type) {}
+            Packet(PacketType type) : packetType(type) {
+            }
             Packet(const nlohmann::json& j):
                 payload(j),
                 packetType(static_cast<PacketType>(j["packetType"].get<int>()))

@@ -19,6 +19,7 @@ namespace TrucoGame {
                 Packet(PacketType::PlayerPlay),
                 playerId(playerId)
             {
+                ToJson(payload);
             }
 
             void ToJson(nlohmann::json& j) const override {

@@ -1,8 +1,10 @@
 #include "../../../include/models/server/ServerGameManager.h"
 #include <iostream>
 #include "../../../include/models/packets/PlayerPlayPacket.h"
+#include "../../../include/models/server/AIPlayer.h"
 
 #define NUM_OF_PLAYERS 4
+#define NUM_OF_HUMANS 1
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {
@@ -11,7 +13,11 @@ namespace TrucoGame {
             std::cout << "[SERVER] Starting Server Thread" << std::endl;
             tcpServer.Open(DEFAULT_PORT);
 
-            clients = tcpServer.AcceptPlayers(NUM_OF_PLAYERS);
+            clients = tcpServer.AcceptPlayers(NUM_OF_HUMANS);   
+
+            for (int i = NUM_OF_HUMANS; i < NUM_OF_PLAYERS; i++) {
+                clients.push_back(new AIPlayer(i, &table));
+            }
         }
 
         void ServerGameManager::startGame() {
@@ -66,9 +72,11 @@ namespace TrucoGame {
                 TrucoResult result = TrucoResult::Raise;
 
                 while (score.getStakes() < score.maxStakes && result == TrucoResult::Raise) {
-                    tcpServer.SendToAllClients(&trucoPacket);
+                    tcpServer.SendToClients(clients, &trucoPacket);
 
-                    auto [playerAResponse, playerBResponse] = tcpServer.WaitForTeamPacket(trucoPacket.responseTeamId);
+                    int teamId = trucoPacket.responseTeamId;
+                    TcpClientPlayer* players[] = { clients[teamId], clients[teamId + 2] };
+                    auto [playerAResponse, playerBResponse] = tcpServer.WaitForTeamPacket(players);
                     TrucoPacket a(playerAResponse->payload);
                     TrucoPacket b(playerBResponse->payload);
 
@@ -78,14 +86,13 @@ namespace TrucoGame {
                         score.increaseStakes();
                     }
 
-                    trucoPacket.responseTeamId = a.responseTeamId;
-                    trucoPacket.result = result;
+                    trucoPacket = TrucoPacket(trucoPacket.requesterId, a.responseTeamId, result);
 
                     delete playerAResponse;
                     delete playerBResponse;
                 }
 
-                tcpServer.SendToAllClients(&trucoPacket);
+                tcpServer.SendToClients(clients, &trucoPacket);
 
                 if (result == TrucoResult::No) {
                     endRound(!trucoPacket.responseTeamId);

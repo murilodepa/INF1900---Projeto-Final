@@ -25,32 +25,17 @@ namespace TrucoGame {
             return Success;
         }
 
-        ErrorCode TcpServer::StartAcceptingClients()
-        {
-            if (listen(serverSocket, SOMAXCONN) == SOCKET_ERROR) {
-                closesocket(serverSocket);
-                WSACleanup();
-                return SocketError;
-            }
-            acceptThread = std::thread(&TcpServer::AcceptClients, this);
-
-            if (!acceptThread.joinable()) {
-                return ErrorCode::ThreadError;
-            }
-            return ErrorCode::Success;
-        }
-
-        std::pair<Packet*, Packet*> TcpServer::WaitForTeamPacket(int team)
+        std::pair<Packet*, Packet*> TcpServer::WaitForTeamPacket(TcpClientPlayer* players[])
         {
             Packet* packetA;
             Packet* packetB;
 
-            std::thread threadPlayerA([this, &packetA, team]() {
-                packetA = players[team]->WaitForPacket();
+            std::thread threadPlayerA([this, &packetA, players]() {
+                packetA = players[0]->WaitForPacket();
             });
 
-            std::thread threadPlayerB([this, &packetB, team]() {
-                packetB = players[team + 2]->WaitForPacket();
+            std::thread threadPlayerB([this, &packetB, players]() {
+                packetB = players[1]->WaitForPacket();
             });
 
             threadPlayerA.join();
@@ -88,6 +73,7 @@ namespace TrucoGame {
 
                 std::cout << "[SERVER] Client " << client->id << " connected\n";
             }
+
             return players;
         }
 
@@ -97,20 +83,10 @@ namespace TrucoGame {
             return Success;
         }
 
-        ErrorCode TcpServer::SendToAllClients(Packet* packet)
+        ErrorCode TcpServer::SendToClients(std::vector<TcpClientPlayer*> players, Packet* packet)
         {
             for (int i = 0; i < players.size(); i++) {
                 players[i]->Send(packet);
-            }
-            return Success;
-        }
-
-        ErrorCode TcpServer::StartListeningClients()
-        {
-            //TODO SUBSCRIBE TO CLIENT
-            for (int i = 0; i < players.size(); i++) {
-                std::cout << "[SERVER] Reading Socket of client " << players[i]->id << std::endl;
-                players[i]->StartListening();
             }
             return Success;
         }
@@ -121,31 +97,6 @@ namespace TrucoGame {
                 delete players[i];
             }
             return ErrorCode();
-        }
-
-        void TcpServer::AcceptClients()
-        {
-            int numberOfClients = 0;
-            std::cout << "[SERVER] Waiting for " << MAX_CONNECTED_CLIENTS << " clients to connect\n";
-
-            while (players.size() < MAX_CONNECTED_CLIENTS) {
-                TcpClientPlayer* client = new TcpClientPlayer(++numberOfClients);
-                client->socket = accept(
-                    serverSocket,
-                    (struct sockaddr*)&client->address,
-                    &client->addressSize
-                );
-
-                if (client->socket == INVALID_SOCKET) {
-                    closesocket(serverSocket);
-                    WSACleanup();
-                    return;
-                }
-
-                players.push_back(client);
-
-                std::cout << "[SERVER] Client " << client->id << " connected\n";
-            }
         }
 
         /* private */

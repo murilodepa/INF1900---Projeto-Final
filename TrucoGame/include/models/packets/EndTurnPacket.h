@@ -20,7 +20,9 @@ namespace TrucoGame {
                 Packet(PacketType::EndTurn),
                 winnerTeamId(winnerTeamId),
                 winnerPlayerId(winnerPlayerId)
-            {}
+            {
+                ToJson(payload);
+            }
 
             void ToJson(nlohmann::json& j) const override {
                 Packet::ToJson(j);

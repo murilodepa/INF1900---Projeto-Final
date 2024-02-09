@@ -22,12 +22,12 @@ namespace TrucoGame {
             int addressSize = sizeof(address);
 
             TcpClientPlayer(int id) : id(id) {}
-            ErrorCode StartListening();
-            ErrorCode Send(Packet* packet);
+            virtual ErrorCode StartListening();
+            virtual ErrorCode Send(Packet* packet);
 
-            Packet* WaitForPacket();
+            virtual Packet* WaitForPacket();
 
-            void Listen();
+            virtual void Listen();
         private:
             std::thread mListenThread;
         };

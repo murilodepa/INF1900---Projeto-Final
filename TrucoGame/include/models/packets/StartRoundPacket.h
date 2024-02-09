@@ -23,7 +23,9 @@ namespace TrucoGame {
                 Packet(PacketType::StartRound),
                 tableCard(tablecard),
                 handCards(handCards)
-            {}
+            {
+                ToJson(payload);
+            }
             void ToJson(nlohmann::json& j) const override {
                 Packet::ToJson(j);
                 tableCard.ToJson(j["payload"]["tableCard"]);

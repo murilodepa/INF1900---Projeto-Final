@@ -23,7 +23,10 @@ namespace TrucoGame {
                 card(card), 
                 playerId(playerId),
                 isCovered(isCovered)
-            {}
+            {
+                ToJson(payload);
+            }
+
             void ToJson(nlohmann::json& j) const override {
                 Packet::ToJson(j);
                 j["payload"]["playerId"] = playerId;
