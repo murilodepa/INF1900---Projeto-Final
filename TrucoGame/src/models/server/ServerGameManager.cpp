@@ -13,7 +13,7 @@ namespace TrucoGame {
             std::cout << "[SERVER] Starting Server Thread" << std::endl;
             tcpServer.Open(DEFAULT_PORT);
 
-            clients = tcpServer.AcceptPlayers(NUM_OF_HUMANS);   
+            clients = tcpServer.AcceptPlayers(NUM_OF_HUMANS);
 
             for (int i = NUM_OF_HUMANS; i < NUM_OF_PLAYERS; i++) {
                 clients.push_back(new AIPlayer(i, &table));

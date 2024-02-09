@@ -1,4 +1,4 @@
-#include "../../include/models/Card.h"
+﻿#include "../../include/models/Card.h"
 
 namespace TrucoGame {
 

@@ -20,6 +20,8 @@ namespace TrucoGame {
 
         void Score::increaseStakes() 
         {
+            std::cout << "Increasing stakes..." << std::endl;
+            std::cout << "Before: " << stakes << std::endl;
             if (stakes == 1)
                 stakes = 3;
             else if (stakes == 3)
@@ -28,6 +30,7 @@ namespace TrucoGame {
                 stakes = 9;
             else if (stakes == 9)
                 stakes = 12;
+            std::cout << "After: " << stakes << std::endl;
         }
 
         
