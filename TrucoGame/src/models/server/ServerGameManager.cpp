@@ -4,7 +4,7 @@
 #include "../../../include/models/server/AIPlayer.h"
 
 #define NUM_OF_PLAYERS 4
-#define NUM_OF_HUMANS 1
+#define NUM_OF_HUMANS 2
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {
@@ -95,7 +95,7 @@ namespace TrucoGame {
                 tcpServer.SendToClients(clients, &trucoPacket);
 
                 if (result == TrucoResult::No) {
-                    endRound(!trucoPacket.responseTeamId);
+                    teamRefusedTruco = !trucoPacket.responseTeamId;
                     return;
                 }
 
@@ -115,8 +115,14 @@ namespace TrucoGame {
 
         int ServerGameManager::endTurn()
         {
+            int roundWinner;
+            if (teamRefusedTruco != -1) {
+                roundWinner = !teamRefusedTruco;
+                teamRefusedTruco = -1;
+                return roundWinner;
+            }
             int turnWinner = table.CalculateWinner();
-            int roundWinner = score.updateTurnWon(turnWinner % 2);
+            roundWinner = score.updateTurnWon(turnWinner % 2);
             table.playedCards.clear();
             //TODO: clear table cards
             std::cout << "===== TURN ENDED ===== ";
