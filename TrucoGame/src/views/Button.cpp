@@ -2,16 +2,16 @@
 
 Button::Button(float x, float y, float width, float height, Color idleColor, Color hoverColor, Color activeColor)
 {
-	this->buttonState = BTN_IDLE;
+	this->buttonState = BTN_IDLE2;
 
-	this->shape.setPosition(Vector2f(x, y));
-	this->shape.setSize(Vector2f(width, height));
+	this->setPosition(Vector2f(x, y));
+	this->setSize(Vector2f(width, height));
 
 	this->idleColor = idleColor;
 	this->hoverColor = hoverColor;
 	this->activeColor = activeColor;
 
-	this->shape.setFillColor(this->idleColor);
+	this->setFillColor(this->idleColor);
 }
 
 Button::~Button()
@@ -20,7 +20,7 @@ Button::~Button()
 
 const bool Button::isPressed() const
 {
-	if (this->buttonState == BTN_PRESSED) {
+	if (this->buttonState == BTN_PRESSED2) {
 		return true;
 	}
 	return false;
@@ -29,35 +29,30 @@ const bool Button::isPressed() const
 void Button::update(const Vector2f(mousePos))
 {
 	// Idle
-	this->buttonState = BTN_IDLE;
+	this->buttonState = BTN_IDLE2;
 
 	// Hover
-	if (this->shape.getGlobalBounds().contains(mousePos)) {
-		this->buttonState = BTN_HOVER;
+	if (this->getGlobalBounds().contains(mousePos)) {
+		this->buttonState = BTN_HOVER2;
 
 		// Pressed
 		if (Mouse::isButtonPressed(Mouse::Left)) {
-			this->buttonState = BTN_PRESSED;
+			this->buttonState = BTN_PRESSED2;
 		}
 	}
 
 	switch (this->buttonState)
 	{
-	case BTN_IDLE:
-		this->shape.setFillColor(this->idleColor);
+	case BTN_IDLE2:
+		this->setFillColor(this->idleColor);
 		break;
-	case BTN_HOVER:
-		this->shape.setFillColor(this->hoverColor);
+	case BTN_HOVER2:
+		this->setFillColor(this->hoverColor);
 		break;
-	case BTN_PRESSED:
-		this->shape.setFillColor(this->activeColor);
+	case BTN_PRESSED2:
+		this->setFillColor(this->activeColor);
 	default:
-		this->shape.setFillColor(Color::Red);
+		this->setFillColor(Color::Red);
 		break;
 	}
-}
-
-void Button::render(RenderTarget* target)
-{
-	target->draw(this->shape);
 }

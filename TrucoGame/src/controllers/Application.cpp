@@ -7,6 +7,7 @@
 #include "../../include/models/Player.h"
 #include "../../include/models/Table.h"
 #include "../../include/models/Card.h"
+#include "../../include/views/Button.h"
 
 using namespace TrucoGame::View;
 using namespace TrucoGame::Models;
@@ -24,12 +25,13 @@ namespace TrucoGame {
         else {
             windowSize = Vector2f(SCREEN_X / 2, SCREEN_Y / 2);
         }
-        float initialDeckPosition = (0.1 * windowSize.x);
-        return TrucoGameView(windowSize, windowSize.y / 5000, Vector2f(initialDeckPosition, initialDeckPosition));
+        float initialDeckPosition = windowSize.x * CALCULATE_INITIAL_DECK_POSITION;
+        float cardScale = windowSize.y / CALCULATE_CARD_SCALE;
+        return TrucoGameView(windowSize, cardScale, Vector2f(initialDeckPosition, initialDeckPosition));
         }()),
-        mainMenuState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MainMenuState>(pGraphicManager->getWindow()) : nullptr)
+        mouseState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MouseState>(pGraphicManager->getWindow()) : nullptr)
     {
-        if (pGraphicManager == nullptr || mainMenuState == nullptr) {
+        if (pGraphicManager == nullptr || mouseState == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
         }
@@ -69,6 +71,8 @@ namespace TrucoGame {
         }
         int winner = table.CalculateWinner(); //calculate winner and does nothing
 
+        Button *button = new Button(100, 100, 150, 50, Color::Green, Color::Blue, Color::Yellow);
+
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window
@@ -78,11 +82,15 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
-            mainMenuState->render();
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag, mouseState->getMousePosView());
+            //mainMenuState->render();
 
             //Update Mouse
-            mainMenuState->update();
+            mouseState->updateMousePosition();
+
+            button->update(mouseState->getMousePosView());
+
+            pGraphicManager->drawElement(*button);
 
             pGraphicManager->showElements();
         }

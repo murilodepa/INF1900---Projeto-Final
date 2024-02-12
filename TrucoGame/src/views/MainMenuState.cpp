@@ -1,3 +1,4 @@
+/*
 #include "../../include/views/MainMenuState.h"
 #include <iostream>
 
@@ -17,7 +18,7 @@ void TrucoGame::View::MainMenuState::endState()
 	std::cout << "Ending State - Truco Game" << std::endl;
 }
 
-void TrucoGame::View::MainMenuState::update(/*const float& dt*/)
+void TrucoGame::View::MainMenuState::update(/*const float& dt*/ /*)
 {
 	//TODO - Update game state
 	this->updateMousePosition();
@@ -34,3 +35,4 @@ void TrucoGame::View::MainMenuState::render(RenderTarget* target) {
 
 	this->button->render(target);
 }
+*/

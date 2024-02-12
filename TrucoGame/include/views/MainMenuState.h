@@ -1,3 +1,4 @@
+/*
 #ifndef MAIN_MENU_STATE_H
 #define MAIN_MENU_STATE_H
 
@@ -17,10 +18,11 @@ namespace TrucoGame {
 
             void endState();
 
-            void update(/*const float& dt*/);
+            void update(/*const float& dt*/ /*);
             void render(RenderTarget* target = NULL);
         };
 
         #endif // MAIN_MENU_STATE_H
     } // namespace View
 } // namespace TrucoGame
+*/

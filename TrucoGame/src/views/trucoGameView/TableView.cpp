@@ -31,8 +31,8 @@ void TrucoGame::View::TableView::setDeckPositionOnTheTable(float screenWidth, fl
 	float halfScreenHeight = screenHeight / 2;
 	float halfCardWidth = cardWidth / 2;
 
-	cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition = Vector2f(halfScreenWidth - halfCardWidth + cardWidth, halfScreenHeight - halfCardWidth);
-	cardTurnedFaceUpAndDeck.deckPosition = Vector2f(halfScreenWidth + 20, halfScreenHeight - halfCardWidth - 20);
+	cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition = Vector2f(halfScreenWidth - halfCardWidth + cardWidth, halfScreenHeight - halfCardWidth - (0.07f * cardWidth));
+	cardTurnedFaceUpAndDeck.deckPosition = Vector2f(halfScreenWidth + (0.05f * cardWidth), halfScreenHeight - halfCardWidth - (0.1f * cardWidth));
 	cardTurnedFaceUpAndDeck.deckRotation = 35.0f;
 }
 

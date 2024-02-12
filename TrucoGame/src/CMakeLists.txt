@@ -30,14 +30,16 @@ set(SRC_FILES
     "views/trucoGameView/Player/PlayerCards.cpp"
     "views/trucoGameView/Player/PlayerView.cpp"
     "views/trucoGameView/Animator.cpp"
+    "views/trucoGameView/CardButton.cpp"
     "views/trucoGameView/CardView.cpp"
     "views/trucoGameView/ScoreView.cpp"
     "views/trucoGameView/TableView.cpp"
     "views/trucoGameView/TrucoGameView.cpp"
     "views/Button.cpp"
+    "views/ButtonBase.cpp"
     "views/GraphicManager.cpp"
     "views/MainMenuState.cpp"
-    "views/State.cpp"
+    "views/MouseState.cpp"
     "views/UtilsView.cpp"
 )
 

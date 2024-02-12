@@ -35,6 +35,7 @@ set(HEADER_FILES
     "views/trucoGameView/player/PlayerCards.h"
     "views/trucoGameView/player/PlayerView.h"
     "views/trucoGameView/Animator.h"
+    "views/trucoGameView/CardButton.h"
     "views/trucoGameView/CardDeck.h"
     "views/trucoGameView/CardsEnum.h"
     "views/trucoGameView/CardView.h"
@@ -42,9 +43,10 @@ set(HEADER_FILES
     "views/trucoGameView/TableView.h"
     "views/trucoGameView/TrucoGameView.h"
     "views/Button.h"
+    "views/ButtonBase.h"
     "views/GraphicManager.h"
     "views/MainMenuState.h"
-    "views/State.h"
+    "views/MouseState.h"
     "views/UtilsView.h"
 )
 

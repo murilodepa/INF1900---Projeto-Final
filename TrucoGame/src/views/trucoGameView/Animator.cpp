@@ -8,7 +8,7 @@ namespace TrucoGame {
 
 			while (destinationPosition.x != sprite.getPosition().x && destinationPosition.y != sprite.getPosition().y) {
 				direction = destinationPosition - sprite.getPosition();
-				if (direction.x > speed || direction.y > speed) {
+				if (std::abs(direction.x) > speed || std::abs(direction.y) > speed) {
 					distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 					// Normalizing the direction to maintain a constant speed

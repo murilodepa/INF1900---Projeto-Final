@@ -4,13 +4,11 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-enum button_states{BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED};
+enum button_states2{BTN_IDLE2 = 0, BTN_HOVER2, BTN_PRESSED2};
 
-class Button {
+class Button : public RectangleShape {
 private:
     short unsigned buttonState;
-
-    RectangleShape shape;
 
     Color idleColor;
     Color hoverColor;
@@ -24,7 +22,6 @@ public:
 
     // Functions
     void update(const Vector2f(mousePos));
-    void render(RenderTarget* target);
 };
 
 #endif // BUTTON_H
