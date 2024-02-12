@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-enum button_states { BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED };
+enum button_states { BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED_LEFT, BTN_PRESSED_RIGHT};
 
 class ButtonBase : public RectangleShape {
 private:
@@ -16,7 +16,8 @@ protected:
     Color activeColor;
 
     virtual void onHover() = 0;
-    virtual void onPress() = 0;
+    virtual void onPressLeft() = 0;
+    virtual void onPressRight() = 0;
     virtual void onIdle() = 0;
 
 public:

@@ -37,6 +37,7 @@ namespace TrucoGame {
             PlayerCards playerCards;
             std::vector<PlayerView*> players;
             std::vector<CardButton*> cardButtons;
+            std::vector<Vector2f> positionToDiscardCards;
             std::vector<std::string> names;
             float cardScale, animationSpeed;
             Vector2f windowSize;
@@ -45,12 +46,15 @@ namespace TrucoGame {
 
             void setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
             void setNamesPositions(float screenWidth, float screenHeight, float textAndTableSpacing, std::vector<std::string>& names);
+            void setPositionToDiscardCards();
 
             void drawScore(GraphicManager* pGraphicManager);
             void drawCardsOnTheTable(GraphicManager* pGraphicManager);
             void drawPlayerNames(GraphicManager* pGraphicManager);
             void checkIftheCardHasBeenDiscardedAndDraw(GraphicManager* pGraphicManager, Vector2f& mousePosView);
             void distributeCardsToPlayers();
+            void discardCard(size_t player, size_t card, std::string& newTexturePath);
+            void testDiscartCards();
 
         public:
             TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition);

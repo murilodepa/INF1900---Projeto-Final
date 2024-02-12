@@ -23,7 +23,7 @@ ButtonBase::~ButtonBase()
 
 const bool ButtonBase::isPressed() const
 {
-	if (this->buttonState == BTN_PRESSED) {
+	if (this->buttonState == BTN_PRESSED_LEFT) {
 		return true;
 	}
 	return false;
@@ -40,7 +40,10 @@ void ButtonBase::update(const Vector2f& mousePos)
 
 		// Pressed
 		if (Mouse::isButtonPressed(Mouse::Left)) {
-			this->buttonState = BTN_PRESSED;
+			this->buttonState = BTN_PRESSED_LEFT;
+		}
+		else if (Mouse::isButtonPressed(Mouse::Right)) {
+			this->buttonState = BTN_PRESSED_RIGHT;
 		}
 	}
 
@@ -52,8 +55,11 @@ void ButtonBase::update(const Vector2f& mousePos)
 	case BTN_HOVER:
 		onHover();
 		break;
-	case BTN_PRESSED:
-		onPress();
+	case BTN_PRESSED_LEFT:
+		onPressLeft();
+		break;
+	case BTN_PRESSED_RIGHT:
+		onPressRight();
 		break;
 	default:
 		break;
