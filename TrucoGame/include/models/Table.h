@@ -1,5 +1,8 @@
 #pragma once 
 #include "Card.h"
+#include "Deck.h"
+
+using namespace std;
 
 namespace TrucoGame {
 	namespace Models {
@@ -14,8 +17,7 @@ namespace TrucoGame {
 				isCovered(isCovered){}
 		};
 
-		class Table
-		{
+		class Table {
 		public:
 			Table();
 			void PlaceCard(Card card, int playerId, bool isCovered);
@@ -24,10 +26,12 @@ namespace TrucoGame {
 			Card* GetAllCards();
 			void SetTableCard(Card card);
 			std::vector<PlayedCard> playedCards;
+			vector<Card> getPlayedCards();
+			void cleanPlayedCards();
 		private:
 			int manilhaValue = -1;
 			int playedCardIndex = 0;
-			int GetCardActualValue(PlayedCard playedCard);
+			int getCardActualValue(PlayedCard playedCard);
 		};
 	}
 }

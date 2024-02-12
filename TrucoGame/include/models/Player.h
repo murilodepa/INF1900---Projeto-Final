@@ -1,5 +1,5 @@
 #pragma once 
-#include "Card.h"
+#include "Card.h"   
 #include <string>
 #include <vector>
 
@@ -16,6 +16,8 @@ namespace TrucoGame {
 
 			Card popCardByIndex(int index);
 			int playerId;
+			void setHand(vector<Card*> shuffleCards);
+			void cleanHand();
 		private:
 			string playerName;
 		};

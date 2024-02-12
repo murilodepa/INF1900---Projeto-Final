@@ -83,19 +83,19 @@ namespace TrucoGame {
 			}
 		}
 
-		void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, Texture& newTextureOfCardTurnedFaceUp, const Vector2f& destinationPosition, float finalRotation, float speed)
+		void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, Texture* texture, const std::string& newTexturePath, const Vector2f& destinationPosition, float finalRotation, float speed, const float cardScale)
 		{
 			moveSpriteTo(sprite, destinationPosition, speed);
-			flipCard(sprite, 1.5f, newTextureOfCardTurnedFaceUp);
+			flipCard(sprite, 1.5f, texture, newTexturePath, cardScale);
 		}
 
-		void Animator::animationWithCardTurnedFaceUpAndInitialDeck(Sprite& cardTurnedFaceUp, Texture& newTextureOfCardTurnedFaceUp, Sprite& initialDeck, const Vector2f& cardTurnedFaceUpDestinationPosition, const Vector2f& initialDeckDestinationPosition, float finalRotation, float speed)
+		void Animator::animationWithCardTurnedFaceUpAndInitialDeck(Sprite& cardTurnedFaceUp, Texture* texture, const std::string& newTexturePath, Sprite& initialDeck, const Vector2f& cardTurnedFaceUpDestinationPosition, const Vector2f& initialDeckDestinationPosition, float finalRotation, float speed, const float cardScale)
 		{
-			moveAndFlipCardTurnedFaceUpTo(cardTurnedFaceUp, newTextureOfCardTurnedFaceUp, cardTurnedFaceUpDestinationPosition, finalRotation, speed);
+			moveAndFlipCardTurnedFaceUpTo(cardTurnedFaceUp, texture, newTexturePath, cardTurnedFaceUpDestinationPosition, finalRotation, speed, cardScale);
 			moveAndRotateSpriteTo(initialDeck, initialDeckDestinationPosition, finalRotation, speed);
 		}
 
-		void Animator::flipCard(Sprite& card, float duration, Texture& newTextureOfCardTurnedFaceUp) {
+		void Animator::flipCard(Sprite& card, float duration, Texture* texture, const std::string& newTexturePath, const float cardScale) {
 
 			float initialScaleX = card.getScale().x;
 
@@ -103,13 +103,13 @@ namespace TrucoGame {
 			Clock clock;
 			while (clock.getElapsedTime().asSeconds() < duration) {
 				float progress = clock.getElapsedTime().asSeconds() / duration;
-				float newXValue = initialScaleX * (0.4f - progress);
+				float newXValue = initialScaleX * (cardScale - progress);
 
 				// Adjust the card scale to simulate the "vira"
-				card.setScale(initialScaleX * (0.4f - progress), 0.4f);
+				card.setScale(initialScaleX * (cardScale - progress), cardScale);
 
 				if (newXValue <= 0.0f) {
-					card.setTexture(newTextureOfCardTurnedFaceUp, true);
+					*texture = UtilsView::loadTexture(newTexturePath);
 				}
 
 
@@ -118,8 +118,7 @@ namespace TrucoGame {
 			}
 
 			// Make sure that the final scale be exaclty like 0 to avoid numerics mistakes
-			card.setScale(0.4f, 0.4f);
-
+			card.setScale(cardScale, cardScale);
 			card.setPosition(card.getPosition().x - card.getGlobalBounds().width, card.getPosition().y);
 		}
 	}

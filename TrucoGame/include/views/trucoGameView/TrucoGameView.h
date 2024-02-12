@@ -7,9 +7,22 @@
 #include "../../../include/views/UtilsView.h"
 #include "TableView.h"
 #include "ScoreView.h"
+#include "Player/PlayerView.h"
+#include "Player/PlayerCards.h"
+
+// Define the spacing between cards.
+#define CALCULATE_CARDS_SPACING 0.02f
+
+// Define the spacing between the table and cards
+#define CALCULATE_TABLE_AND_CARDS_SPACING 0.073f 
+
+// Define the spacing between the player name table
+#define CALCULATE_TEXT_AND_TABLE_SPACING 0.02f
+
+// Define the speed to animations
+#define CALCULATE_ANIMATION_SPEED 40.f;
 
 using namespace sf;
-
 
 namespace TrucoGame {
     namespace View {
@@ -17,14 +30,26 @@ namespace TrucoGame {
         private:
             TableView tableView;
             ScoreView scoreView;
+            PlayerCards playerCards;
+            std::vector<PlayerView*> players;
+            std::vector<std::string> names;
+            float cardScale, animationSpeed;
 
-            void initialize();
+            void initialize(const Vector2f& windowSize);
+
+            void setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
+            void setNamesPositions(float screenWidth, float screenHeight, float textAndTableSpacing, std::vector<std::string>& names);
+
             void drawScore(GraphicManager* pGraphicManager);
+            void drawCardsOnTheTable(GraphicManager* pGraphicManager);
+            void drawPlayerNames(GraphicManager* pGraphicManager);
+            void distributeCardsToPlayers();
 
         public:
-            TrucoGameView(Vector2f windowSize);
+            TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition);
             ~TrucoGameView();
             void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag);
+            void setPlayerNames(std::vector<std::string> names);
         };
     }
 }

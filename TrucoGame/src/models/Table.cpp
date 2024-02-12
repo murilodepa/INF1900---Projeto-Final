@@ -2,6 +2,8 @@
 #include "..\..\include\models\Card.h"
 #include <iostream>
 
+using namespace std;
+
 namespace TrucoGame {
 	namespace Models {
 
@@ -18,6 +20,19 @@ namespace TrucoGame {
 			playedCardIndex++;
 		}
 
+		vector<Card> Table::getPlayedCards()
+		{
+			vector<Card> tableCards;
+		
+			for (int i = 0; i < 4; i++)
+			{
+				tableCards.push_back(*playedCards[i].card);
+			}
+			
+			return tableCards;
+		}
+
+		
 		void Table::SetTableCard(Card card) {
 			manilhaValue = (card.getValue() + 1) % 10;
 		}
@@ -27,8 +42,8 @@ namespace TrucoGame {
 			PlayedCard winningCard = playedCards[0];
 			for(int i = 1; i < playedCards.size(); i++)
 			{
-				int newCardValue = GetCardActualValue(playedCards[i]);
-				int oldCardValue = GetCardActualValue(winningCard);
+				int newCardValue = getCardActualValue(playedCards[i]);
+				int oldCardValue = getCardActualValue(winningCard);
 				if (newCardValue > oldCardValue)
 				{
 					winningCard = playedCards[i];
@@ -46,7 +61,7 @@ namespace TrucoGame {
 			return winningCard.playerId;
 		}
 
-		int Table::GetCardActualValue(PlayedCard playedCard)
+		int Table::getCardActualValue(PlayedCard playedCard)
 		{
 			int baseValue = playedCard.card.getValue();
 
@@ -65,6 +80,6 @@ namespace TrucoGame {
 
 			return actualValue;
 		}
-
 	}
 }
+
