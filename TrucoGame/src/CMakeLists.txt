@@ -18,13 +18,18 @@ set(SRC_FILES
     "controllers/TableController.cpp"
 
     # Models
+    "models/client/ClientGameManager.cpp"
     "models/client/TcpClient.cpp"
     "models/packets/Packet.cpp"
-    "models/server/Player.cpp"
+    "models/server/AIPlayer.cpp"
+    "models/server/ServerGameManager.cpp"
+    "models/server/TcpClientPlayer.cpp"
     "models/server/TcpServer.cpp"
     "models/Card.cpp"
     "models/Deck.cpp"
     "models/Table.cpp"
+    "models/Player.cpp"
+    "models/Score.cpp"
     
     # Views
     "views/trucoGameView/Player/PlayerCards.cpp"

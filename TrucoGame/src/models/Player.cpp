@@ -10,17 +10,16 @@ namespace TrucoGame {
 			Card card = hand[index];
 			hand.erase(hand.begin() + index);
 			return card;
-			return hand;
 		}
 
-		void Player::setHand(vector<Card*> shuffleCards)
+		void Player::setHand(vector<Card> shuffleCards)
 		{
 			hand = shuffleCards;
 		}
 		
 		void Player::cleanHand()
 		{
-			 getHand().clear();
+			 hand.clear();
 		}
 	}
 }

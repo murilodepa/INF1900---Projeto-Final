@@ -26,7 +26,7 @@ namespace TrucoGame {
             case StartRound:
             {   
                 StartRoundPacket startRoundPacket(packet->payload);
-                player.hand = startRoundPacket.handCards;
+                player.setHand(startRoundPacket.handCards);
                 break;
             }
             case PlayerPlay:

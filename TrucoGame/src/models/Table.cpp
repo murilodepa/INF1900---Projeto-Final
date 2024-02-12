@@ -19,20 +19,7 @@ namespace TrucoGame {
 			playedCards.push_back(playedCard);
 			playedCardIndex++;
 		}
-
-		vector<Card> Table::getPlayedCards()
-		{
-			vector<Card> tableCards;
-		
-			for (int i = 0; i < 4; i++)
-			{
-				tableCards.push_back(*playedCards[i].card);
-			}
-			
-			return tableCards;
-		}
-
-		
+				
 		void Table::SetTableCard(Card card) {
 			manilhaValue = (card.getValue() + 1) % 10;
 		}

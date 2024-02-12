@@ -26,8 +26,6 @@ namespace TrucoGame {
 			Card* GetAllCards();
 			void SetTableCard(Card card);
 			std::vector<PlayedCard> playedCards;
-			vector<Card> getPlayedCards();
-			void cleanPlayedCards();
 		private:
 			int manilhaValue = -1;
 			int playedCardIndex = 0;
