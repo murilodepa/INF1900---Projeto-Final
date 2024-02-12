@@ -38,7 +38,6 @@ set(SRC_FILES
     "views/Button.cpp"
     "views/ButtonBase.cpp"
     "views/GraphicManager.cpp"
-    "views/MainMenuState.cpp"
     "views/MouseState.cpp"
     "views/UtilsView.cpp"
 )

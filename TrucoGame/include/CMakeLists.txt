@@ -45,7 +45,6 @@ set(HEADER_FILES
     "views/Button.h"
     "views/ButtonBase.h"
     "views/GraphicManager.h"
-    "views/MainMenuState.h"
     "views/MouseState.h"
     "views/UtilsView.h"
 )
