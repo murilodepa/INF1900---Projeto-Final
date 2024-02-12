@@ -17,7 +17,7 @@ namespace TrucoGame {
             // The private constructor is part of the Singleton design pattern.
             // It ensures that there is only one instance of the GraphicManager class.
             static GraphicManager* pGraphicManager;
-            GraphicManager();
+            GraphicManager(unsigned int windowWidth, unsigned int windowHeight);
         public:
             ~GraphicManager();
             static GraphicManager* getGraphicManager();

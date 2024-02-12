@@ -21,13 +21,13 @@ namespace TrucoGame {
         public:
             CardView** cardsInHands;
 
-            PlayerCards(size_t numPlayer, size_t quantityOfCardsInHands, Vector2f& initialDeckPositionVector2f);
+            PlayerCards(size_t numPlayer, size_t quantityOfCardsInHands, Vector2f& initialDeckPositionVector2f, const float cardScale);
             ~PlayerCards();
 
             Texture* getCardTexture(size_t player, size_t cardIndex);
             void setCardTexture(CardStruct &cardStruct, Texture* texture);
 
-            void initializePlayerCards(Vector2f& initialDeckPositionVector2f);
+            void initializePlayerCards(Vector2f& initialDeckPositionVector2f, const float cardScale);
         };
     }
 }

@@ -23,11 +23,11 @@ void deleteTextuteMatrix(Texture*** matrix, size_t rows, size_t columns)
 	delete[] matrix;
 }
 
-TrucoGame::View::PlayerCards::PlayerCards(size_t numPlayer, size_t quantityOfCardsInHands, Vector2f& initialDeckPositionVector2f)
+TrucoGame::View::PlayerCards::PlayerCards(size_t numPlayer, size_t quantityOfCardsInHands, Vector2f& initialDeckPositionVector2f, const float cardScale)
 {
 	this->numPlayers = numPlayer;
 	this->quantityOfCardsInHands = quantityOfCardsInHands;
-	initializePlayerCards(initialDeckPositionVector2f);
+	initializePlayerCards(initialDeckPositionVector2f, cardScale);
 }
 
 TrucoGame::View::PlayerCards::~PlayerCards()
@@ -50,7 +50,7 @@ void TrucoGame::View::PlayerCards::setCardTexture(CardStruct& cardStruct, Textur
 	}
 }
 
-void TrucoGame::View::PlayerCards::initializePlayerCards(Vector2f& initialDeckPositionVector2f)
+void TrucoGame::View::PlayerCards::initializePlayerCards(Vector2f& initialDeckPositionVector2f, const float cardScale)
 {
 	cardsInHands = UtilsView::initializeMatrix<CardView>(numPlayers, quantityOfCardsInHands);
 	cardsTexture = initializeTextureMatrix(numPlayers, quantityOfCardsInHands);
@@ -62,7 +62,7 @@ void TrucoGame::View::PlayerCards::initializePlayerCards(Vector2f& initialDeckPo
 		for (size_t cardIndex = 0; cardIndex < quantityOfCardsInHands; cardIndex++) {
 			Texture* cardTexture = cardsTexture[playerIndex][cardIndex];
 			setCardTexture(cardStruct, cardTexture);
-			cardsInHands[playerIndex][cardIndex] = CardView(initialDeckPositionVector2f, *cardTexture);
+			cardsInHands[playerIndex][cardIndex] = CardView(initialDeckPositionVector2f, *cardTexture, 0.19f);
 		}
 	}
 }

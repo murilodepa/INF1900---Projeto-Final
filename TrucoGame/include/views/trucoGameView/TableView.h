@@ -45,18 +45,18 @@ namespace TrucoGame {
             Vector2f **cardPositionsInPlayerHands;
             
 
-            void initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f);
+            void initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f, const float cardScale);
             void setDeckPositionOnTheTable(float screenWidth, float screenHeight, float cardWidth);
 
         public:
-            TableView(Vector2f& windowSize, Vector2f& initialDeckPositionVector2f);
+            TableView(Vector2f& windowSize, Vector2f& initialDeckPositionVector2f, const float cardScale);
             ~TableView();
             void setTableTexture(const std::string& texturePath);
             void setBackCardTexture(const std::string& texturePath);
             Sprite getTableCloth();
             void setTableClothScale(Vector2f& windowSize, Vector2u& textureSize);
             void drawElementsOnTheTable(GraphicManager* pGraphicManager) const;
-            void moveDeckAndTurnUpCard();
+            void moveDeckAndTurnUpCard(const float cardScale, float speed);
             void setTurnedFaceUpCardTexture(std::string& texturePath);
             void setTextureFromPath(const std::string& texturePath);
         };

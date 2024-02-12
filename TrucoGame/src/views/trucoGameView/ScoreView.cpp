@@ -28,9 +28,11 @@ void TrucoGame::View::ScoreView::createCirclesInScoreRectangle(float rectangleWi
     ourCircles.resize(numRounds);
     theirCircles.resize(numRounds);
 
+    float circleRadius = rectangleScoreHeight * CALCULATE_CIRCLE_RADIUS;
+
     for (int i = 0; i < numRounds; i++) {
-        ourCircles[i].setRadius(CIRCLE_RADIUS);
-        theirCircles[i].setRadius(CIRCLE_RADIUS);
+        ourCircles[i].setRadius(circleRadius);
+        theirCircles[i].setRadius(circleRadius);
 
         ourCircles[i].setFillColor(sf::Color(CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED));
         theirCircles[i].setFillColor(sf::Color(CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED));
@@ -54,18 +56,20 @@ void TrucoGame::View::ScoreView::createCirclesInScoreRectangle(float rectangleWi
     theirCircles[2].setPosition(rectangleScoreXPosition + spacingAndCircleDiameterWidth + circleDiameter + circlesSpacingWidth, rectangleScoreYPositionAndSpacing + circleDiameter + circlesSpacingHeightDouble);
 }
 
-TrucoGame::View::ScoreView::ScoreView()
+TrucoGame::View::ScoreView::ScoreView(const Vector2f& windowSize)
 {
-    float scoreRectangleXPosition = SCORE_RECTANGLE_X_POSITION;
-    float scoreRectangleYPosition = SCORE_RECTANGLE_Y_POSITION;
-    Vector2f& scoreRectangleDimensions(SCORE_RECTANGLE_DIMENSIONS);
+    float windowSizeX = windowSize.x;
+    float windowSizeY = windowSize.y;
+    float scoreRectangleXPosition = CALCULATE_SCORE_RECTANGLE_X_POSITION * windowSizeX;
+    float scoreRectangleYPosition = CALCULATE_SCORE_RECTANGLE_Y_POSITION * windowSizeY;
+    Vector2f& scoreRectangleDimensions = Vector2f(CALCULATE_SCORE_RECTANGLE_DIMENSIONS_WIDTH * windowSizeX, CALCULATE_SCORE_RECTANGLE_DIMENSIONS_HEIGHT * windowSizeY);
     std::shared_ptr<float> rectangleWidthToCirclesPtr = std::make_shared<float>();
     std::shared_ptr<float> rectangleScoreHeight = std::make_shared<float>();
     std::shared_ptr<float> textsWidth = std::make_shared<float>();
 
     createScoreRectangle(scoreRectangleXPosition, scoreRectangleYPosition, scoreRectangleDimensions, rectangleWidthToCirclesPtr, rectangleScoreHeight, textsWidth);
     createCirclesInScoreRectangle(*rectangleWidthToCirclesPtr - *textsWidth, *rectangleScoreHeight, scoreRectangleXPosition + *textsWidth, scoreRectangleYPosition);
-    initializeTexts();
+    initializeTexts(scoreRectangleDimensions.x);
     setTextsPosition(scoreRectangleXPosition, scoreRectangleYPosition, *rectangleWidthToCirclesPtr, *rectangleScoreHeight, *textsWidth);
 }
 
@@ -134,13 +138,14 @@ void TrucoGame::View::ScoreView::setTextsColor()
 }
 
 
-void TrucoGame::View::ScoreView::initializeTexts()
+void TrucoGame::View::ScoreView::initializeTexts(const float scoreRectangleWidth)
 {
     setTextsFont(NAME_FONT_PATH);
 
-    roundScoreText = sf::Text(std::to_string(0), textsFont, SCORE_TEXT_CHARACTER_SIZE);
-    weText = sf::Text("Nós", textsFont, WE_AND_THEY_TEXT_CHARACTER_SIZE);
-    theyText = sf::Text("Eles", textsFont, WE_AND_THEY_TEXT_CHARACTER_SIZE);
+    float weAndTheyTextCharacterSize = scoreRectangleWidth * CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE;
+    roundScoreText = sf::Text(std::to_string(0), textsFont, (scoreRectangleWidth * CALCULATE_SCORE_TEXT_CHARACTER_SIZE));
+    weText = sf::Text("Nós", textsFont, weAndTheyTextCharacterSize);
+    theyText = sf::Text("Eles", textsFont, weAndTheyTextCharacterSize);
 
     roundScoreText.setFillColor(BORDER_COLOR);
     weText.setFillColor(BORDER_COLOR);

@@ -2,20 +2,23 @@
 #include <thread>
 #include "../../../include/views/trucoGameView/Animator.h"
 
-void TrucoGame::View::TrucoGameView::initialize(Vector2f& windowSize)
+void TrucoGame::View::TrucoGameView::initialize(const Vector2f& windowSize)
 {
 	for (size_t playerIndex = 0; playerIndex < NUM_PLAYERS; playerIndex++) {
-		PlayerView* player = new PlayerView(CARDS_IN_HAND);
+		PlayerView* player = new PlayerView(CARDS_IN_HAND, windowSize.y);
 		players.push_back(player);
 	}
 
 	if (playerCards.cardsInHands != nullptr) {
-		setCardPositionsOfThePlayers(windowSize.x, windowSize.y, playerCards.cardsInHands[0][0].getCardWidth(), playerCards.cardsInHands[0][0].getCardHeight(), CARDS_SPACING, TABLE_AND_CARDS_SPACING);
+		float tableAndCardsSpacing = windowSize.y * CALCULATE_TABLE_AND_CARDS_SPACING;
+		float cardsSpacing = windowSize.x * CALCULATE_CARDS_SPACING;
+		setCardPositionsOfThePlayers(windowSize.x, windowSize.y, playerCards.cardsInHands[0][0].getCardWidth(), playerCards.cardsInHands[0][0].getCardHeight(), cardsSpacing, tableAndCardsSpacing);
 	}
 	// TODO - Remove mocked names
 	names = { "Caique", "Laert", "Murilo", "Vitor" };
 	setPlayerNames(names);
-	setNamesPositions(windowSize.x, windowSize.y, TEXT_AND_TABLE_SPACING, names);
+	float textAndTableSpacing = windowSize.y * CALCULATE_TEXT_AND_TABLE_SPACING;
+	setNamesPositions(windowSize.x, windowSize.y, textAndTableSpacing, names);
 }
 
 void TrucoGame::View::TrucoGameView::setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing) {
@@ -120,23 +123,22 @@ void TrucoGame::View::TrucoGameView::drawPlayerNames(GraphicManager* pGraphicMan
 
 void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 {
-	float speed = 15.0f;
 	std::vector<std::thread*> animationThreads;
 
 	for (size_t player = 0; player < NUM_PLAYERS; player++) {
 		for (size_t card = 0; card < CARDS_IN_HAND; card++) {
 			CardView* cardView = &playerCards.cardsInHands[player][card];
 			if (player == 0) {
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), speed));
+				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), animationSpeed));
 			}
 			else if (player == 2) {
 				std::string newTexturePath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
 
 				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo,
-					std::ref(*cardView), playerCards.getCardTexture(player, card), newTexturePath, players[player]->getCardPosition(card), cardView->getRotation(), speed));
+					std::ref(*cardView), playerCards.getCardTexture(player, card), newTexturePath, players[player]->getCardPosition(card), cardView->getRotation(), animationSpeed, cardScale));
 			}
 			else {
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), 90.0f, speed));
+				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), 90.0f, animationSpeed));
 			}
 		}
 	}
@@ -147,10 +149,13 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 	}
 }
 
-TrucoGame::View::TrucoGameView::TrucoGameView(Vector2f windowSize) :
-	tableView(Vector2f(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)), InitialDeckPositionVector2f(200, 200)),
-	playerCards(NUM_PLAYERS, CARDS_IN_HAND, InitialDeckPositionVector2f(200, 200))
+TrucoGame::View::TrucoGameView::TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition) :
+	tableView(Vector2f(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)), initialDeckPosition, cardScale),
+	playerCards(NUM_PLAYERS, CARDS_IN_HAND, initialDeckPosition, cardScale),
+	scoreView(windowSize)
 {
+	this->cardScale = cardScale;
+	this->animationSpeed = cardScale * CALCULATE_ANIMATION_SPEED;
 	initialize(windowSize);
 }
 
@@ -170,7 +175,7 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		if (*firstTimeFlag == true) {
 			*firstTimeFlag = false;
 			distributeCardsToPlayers();
-			tableView.moveDeckAndTurnUpCard();
+			tableView.moveDeckAndTurnUpCard(cardScale, animationSpeed);
 		}
 		drawCardsOnTheTable(pGraphicManager);
 		tableView.drawElementsOnTheTable(pGraphicManager);

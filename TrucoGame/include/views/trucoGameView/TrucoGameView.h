@@ -10,17 +10,17 @@
 #include "Player/PlayerView.h"
 #include "Player/PlayerCards.h"
 
-// Macro to create a initial position to the deck like sf::Vector2f
-#define InitialDeckPositionVector2f(x, y) sf::Vector2f(x, y)
-
 // Define the spacing between cards.
-#define CARDS_SPACING 16.0f
+#define CALCULATE_CARDS_SPACING 0.02f
 
 // Define the spacing between the table and cards
-#define TABLE_AND_CARDS_SPACING 110.0f
+#define CALCULATE_TABLE_AND_CARDS_SPACING 0.073f 
 
 // Define the spacing between the player name table
-#define TEXT_AND_TABLE_SPACING 40.0f
+#define CALCULATE_TEXT_AND_TABLE_SPACING 0.02f
+
+// Define the speed to animations
+#define CALCULATE_ANIMATION_SPEED 40.f;
 
 using namespace sf;
 
@@ -33,8 +33,9 @@ namespace TrucoGame {
             PlayerCards playerCards;
             std::vector<PlayerView*> players;
             std::vector<std::string> names;
+            float cardScale, animationSpeed;
 
-            void initialize(Vector2f& windowSize);
+            void initialize(const Vector2f& windowSize);
 
             void setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
             void setNamesPositions(float screenWidth, float screenHeight, float textAndTableSpacing, std::vector<std::string>& names);
@@ -45,7 +46,7 @@ namespace TrucoGame {
             void distributeCardsToPlayers();
 
         public:
-            TrucoGameView(Vector2f windowSize);
+            TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition);
             ~TrucoGameView();
             void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag);
             void setPlayerNames(std::vector<std::string> names);

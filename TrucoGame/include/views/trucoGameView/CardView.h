@@ -19,7 +19,7 @@ namespace TrucoGame {
 
         public:
             CardView() = default;
-            CardView(Vector2f& cardPositionOnTable, Texture& texture);
+            CardView(Vector2f& cardPositionOnTable, Texture& texture, const float cardScale);
             ~CardView();
 
             float getCardWidth() const;

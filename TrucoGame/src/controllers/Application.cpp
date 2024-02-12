@@ -16,7 +16,17 @@ namespace TrucoGame {
     GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
 
     Application::Application() : 
-        trucoGameView((pGraphicManager != nullptr) ? pGraphicManager->getWindowSize() : Vector2f(SCREEN_X, SCREEN_Y)),
+        trucoGameView([&]() {
+        Vector2f windowSize;
+        if ((pGraphicManager != nullptr)) {
+            windowSize = pGraphicManager->getWindowSize();
+        }
+        else {
+            windowSize = Vector2f(SCREEN_X / 2, SCREEN_Y / 2);
+        }
+        float initialDeckPosition = (0.1 * windowSize.x);
+        return TrucoGameView(windowSize, windowSize.y / 5000, Vector2f(initialDeckPosition, initialDeckPosition));
+        }()),
         mainMenuState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MainMenuState>(pGraphicManager->getWindow()) : nullptr)
     {
         if (pGraphicManager == nullptr || mainMenuState == nullptr) {

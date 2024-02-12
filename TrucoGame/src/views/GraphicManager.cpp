@@ -7,8 +7,8 @@ namespace TrucoGame {
 
         GraphicManager* GraphicManager::pGraphicManager = nullptr;
 
-        GraphicManager::GraphicManager() :
-            window(new sf::RenderWindow(sf::VideoMode((unsigned int)SCREEN_X, (unsigned int)SCREEN_Y), "Truco Game", sf::Style::Titlebar | sf::Style::Close))
+        GraphicManager::GraphicManager(unsigned int windowWidth, unsigned int windowHeight) :
+            window(new sf::RenderWindow(sf::VideoMode(windowWidth, windowHeight), "Truco Game", sf::Style::Titlebar | sf::Style::Close))
         {
             if (window == nullptr) {
                 std::cout << "ERROR::TrucoGame::Controller::GraphicManager - Failed to create a graphical window." << std::endl;
@@ -33,7 +33,12 @@ namespace TrucoGame {
              */
 
             if (pGraphicManager == nullptr) {
-                pGraphicManager = new GraphicManager();
+                sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+                unsigned int windowHeight = desktop.height - 100;
+                unsigned int windowWidth = static_cast<int>(windowHeight * 1.499470899470899f);
+                if (windowWidth > desktop.width)
+                    windowWidth = desktop.width;
+                pGraphicManager = new GraphicManager(windowWidth, windowHeight);
             }
             return pGraphicManager;
         }

@@ -5,13 +5,15 @@ void TrucoGame::View::PlayerView::setFontFromPath(const std::string& fontPath)
 	this->font = UtilsView::loadFont(fontPath);
 }
 
-TrucoGame::View::PlayerView::PlayerView(size_t numCardsInHands)
+TrucoGame::View::PlayerView::PlayerView(size_t numCardsInHands, const float windowHeight)
 {
 	setFontFromPath(NAME_FONT_PATH);
 	playerCards.resize(numCardsInHands);
 
 	playerName.setFont(font);
-	playerName.setCharacterSize(PLAYER_NAME_CHARACTER_SIZE);
+
+	float playerNameCharacterSize = windowHeight * CONSTANT_TO_CALCULATE_PLAYER_NAME_CHARACTER_SIZE;
+	playerName.setCharacterSize(playerNameCharacterSize);
 	playerName.setFillColor(NAME_COLOR);
 	playerName.setStyle(sf::Text::Bold);
 }
