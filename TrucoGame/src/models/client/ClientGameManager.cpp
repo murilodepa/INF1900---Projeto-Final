@@ -32,6 +32,24 @@ namespace TrucoGame {
             };
         }
 
+        void ClientGameManager::GetPlayerInputAndSend()
+        {
+            int input;
+            std::cin >> input;
+            if (input < player->hand.size())
+            {
+                CardPacket p = CardPacket(player->playerId, player->popCardByIndex(input), false);
+                client.Send(&p);
+            }
+            else
+            {
+                std::cout << std::endl << "Requesting Truco..." << std::endl;
+                int id = player->playerId;
+                TrucoPacket p(id, (id + 1) % 2, TrucoResult::Raise);
+                client.Send(&p);
+            }
+        }
+
         void ClientGameManager::OnStartGamePacketReceived(StartGamePacket packet)
         {
             player = new Player(packet.playerId, "Player " + packet.playerId);
@@ -50,20 +68,7 @@ namespace TrucoGame {
             std::cout << "]" << std::endl;
 
 
-            int input;
-            std::cin >> input;
-            if (input < player->hand.size())
-            {
-                CardPacket p = CardPacket(player->playerId, player->popCardByIndex(input), false);
-                client.Send(&p);
-            }
-            else
-            {
-                std::cout << std::endl << "Requesting Truco..." << std::endl;
-                int id = player->playerId;
-                TrucoPacket p(id, (id + 1) % 2, TrucoResult::Raise);
-                client.Send(&p);
-            }
+            GetPlayerInputAndSend();
 
         }
 
@@ -77,17 +82,16 @@ namespace TrucoGame {
                 if (packet.requesterId == player->playerId)
                 {
                     std::cout << "I am the player now:" << std::endl;
-                    CardPacket p = CardPacket(player->playerId, player->popCardByIndex(0), false);
-                    client.Send(&p);
+                    GetPlayerInputAndSend();
                 }
             }
             else
             {
                 if (packet.responseTeamId == player->playerId % 2)
                 {
-                    std::cout.flush();
                     std::cout << "Yes : 0 | No : 1 | Raise : 2" << std::endl;
                     int input;
+                    std::cin.clear();
                     std::cin >> input;
                     packet.result = (TrucoResult)input;
                     packet.responseTeamId = !packet.responseTeamId;

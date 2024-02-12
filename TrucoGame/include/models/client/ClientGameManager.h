@@ -13,6 +13,7 @@ namespace TrucoGame {
         private:
             Player* player;
             TcpClient client;
+            void GetPlayerInputAndSend();
             void OnStartGamePacketReceived(StartGamePacket packet);
             void OnStartRoundPacketReceived(StartRoundPacket packet);
             void OnPlayPacketReceived(PlayerPlayPacket packet);
