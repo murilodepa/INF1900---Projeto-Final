@@ -1,14 +1,16 @@
 #include "..\..\include\models\Table.h"
 #include "..\..\include\models\Card.h"
 
+using namespace std;
+
 namespace TrucoGame {
 	namespace Models {
 
 		Table::Table() {
 			playedCardIndex = 0;
 		}
-
-		void Table::PlaceCard(Card* card, int playerId, bool isCovered)
+		
+		void Table::placeCard(Card* card, int playerId, bool isCovered)
 		{
 			if (playedCardIndex >= 4) return;
 
@@ -20,14 +22,26 @@ namespace TrucoGame {
 			playedCardIndex++;
 		}
 
-		int Table::CalculateWinner()
+		vector<Card> Table::getPlayedCards()
+		{
+			vector<Card> tableCards;
+		
+			for (int i = 0; i < 4; i++)
+			{
+				tableCards.push_back(*playedCards[i].card);
+			}
+			
+			return tableCards;
+		}
+
+		int Table::calculateWinner()
 		{
 			PlayedCard winningCard;
 			winningCard = playedCards[0];
 			for(int i = 1; i < 4; i++)
 			{
-				int newCardValue = GetCardActualValue(playedCards[i]);
-				int oldCardValue = GetCardActualValue(winningCard);
+				int newCardValue = getCardActualValue(playedCards[i]);
+				int oldCardValue = getCardActualValue(winningCard);
 				if (newCardValue > oldCardValue)
 				{
 					winningCard = playedCards[i];
@@ -40,7 +54,7 @@ namespace TrucoGame {
 			return winningCard.playerId;
 		}
 
-		int Table::GetCardActualValue(PlayedCard playedCard)
+		int Table::getCardActualValue(PlayedCard playedCard)
 		{
 			int baseValue = playedCard.card->getValue();
 
@@ -56,6 +70,6 @@ namespace TrucoGame {
 			else
 				return baseValue;
 		}
-
 	}
 }
+

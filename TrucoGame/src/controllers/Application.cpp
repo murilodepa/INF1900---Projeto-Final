@@ -7,6 +7,7 @@
 #include "../../include/models/Player.h"
 #include "../../include/models/Table.h"
 #include "../../include/models/Card.h"
+#include "../../include/models/GameManager.h"
 
 using namespace TrucoGame::View;
 using namespace TrucoGame::Models;
@@ -50,24 +51,29 @@ namespace TrucoGame {
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
         // TEST CODE FOR THE MODELS, WILL BE REMOVED LATER
         std::vector<Player> players;
-        players.push_back(Player(0, "Laert"));
-        players.push_back(Player(1, "Caique"));
-        players.push_back(Player(2, "Vitor"));
-        players.push_back(Player(3, "Murilo"));
+        players.push_back(Player("Laert",  0));
+        players.push_back(Player("Caique", 1));
+        players.push_back(Player("Vitor",  2));
+        players.push_back(Player("Murilo", 3));
 
         Table table;
         Deck deck;        
         Models::Card* cards[4];
         table.turnedCard = deck.pop();
 
+      /*  GameManager gameManager;
+        gameManager.players = players;
+        gameManager.popAllPlayersCards();
+        gameManager.cleanPlayerCards();*/
+
         // get 4 cards and place them at the table, (player 2 covers)
         for (int i = 0; i < 4; i++) {
             cards[i] = deck.pop();
             bool isCovered = false;
             if (i == 2) isCovered = true;
-            table.PlaceCard(cards[i], i, isCovered);
+            table.placeCard(cards[i], i, isCovered);
         }
-        int winner = table.CalculateWinner(); //calculate winner and does nothing
+        int winner = table.calculateWinner(); //calculate winner and does nothing
 
         while (pGraphicManager->checkWindowOpen()) {
 
