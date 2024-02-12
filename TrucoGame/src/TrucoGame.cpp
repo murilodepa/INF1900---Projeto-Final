@@ -32,8 +32,8 @@ void Server() {
     int currentRound = 0;
     while (gameWinner == -1)
     {
-        gameManager.startRound();
-        roundWinner = -1;
+        
+        roundWinner = gameManager.startRound();
 
         turnsPlayed = 0;
         while (roundWinner == -1 && turnsPlayed < 3)

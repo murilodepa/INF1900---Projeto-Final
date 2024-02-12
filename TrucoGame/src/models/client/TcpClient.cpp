@@ -105,7 +105,6 @@ namespace TrucoGame {
                         case StartRound:
                         {
                             StartRoundPacket startRoundPacket(receivedPacket.payload);
-                            std::cout << "Table Card: " << startRoundPacket.tableCard.getValue() << " " << startRoundPacket.tableCard.getSuit();
                             if (startRoundPacketReceived)
                                 startRoundPacketReceived(startRoundPacket);
                             break;
@@ -136,6 +135,12 @@ namespace TrucoGame {
                         {
                             TrucoPacket truco(receivedPacket.payload);
                             trucoPacketReceived(truco);
+                            break;
+                        }
+                        case ElevenHand:
+                        {
+                            ElevenHandPacket elevenHandPacket(receivedPacket.payload);
+                            elevenHandPacketReceived(elevenHandPacket);
                             break;
                         }
                         default:

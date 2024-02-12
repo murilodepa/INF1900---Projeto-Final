@@ -1,5 +1,5 @@
 #pragma once
-
+#define POINT_TO_WIN 12
 
 namespace TrucoGame {
     namespace Models {

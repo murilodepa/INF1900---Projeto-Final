@@ -12,6 +12,8 @@ namespace TrucoGame {
             PlayerPlay,
             PlayerCard,
             Truco,
+            ElevenHand,
+            ElevenHandResponse
         };
 
         class Packet {

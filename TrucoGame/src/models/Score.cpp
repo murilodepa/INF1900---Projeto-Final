@@ -2,8 +2,6 @@
 #include "..\..\include\models\Score.h"
 #include <iostream>
 
-#define POINT_TO_WIN 50
-
 namespace TrucoGame {
     namespace Models {
 
@@ -92,7 +90,7 @@ namespace TrucoGame {
         }
 
         void Score::resetGame() {
-            team0GameScore = 0;
+            team0GameScore = 11;
             team1GameScore = 0;
         }
     }
