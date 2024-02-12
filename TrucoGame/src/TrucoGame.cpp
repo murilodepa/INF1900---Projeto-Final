@@ -196,6 +196,6 @@ int main()
 {
     TrucoGame::Application applicationObject;
     applicationObject.run();
-    TestTcp();
+    //TestTcp();
     return 0;
 }

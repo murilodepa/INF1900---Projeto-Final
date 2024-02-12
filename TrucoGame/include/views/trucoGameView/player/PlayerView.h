@@ -5,7 +5,7 @@
 #define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"
 
 // Character size for the player name display
-#define PLAYER_NAME_CHARACTER_SIZE 50
+#define CONSTANT_TO_CALCULATE_PLAYER_NAME_CHARACTER_SIZE 0.03
 
 // Define name color 
 #define NAME_COLOR sf::Color::White
@@ -27,7 +27,7 @@ namespace TrucoGame {
             void setFontFromPath(const std::string& fontPath);
 
         public:
-            PlayerView(size_t numCardsInHands);
+            PlayerView(size_t numCardsInHands, const float windowHeight);
             ~PlayerView();
 
             void setPlayerName(std::string name);

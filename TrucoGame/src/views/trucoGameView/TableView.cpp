@@ -5,7 +5,7 @@
 
 
 
-void TrucoGame::View::TableView::initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f)
+void TrucoGame::View::TableView::initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f, const float cardScale)
 {
 	setTableTexture(TABLE_TEXTURE_PATH);
 	tableCloth.setTexture(tableTexture);
@@ -14,9 +14,10 @@ void TrucoGame::View::TableView::initialize(Vector2f windowSize, Vector2f& initi
 	setBackCardTexture(CARD_BACK_TEXTURE_PATH);
 
 	setTextureFromPath(CARD_BACK_TEXTURE_PATH);
-	cardTurnedFaceUp = new CardView(initialDeckPositionVector2f, *texture);
+	
+	cardTurnedFaceUp = new CardView(initialDeckPositionVector2f, *texture, cardScale);
+	deck = new CardView(initialDeckPositionVector2f, backCardTexture, cardScale);
 
-	deck = new CardView(initialDeckPositionVector2f, backCardTexture);
 	deck->setTexture(backCardTexture);
 	if (deck != nullptr)
 		setDeckPositionOnTheTable(windowSize.x, windowSize.y, deck->getCardWidth());
@@ -35,9 +36,9 @@ void TrucoGame::View::TableView::setDeckPositionOnTheTable(float screenWidth, fl
 	cardTurnedFaceUpAndDeck.deckRotation = 35.0f;
 }
 
-TrucoGame::View::TableView::TableView(Vector2f& windowSize, Vector2f& initialDeckPositionVector2f)
+TrucoGame::View::TableView::TableView(Vector2f& windowSize, Vector2f& initialDeckPositionVector2f, const float cardScale)
 {
-	initialize(windowSize, initialDeckPositionVector2f);
+	initialize(windowSize, initialDeckPositionVector2f, cardScale);
 }
 
 TrucoGame::View::TableView::~TableView()
@@ -71,14 +72,12 @@ void TrucoGame::View::TableView::drawElementsOnTheTable(GraphicManager* pGraphic
 	pGraphicManager->drawElement(*deck);
 }
 
-void TrucoGame::View::TableView::moveDeckAndTurnUpCard()
+void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, float speed)
 {
-	float speed = 15.0f;
-
 	std::string turnedFaceUpPath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
 	//*texture = UtilsView::loadTexture(turnedFaceUpPath);
 	std::thread* animationThread = new std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck,
-		std::ref(*cardTurnedFaceUp), texture, turnedFaceUpPath, std::ref(*deck), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed);
+		std::ref(*cardTurnedFaceUp), texture, turnedFaceUpPath, std::ref(*deck), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed, cardScale);
 	
 	animationThread->detach();
 	delete animationThread;

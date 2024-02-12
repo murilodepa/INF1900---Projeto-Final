@@ -5,10 +5,10 @@
 #define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"
 
 // Define for the x-axis position of the score rectangle
-#define SCORE_RECTANGLE_X_POSITION 200.0f
+#define CALCULATE_SCORE_RECTANGLE_X_POSITION 0.09f
 
 // Define for the y-axis position of the score rectangle
-#define SCORE_RECTANGLE_Y_POSITION 10.0f
+#define CALCULATE_SCORE_RECTANGLE_Y_POSITION 0.007f
 
 // Character size for the "We" and "They" labels
 #define WE_AND_THEY_CHARACTER_SIZE 25
@@ -16,8 +16,11 @@
 // Character size for the round score display
 #define ROUND_SCORE_CHARACTER_SIZE 30
 
-// Macro to create dimensions to the score rectangle like sf::Vector2f
-#define SCORE_RECTANGLE_DIMENSIONS sf::Vector2f(400.f, 180.f)
+// Define to create dimensions to the score rectangle width
+#define CALCULATE_SCORE_RECTANGLE_DIMENSIONS_WIDTH 0.18f
+
+// Macro to create dimensions to the score rectangle height
+#define CALCULATE_SCORE_RECTANGLE_DIMENSIONS_HEIGHT 0.12f
 
 // Border color of the score rectangle 
 #define BORDER_COLOR sf::Color::White
@@ -32,13 +35,13 @@
 #define CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED sf::Color(126, 126, 126)
 
 // Define radius of the circles that represent the rounds 
-#define CIRCLE_RADIUS 30.f
+#define CALCULATE_CIRCLE_RADIUS 0.166f
 
 // Defines the sizes of the texts: we and they
-#define WE_AND_THEY_TEXT_CHARACTER_SIZE 27
+#define CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE 0.0675f
 
 // Defines the sizes of the texts: score
-#define SCORE_TEXT_CHARACTER_SIZE 37
+#define CALCULATE_SCORE_TEXT_CHARACTER_SIZE 0.0925f
 
 #pragma once
 #include <SFML/Graphics.hpp>
@@ -74,13 +77,13 @@ namespace TrucoGame {
 				Vector2f& scoreRectangleDimensions, std::shared_ptr<float>& rectangleScoreWidth, 
 				std::shared_ptr<float>& rectangleScoreHeight, std::shared_ptr<float>& textsWidth);
 			void createCirclesInScoreRectangle(float rectangleWidthToCircles, float rectangleScoreHeight, float rectangleScoreXPosition, float rectangleScoreYPosition);
-			void initializeTexts();
+			void initializeTexts(const float scoreRectangleWidth);
 
 			void setTextsFont(const std::string& fontPath);
 			void setTextsColor();
 			void TrucoGame::View::ScoreView::setTextsPosition(float scoreRectangleXPosition, float scoreRectangleYPosition, float rectangleWidthToCirclesPtr, float rectangleScoreHeight, float textsWidth);
 		public:
-			ScoreView();
+			ScoreView(const Vector2f& windowSize);
 			~ScoreView();
 
 			RectangleShape getScoreRectangle();
