@@ -8,16 +8,6 @@ namespace TrucoGame {
     namespace Models {
         ClientGameManager::ClientGameManager()
         {
-            std::cout << "[CLIENT] Starting client Thread" << std::endl;
-
-            ErrorCode result = ErrorCode::SocketError;
-
-            while (HAS_FAILED(result)) {
-                result = client.Connect("127.0.0.1", DEFAULT_PORT);
-                std::this_thread::sleep_for(std::chrono::seconds(2));
-            }
-            client.StartListening();
-
             client.startGamePacketReceived = [this](StartGamePacket packet) {
                 OnStartGamePacketReceived(packet);
             };
@@ -33,6 +23,19 @@ namespace TrucoGame {
             client.elevenHandPacketReceived = [this](ElevenHandPacket packet) {
                 OnElevenHandPacketReceived(packet);
             };
+        }
+
+        void ClientGameManager::Start(std::string ip) 
+        {
+            std::cout << "[CLIENT] Starting client Thread" << std::endl;
+
+            ErrorCode result = ErrorCode::SocketError;
+
+            while (HAS_FAILED(result)) {
+                result = client.Connect(ip.c_str(), DEFAULT_PORT);
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+            }
+            client.StartListening();
         }
 
         void ClientGameManager::GetPlayerInputAndSend()

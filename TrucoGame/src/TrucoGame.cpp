@@ -13,6 +13,7 @@
 void Client() {
     using namespace TrucoGame::Models;
     ClientGameManager clientGameManager;
+    clientGameManager.Start("127.0.0.1");
 
     while (true) {}
 }

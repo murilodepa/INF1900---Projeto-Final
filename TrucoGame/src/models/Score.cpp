@@ -90,7 +90,7 @@ namespace TrucoGame {
         }
 
         void Score::resetGame() {
-            team0GameScore = 11;
+            team0GameScore = 0;
             team1GameScore = 0;
         }
     }

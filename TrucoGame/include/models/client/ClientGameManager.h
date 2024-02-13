@@ -23,6 +23,7 @@ namespace TrucoGame {
             void OnElevenHandPacketReceived(ElevenHandPacket packet);
         public:
             ClientGameManager();
+            void Start(std::string ip);
         };
     }
 }
