@@ -27,21 +27,23 @@ set(SRC_FILES
     "models/Table.cpp"
     
     # Views
-    "views/trucoGameView/Player/PlayerCards.cpp"
-    "views/trucoGameView/Player/PlayerView.cpp"
+    "views/button/ButtonBase.cpp"
+    "views/text/TextView.cpp"
+    "views/trucoGameView/buttonsTruco/CardButton.cpp"
+    "views/trucoGameView/buttonsTruco/IncreaseScoreButton.cpp"
+     "views/trucoGameView/buttonsTruco/TrucoButton.cpp"
+    "views/trucoGameView/player/PlayerCards.cpp"
+    "views/trucoGameView/player/PlayerView.cpp"
     "views/trucoGameView/Animator.cpp"
-    "views/trucoGameView/CardButton.cpp"
     "views/trucoGameView/CardView.cpp"
     "views/trucoGameView/ScoreView.cpp"
     "views/trucoGameView/TableView.cpp"
     "views/trucoGameView/TrucoGameView.cpp"
-    "views/Button.cpp"
-    "views/ButtonBase.cpp"
     "views/GraphicManager.cpp"
     "views/MouseState.cpp"
     "views/MutexView.cpp"
     "views/UtilsView.cpp"
- )
+)
 
 # Add source to this project's executable.
 add_executable (TrucoGame ${SRC_FILES})

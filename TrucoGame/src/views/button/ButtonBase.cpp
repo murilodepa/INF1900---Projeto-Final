@@ -1,6 +1,6 @@
-#include "../../include/views/ButtonBase.h"
+#include "../../../include/views/button/ButtonBase.h"
 
-ButtonBase::ButtonBase(float x, float y, float width, float height, Color hoverColor)
+TrucoGame::View::ButtonBase::ButtonBase(float x, float y, float width, float height, Color hoverColor)
 {
 	this->buttonState = BTN_IDLE;
 
@@ -10,18 +10,18 @@ ButtonBase::ButtonBase(float x, float y, float width, float height, Color hoverC
 	this->hoverColor = hoverColor;
 }
 
-ButtonBase::ButtonBase(float x, float y, float width, float height, Color idleColor, Color hoverColor, Color activeColor) :
+TrucoGame::View::ButtonBase::ButtonBase(float x, float y, float width, float height, Color idleColor, Color hoverColor, Color activeColor) :
 	ButtonBase(x, y, width, height, hoverColor)
 {
 	this->idleColor = idleColor;
 	this->activeColor = activeColor;
 }
 
-ButtonBase::~ButtonBase()
+TrucoGame::View::ButtonBase::~ButtonBase()
 {
 }
 
-const bool ButtonBase::isPressed() const
+const bool TrucoGame::View::ButtonBase::isPressed() const
 {
 	if (this->buttonState == BTN_PRESSED_LEFT) {
 		return true;
@@ -29,7 +29,7 @@ const bool ButtonBase::isPressed() const
 	return false;
 }
 
-void ButtonBase::update(const Vector2f& mousePos)
+void TrucoGame::View::ButtonBase::update(const Vector2f& mousePos)
 {
 	// Idle
 	this->buttonState = BTN_IDLE;

@@ -9,7 +9,7 @@
 #include "ScoreView.h"
 #include "Player/PlayerView.h"
 #include "Player/PlayerCards.h"
-#include "CardButton.h"
+#include "buttonsTruco/CardButton.h"
 
 // Define a constant to calculate the spacing between cards.
 #define CALCULATE_CARDS_SPACING 0.02f

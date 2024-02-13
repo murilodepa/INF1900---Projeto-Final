@@ -59,7 +59,7 @@ namespace TrucoGame {
             window->draw(cardView);
         }
         
-        void GraphicManager::drawElement(Button& button) {
+        void GraphicManager::drawElement(ButtonBase& button) {
             window->draw(button);
         }
 

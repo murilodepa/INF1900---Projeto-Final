@@ -71,24 +71,24 @@ void TrucoGame::View::TrucoGameView::setNamesPositions(float screenWidth, float 
 
 	size_t playerIndex = 0;
 	PlayerView* player = players[playerIndex];
-	halfTextWidth = player->getHalfTextWidth(playerIndex);
+	halfTextWidth = player->playerName->getHalfTextWidth();
 	player->setNamePosition(Vector2f(halfScreenWidth - halfTextWidth, textAndTableSpacing));
 
 	playerIndex = 1;
 	player = players[playerIndex];
-	halfTextWidth = player->getHalfTextWidth(playerIndex);
+	halfTextWidth = player->playerName->getHalfTextWidth();
 	player->setNamePosition(Vector2f(textAndTableSpacing, halfScreenHeight + halfTextWidth));
 	player->setNameRotation(-90.0f);
 
 	playerIndex = 2;
 	player = players[playerIndex];
-	halfTextWidth = player->getHalfTextWidth(playerIndex);
-	float textHeight = player->getTextHeight(playerIndex);
+	halfTextWidth = player->playerName->getHalfTextWidth();
+	float textHeight = player->playerName->getTextHeight();
 	player->setNamePosition(Vector2f(halfScreenWidth - halfTextWidth, screenHeight - textAndTableSpacing - textHeight - 0.3f * textHeight));
 
 	playerIndex = 3;
 	player = players[playerIndex];
-	halfTextWidth = player->getHalfTextWidth(playerIndex);
+	halfTextWidth = player->playerName->getHalfTextWidth();
 	player->setNamePosition(Vector2f(screenWidth - textAndTableSpacing, halfScreenHeight - halfTextWidth));
 	player->setNameRotation(90.0f);
 }

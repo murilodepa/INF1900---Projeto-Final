@@ -1,8 +1,8 @@
 #ifndef CARD_BUTTON_H
 #define CARD_BUTTON_H
 
-#include "../../../include/views/ButtonBase.h"
-#include "../UtilsView.h"
+#include "../../../../include/views/button/ButtonBase.h"
+#include "../../UtilsView.h"
 
 namespace TrucoGame {
     namespace View {
