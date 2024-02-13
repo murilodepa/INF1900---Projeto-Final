@@ -2,6 +2,8 @@
 #include "../../../include/models/packets/StartRoundPacket.h"
 #include "../../../include/models/packets/EndRoundPacket.h"
 #include "../../../include/models/packets/PlayerPlayPacket.h"
+#include "../../../include/models/packets/ElevenHandResponsePacket.h"
+#include "../../../include/models/packets/ElevenHandPacket.h"
 #include <nlohmann/json.hpp>
 #include <random>
 
@@ -66,7 +68,15 @@ namespace TrucoGame {
                 }
                 break;
             }
+            case ElevenHand:
+            {
+                ElevenHandPacket elevenHandPacket(packet->payload);
+                player.setHand(elevenHandPacket.handCards);
+                nextPlay = new ElevenHandResponsePacket(1);
+                break;
+            }
             default:
+                std::cout << "Received invalid packet (" << packet->packetType << ")" << std::endl;
                 break;
             }
             return ErrorCode::Success;

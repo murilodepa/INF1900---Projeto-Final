@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "TcpServer.h"
+#include "AIPlayer.h"
 #include "TcpClientPlayer.h"
 #include "../Card.h"
 #include "../Deck.h"
@@ -11,6 +12,9 @@
 
 #include "../packets/StartGamePacket.h"
 #include "../packets/StartRoundPacket.h"
+#include "../packets/ElevenHandPacket.h"
+#include "../packets/PlayerPlayPacket.h"
+#include "../packets/ElevenHandResponsePacket.h"
 
 namespace TrucoGame {
 
@@ -29,7 +33,8 @@ namespace TrucoGame {
         public:
             void waitForPlayersToConnect();
             void startGame();
-            void startRound();
+            int startRound();
+            int startElevenHandRound(int team, std::vector<Card> playerHands[], Card tableCard);
             void startTurn();
             void startPlay(int currentPlayer);
             int endTurn();

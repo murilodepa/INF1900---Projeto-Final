@@ -24,6 +24,8 @@ set(HEADER_FILES
     "models/packets/StartGamePacket.h"
     "models/packets/StartRoundPacket.h"
     "models/packets/TrucoPacket.h"
+    "models/packets/ElevenHandPacket.h"
+    "models/packets/ElevenHandResponsePacket.h"
     "models/server/AIPlayer.h"
     "models/server/TcpClientPlayer.h"
     "models/server/TcpServer.h"

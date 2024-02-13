@@ -6,6 +6,8 @@
 #include "../packets/PlayerPlayPacket.h"
 #include "../packets/CardPacket.h"
 #include "../packets/TrucoPacket.h"
+#include "../packets/ElevenHandPacket.h"
+#include "../packets/ElevenHandResponsePacket.h"
 
 namespace TrucoGame {
     namespace Models {
@@ -18,8 +20,10 @@ namespace TrucoGame {
             void OnStartRoundPacketReceived(StartRoundPacket packet);
             void OnPlayPacketReceived(PlayerPlayPacket packet);
             void OnTrucoPacketReceived(TrucoPacket packet);
+            void OnElevenHandPacketReceived(ElevenHandPacket packet);
         public:
             ClientGameManager();
+            void Start(std::string ip);
         };
     }
 }

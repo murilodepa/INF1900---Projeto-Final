@@ -8,16 +8,6 @@ namespace TrucoGame {
     namespace Models {
         ClientGameManager::ClientGameManager()
         {
-            std::cout << "[CLIENT] Starting client Thread" << std::endl;
-
-            ErrorCode result = ErrorCode::SocketError;
-
-            while (HAS_FAILED(result)) {
-                result = client.Connect("127.0.0.1", DEFAULT_PORT);
-                std::this_thread::sleep_for(std::chrono::seconds(2));
-            }
-            client.StartListening();
-
             client.startGamePacketReceived = [this](StartGamePacket packet) {
                 OnStartGamePacketReceived(packet);
             };
@@ -30,10 +20,27 @@ namespace TrucoGame {
             client.trucoPacketReceived = [this](TrucoPacket packet) {
                 OnTrucoPacketReceived(packet);
             };
+            client.elevenHandPacketReceived = [this](ElevenHandPacket packet) {
+                OnElevenHandPacketReceived(packet);
+            };
+        }
+
+        void ClientGameManager::Start(std::string ip) 
+        {
+            std::cout << "[CLIENT] Starting client Thread" << std::endl;
+
+            ErrorCode result = ErrorCode::SocketError;
+
+            while (HAS_FAILED(result)) {
+                result = client.Connect(ip.c_str(), DEFAULT_PORT);
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+            }
+            client.StartListening();
         }
 
         void ClientGameManager::GetPlayerInputAndSend()
         {
+            std::cin.clear();
             int input;
             std::cin >> input;
             if (input < player->hand.size())
@@ -54,11 +61,14 @@ namespace TrucoGame {
         {
             player = new Player(packet.playerId, "Player " + packet.playerId);
         }
+
         void ClientGameManager::OnStartRoundPacketReceived(StartRoundPacket packet)
         {
+            std::cout << "Table Card: " << packet.tableCard.getValue() << " " << packet.tableCard.getSuit();
             player->hand = packet.handCards;
             //set table card
         }
+
         void ClientGameManager::OnPlayPacketReceived(PlayerPlayPacket packet)
         {
             std::cout << "Hand [";
@@ -74,7 +84,7 @@ namespace TrucoGame {
 
         void ClientGameManager::OnTrucoPacketReceived(TrucoPacket packet) 
         {
-            std::cout << "Received Truco Packet" << std::endl;
+            std::cout << "Received Truco Packet " << packet.result << std::endl;
 
             if (packet.result == TrucoResult::Yes) {
                 std::cout << "Truco was accepted" << std::endl;
@@ -85,7 +95,7 @@ namespace TrucoGame {
                     GetPlayerInputAndSend();
                 }
             }
-            else
+            else if(packet.result == TrucoResult::Raise)
             {
                 if (packet.responseTeamId == player->playerId % 2)
                 {
@@ -99,6 +109,30 @@ namespace TrucoGame {
 
                 }
             }
+        }
+        void ClientGameManager::OnElevenHandPacketReceived(ElevenHandPacket packet) 
+        {
+            std::cout << "Table Card: " << packet.tableCard.getValue() << " " << packet.tableCard.getSuit();
+            player->hand = packet.handCards;
+
+            std::cout << "My hand [";
+            for (int i = 0; i < packet.handCards.size(); i++) {
+                std::cout << ":" << packet.handCards[i].getValue() << " " << packet.handCards[i].getSuit();
+            }
+            std::cout << "]" << std::endl << std::endl;
+
+            std::cout << "My partner hand [";
+            for (int i = 0; i < packet.partnerHand.size(); i++) {
+                std::cout << ":" << packet.partnerHand[i].getValue() << " " << packet.partnerHand[i].getSuit();
+            }
+            std::cout << "]" << std::endl << std::endl;
+
+            std::cout << "Yes : 1 | No : 0" << std::endl;
+            int input;
+            std::cin.clear();
+            std::cin >> input;
+            ElevenHandResponsePacket response(input);
+            client.Send(&response);
         }
 
         

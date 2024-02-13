@@ -2,8 +2,6 @@
 #include "..\..\include\models\Score.h"
 #include <iostream>
 
-#define POINT_TO_WIN 50
-
 namespace TrucoGame {
     namespace Models {
 

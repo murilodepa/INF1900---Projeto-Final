@@ -56,7 +56,7 @@ namespace TrucoGame {
             std::cout << "[SERVER] Waiting for " << numberOfClients << " clients to connect\n";
 
             while (players.size() < numberOfClients) {
-                TcpClientPlayer* client = new TcpClientPlayer(++playerId);
+                TcpClientPlayer* client = new TcpClientPlayer(playerId++);
                 client->socket = accept(
                     serverSocket,
                     (struct sockaddr*)&client->address,
