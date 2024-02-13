@@ -45,66 +45,52 @@ namespace TrucoGame {
 
             if (score.getTeam0GameScore() != score.getTeam1GameScore()) {
                 if (score.getTeam0GameScore() + 1 == POINT_TO_WIN) {
-                    std::cout << "Team 0 in eleven hand." << std::endl;
-                    ElevenHandPacket elevenHandPacket(tableCard, playerHands[0], playerHands[2]);
-                    clients[0]->Send(&elevenHandPacket);
-                    ElevenHandPacket elevenHandPacket2(tableCard, playerHands[2], playerHands[0]);
-                    clients[2]->Send(&elevenHandPacket2);
-
-                    StartRoundPacket startRoundPacket(tableCard, playerHands[1]);
-                    clients[1]->Send(&startRoundPacket);
-                    StartRoundPacket startRoundPacket2(tableCard, playerHands[3]);
-                    clients[3]->Send(&startRoundPacket2);
-
-                    TcpClientPlayer* players[] = { clients[0], clients[2] };
-                    auto [playerAResponse, playerBResponse] = tcpServer.WaitForTeamPacket(players);
-
-                    ElevenHandResponsePacket a(playerAResponse->payload);
-                    ElevenHandResponsePacket b(playerBResponse->payload);
-                    std::cout << "ElevenHandResponse: " << a.response << "+" << b.response << std::endl;
-                    if (a.response == 0 || b.response == 0) {
-                        return 1;
-                    }
-                    else {
-                        score.increaseStakes();
-                    }
-                    return -1; // no winner yet, play round normally
+                    return startElevenHandRound(0, playerHands, tableCard);
                 }
                 else if (score.getTeam1GameScore() + 1 == POINT_TO_WIN) {
-                    std::cout << "Team 1 in eleven hand." << std::endl;
-                    ElevenHandPacket elevenHandPacket(tableCard, playerHands[1], playerHands[3]);
-                    clients[1]->Send(&elevenHandPacket);
-                    ElevenHandPacket elevenHandPacket2(tableCard, playerHands[3], playerHands[1]);
-                    clients[3]->Send(&elevenHandPacket2);
-
-                    StartRoundPacket startRoundPacket(tableCard, playerHands[0]);
-                    clients[0]->Send(&startRoundPacket);
-                    StartRoundPacket startRoundPacket2(tableCard, playerHands[2]);
-                    clients[2]->Send(&startRoundPacket2);
-
-                    TcpClientPlayer* players[] = { clients[1], clients[3] };
-                    auto [playerAResponse, playerBResponse] = tcpServer.WaitForTeamPacket(players);
-
-                    ElevenHandResponsePacket a(playerAResponse->payload);
-                    ElevenHandResponsePacket b(playerBResponse->payload);
-
-                    std::cout << "ElevenHandResponse: " << a.response << "+" << b.response << std::endl;
-                    if (a.response == 0 || b.response == 0) {
-                        return 0;
-                    }
-                    else {
-                        score.increaseStakes();
-                    }
-                    return -1; // no winner yet, play round normally
+                    return startElevenHandRound(1, playerHands, tableCard);
                 }
             }
             
-
+            //Not eleven hand: start round normally
             for each (auto player in clients) {
                 StartRoundPacket startRoundPacket(tableCard, playerHands[player->id]);
                 player->Send(&startRoundPacket);
             }
 
+            return -1; // no winner yet, play round normally
+        }
+
+        int ServerGameManager::startElevenHandRound(int team, std::vector<Card> playerHands[], Card tableCard)
+        {
+            int idA = team;
+            int idC = team + 2;
+
+            int idB = team + 1;
+            int idD = (team + 3) % 4;
+            std::cout << "Team 0 in eleven hand." << std::endl;
+            ElevenHandPacket elevenHandPacket(tableCard, playerHands[idA], playerHands[idC]);
+            clients[idA]->Send(&elevenHandPacket);
+            ElevenHandPacket elevenHandPacket2(tableCard, playerHands[idC], playerHands[idA]);
+            clients[idC]->Send(&elevenHandPacket2);
+
+            StartRoundPacket startRoundPacket(tableCard, playerHands[idB]);
+            clients[idB]->Send(&startRoundPacket);
+            StartRoundPacket startRoundPacket2(tableCard, playerHands[idD]);
+            clients[idD]->Send(&startRoundPacket2);
+
+            TcpClientPlayer* players[] = { clients[idA], clients[idC] };
+            auto [playerAResponse, playerCResponse] = tcpServer.WaitForTeamPacket(players);
+
+            ElevenHandResponsePacket a(playerAResponse->payload);
+            ElevenHandResponsePacket c(playerCResponse->payload);
+            std::cout << "ElevenHandResponse: " << a.response << "+" << c.response << std::endl;
+            if (a.response == 0 || c.response == 0) {
+                return !team;
+            }
+            else {
+                score.increaseStakes();
+            }
             return -1; // no winner yet, play round normally
         }
 
