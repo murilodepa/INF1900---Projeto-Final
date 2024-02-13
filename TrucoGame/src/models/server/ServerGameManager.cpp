@@ -156,6 +156,7 @@ namespace TrucoGame {
         {
             if (a == TrucoResult::No || b == TrucoResult::No)
                 return TrucoResult::No;
+            
             if (a == TrucoResult::Raise || b == TrucoResult::Raise)
                 return TrucoResult::Raise;
 

@@ -12,6 +12,7 @@ set(HEADER_FILES
     # Controllers
     "controllers/Application.h"
     "controllers/TableController.h"
+    "controllers/GMController.h"
 
     # Models
     "models/client/TcpClient.h"

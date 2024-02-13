@@ -13,7 +13,6 @@ namespace TrucoGame {
     namespace Models {
         class ClientGameManager {
         private:
-            Player* player;
             TcpClient client;
             void GetPlayerInputAndSend();
             void OnStartGamePacketReceived(StartGamePacket packet);
@@ -22,6 +21,7 @@ namespace TrucoGame {
             void OnTrucoPacketReceived(TrucoPacket packet);
             void OnElevenHandPacketReceived(ElevenHandPacket packet);
         public:
+            Player* player;
             ClientGameManager();
             void Start(std::string ip);
         };
