@@ -39,8 +39,9 @@ set(SRC_FILES
     "views/ButtonBase.cpp"
     "views/GraphicManager.cpp"
     "views/MouseState.cpp"
+    "views/MutexView.cpp"
     "views/UtilsView.cpp"
-)
+ )
 
 # Add source to this project's executable.
 add_executable (TrucoGame ${SRC_FILES})

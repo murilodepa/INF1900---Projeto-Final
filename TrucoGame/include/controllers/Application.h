@@ -26,7 +26,7 @@ namespace TrucoGame {
         //static void commonUpdateLoop(TrucoGame::View::GraphicManager& pGraphicManager, std::shared_ptr<bool>& firstTimeFlag, TrucoGame::View::TrucoGameView& pTrucoGameView, std::unique_ptr<TrucoGame::View::MainMenuState>& pMainMenuState);
         void initialize();
     public:
-        Application();
+        Application(const std::vector<std::string>& playerNames);
         ~Application();
         void run();
     };

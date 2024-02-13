@@ -86,7 +86,7 @@ namespace TrucoGame {
 		void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, Texture* texture, const std::string& newTexturePath, const Vector2f& destinationPosition, float speed, const float cardScale)
 		{
 			moveSpriteTo(sprite, destinationPosition, speed);
-			flipCard(sprite, 1.5f, texture, newTexturePath, cardScale, true);
+			flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, true);
 		}
 
 		void Animator::animationWithCardTurnedFaceUpAndInitialDeck(Sprite& cardTurnedFaceUp, Texture* texture, const std::string& newTexturePath, Sprite& initialDeck, const Vector2f& cardTurnedFaceUpDestinationPosition, const Vector2f& initialDeckDestinationPosition, float finalRotation, float speed, const float cardScale)
@@ -135,7 +135,7 @@ namespace TrucoGame {
 				moveSpriteTo(sprite, destinationPosition, speed);
 			}
 
-			flipCard(sprite, 1.5f, texture, newTexturePath, cardScale, false);
+			flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, false);
 		}
 
 	}

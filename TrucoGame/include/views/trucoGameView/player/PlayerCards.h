@@ -6,7 +6,6 @@
 #include <SFML/Graphics.hpp>
 #include "../CardView.h"
 
-#define CARD_BACK_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/cardBack.png"
 #define DEFAULT_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/"
 
 using namespace sf;

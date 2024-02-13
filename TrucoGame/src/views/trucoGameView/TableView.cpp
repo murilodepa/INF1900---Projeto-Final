@@ -72,12 +72,10 @@ void TrucoGame::View::TableView::drawElementsOnTheTable(GraphicManager* pGraphic
 	pGraphicManager->drawElement(*deck);
 }
 
-void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, float speed)
+void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, float speed, std::string& texturePathToturnedFaceUpCard)
 {
-	std::string turnedFaceUpPath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
-	//*texture = UtilsView::loadTexture(turnedFaceUpPath);
 	std::thread* animationThread = new std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck,
-		std::ref(*cardTurnedFaceUp), texture, turnedFaceUpPath, std::ref(*deck), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed, cardScale);
+		std::ref(*cardTurnedFaceUp), texture, texturePathToturnedFaceUpCard, std::ref(*deck), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed, cardScale);
 	
 	animationThread->detach();
 	delete animationThread;

@@ -11,6 +11,11 @@ Texture TrucoGame::UtilsView::loadTexture(const std::string texturePath)
     return texture;
 }
 
+Texture TrucoGame::UtilsView::loadTextureBack()
+{
+    return loadTexture(CARD_BACK_TEXTURE_PATH);
+}
+
 Font TrucoGame::UtilsView::loadFont(const std::string fontPath)
 {
     sf::Font font;

@@ -56,7 +56,7 @@ namespace TrucoGame {
             Sprite getTableCloth();
             void setTableClothScale(Vector2f& windowSize, Vector2u& textureSize);
             void drawElementsOnTheTable(GraphicManager* pGraphicManager) const;
-            void moveDeckAndTurnUpCard(const float cardScale, float speed);
+            void moveDeckAndTurnUpCard(const float cardScale, float speed, std::string& texturePathToturnedFaceUpCard);
             void setTurnedFaceUpCardTexture(std::string& texturePath);
             void setTextureFromPath(const std::string& texturePath);
         };

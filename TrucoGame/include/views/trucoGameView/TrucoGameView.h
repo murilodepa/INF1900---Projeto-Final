@@ -38,29 +38,27 @@ namespace TrucoGame {
             std::vector<PlayerView*> players;
             std::vector<CardButton*> cardButtons;
             std::vector<Vector2f> positionToDiscardCards;
-            std::vector<std::string> names;
             float cardScale, animationSpeed;
             Vector2f windowSize;
 
-            void initialize();
+            void initialize(const std::vector<std::string>& playerNames);
 
             void setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
-            void setNamesPositions(float screenWidth, float screenHeight, float textAndTableSpacing, std::vector<std::string>& names);
+            void setNamesPositions(float screenWidth, float screenHeight, float textAndTableSpacing);
             void setPositionToDiscardCards();
 
             void drawScore(GraphicManager* pGraphicManager);
             void drawCardsOnTheTable(GraphicManager* pGraphicManager);
             void drawPlayerNames(GraphicManager* pGraphicManager);
             void checkIftheCardHasBeenDiscardedAndDraw(GraphicManager* pGraphicManager, Vector2f& mousePosView);
-            void distributeCardsToPlayers();
-            void discardCard(size_t player, size_t card, std::string& newTexturePath);
+            void distributeCardsToPlayers(std::vector<std::string>& texturePathToMainPlayerCards);
+            void discardCard(size_t player, size_t card, std::string& cardTexturePath);
             void testDiscartCards();
 
         public:
-            TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition);
+            TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition, const std::vector<std::string>& playerNames);
             ~TrucoGameView();
-            void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag, Vector2f& mousePosView);
-            void setPlayerNames(std::vector<std::string> names);
+            void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag, Vector2f& mousePosView, std::vector<std::string>& texturePathToMainPlayerCards, std::string& cardPathToturnedFaceUp);
         };
     }
 }
