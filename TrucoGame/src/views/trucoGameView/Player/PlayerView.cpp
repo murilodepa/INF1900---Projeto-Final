@@ -5,7 +5,7 @@ void TrucoGame::View::PlayerView::setFontFromPath(const std::string& fontPath)
 	this->font = UtilsView::loadFont(fontPath);
 }
 
-TrucoGame::View::PlayerView::PlayerView(size_t numCardsInHands, const float windowHeight)
+TrucoGame::View::PlayerView::PlayerView(size_t numCardsInHands, const float windowHeight, const std::string& name)
 {
 	setFontFromPath(NAME_FONT_PATH);
 	playerCards.resize(numCardsInHands);
@@ -16,6 +16,12 @@ TrucoGame::View::PlayerView::PlayerView(size_t numCardsInHands, const float wind
 	playerName.setCharacterSize(playerNameCharacterSize);
 	playerName.setFillColor(NAME_COLOR);
 	playerName.setStyle(sf::Text::Bold);
+
+	playerName.setString(name);
+
+	sf::FloatRect localBounds = playerName.getLocalBounds();
+	width = localBounds.width;
+	height = localBounds.height;
 }
 
 TrucoGame::View::PlayerView::~PlayerView()
@@ -51,17 +57,17 @@ Text TrucoGame::View::PlayerView::getPlayerName() const
 
 float TrucoGame::View::PlayerView::getTextWidth(size_t playerIndex) const
 {
-	return playerName.getGlobalBounds().width;
+	return width;
 }
 
 float TrucoGame::View::PlayerView::getTextHeight(size_t playerIndex) const
 {
-	return playerName.getGlobalBounds().height;
+	return height;
 }
 
 float TrucoGame::View::PlayerView::getHalfTextWidth(size_t playerIndex) const
 {
-	return playerName.getGlobalBounds().width / 2;
+	return width / 2;
 }
 
 Vector2f TrucoGame::View::PlayerView::getCardPosition(size_t cardIndex) const

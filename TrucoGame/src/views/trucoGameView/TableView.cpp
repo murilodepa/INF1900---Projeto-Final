@@ -31,8 +31,8 @@ void TrucoGame::View::TableView::setDeckPositionOnTheTable(float screenWidth, fl
 	float halfScreenHeight = screenHeight / 2;
 	float halfCardWidth = cardWidth / 2;
 
-	cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition = Vector2f(halfScreenWidth - halfCardWidth + cardWidth, halfScreenHeight - halfCardWidth);
-	cardTurnedFaceUpAndDeck.deckPosition = Vector2f(halfScreenWidth + 20, halfScreenHeight - halfCardWidth - 20);
+	cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition = Vector2f(halfScreenWidth - halfCardWidth + cardWidth, halfScreenHeight - halfCardWidth - (0.07f * cardWidth));
+	cardTurnedFaceUpAndDeck.deckPosition = Vector2f(halfScreenWidth + (0.05f * cardWidth), halfScreenHeight - halfCardWidth - (0.1f * cardWidth));
 	cardTurnedFaceUpAndDeck.deckRotation = 35.0f;
 }
 
@@ -72,12 +72,10 @@ void TrucoGame::View::TableView::drawElementsOnTheTable(GraphicManager* pGraphic
 	pGraphicManager->drawElement(*deck);
 }
 
-void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, float speed)
+void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, float speed, std::string& texturePathToturnedFaceUpCard)
 {
-	std::string turnedFaceUpPath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
-	//*texture = UtilsView::loadTexture(turnedFaceUpPath);
 	std::thread* animationThread = new std::thread(&TrucoGame::View::Animator::animationWithCardTurnedFaceUpAndInitialDeck,
-		std::ref(*cardTurnedFaceUp), texture, turnedFaceUpPath, std::ref(*deck), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed, cardScale);
+		std::ref(*cardTurnedFaceUp), texture, texturePathToturnedFaceUpCard, std::ref(*deck), cardTurnedFaceUpAndDeck.cardTurnedFaceUpPosition, cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed, cardScale);
 	
 	animationThread->detach();
 	delete animationThread;

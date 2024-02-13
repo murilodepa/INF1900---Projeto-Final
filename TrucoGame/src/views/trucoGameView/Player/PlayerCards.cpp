@@ -43,7 +43,7 @@ Texture* TrucoGame::View::PlayerCards::getCardTexture(size_t player, size_t card
 void TrucoGame::View::PlayerCards::setCardTexture(CardStruct& cardStruct, Texture* texture)
 {
 	if (cardStruct.rank == CardRank::Back) {
-		*texture = UtilsView::loadTexture(CARD_BACK_TEXTURE_PATH);
+		*texture = UtilsView::loadTextureBack();
 	}
 	else {
 		// TODO

@@ -16,7 +16,7 @@ namespace TrucoGame {
 
     GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    Application::Application() : 
+    Application::Application(const std::vector<std::string>& playerNames) :
         trucoGameView([&]() {
         Vector2f windowSize;
         if ((pGraphicManager != nullptr)) {
@@ -25,12 +25,16 @@ namespace TrucoGame {
         else {
             windowSize = Vector2f(SCREEN_X / 2, SCREEN_Y / 2);
         }
-        float initialDeckPosition = (0.1 * windowSize.x);
-        return TrucoGameView(windowSize, windowSize.y / 5000, Vector2f(initialDeckPosition, initialDeckPosition));
+        float initialDeckPosition = windowSize.x * CALCULATE_INITIAL_DECK_POSITION;
+        float cardScale = windowSize.y / CALCULATE_CARD_SCALE;
+
+        std::vector<std::string> names = playerNames.empty() ? std::vector<std::string>{ "Jogador 1", "Jogador 2", "Jogador 3", "Jogador 4" } : playerNames;
+
+        return TrucoGameView(windowSize, cardScale, Vector2f(initialDeckPosition, initialDeckPosition), names);
         }()),
-        mainMenuState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MainMenuState>(pGraphicManager->getWindow()) : nullptr)
+        mouseState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MouseState>(pGraphicManager->getWindow()) : nullptr)
     {
-        if (pGraphicManager == nullptr || mainMenuState == nullptr) {
+        if (pGraphicManager == nullptr || mouseState == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
         }
@@ -45,16 +49,23 @@ namespace TrucoGame {
         // TODO Define the initial state of the window
     }
 
-    void Application::run() 
+    void Application::run()
     {
-        
+
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
         // TEST CODE FOR THE MODELS, WILL BE REMOVED LATER
-        std::vector<Player> players;
-        players.push_back(Player("Laert",  0));
-        players.push_back(Player("Caique", 1));
-        players.push_back(Player("Vitor",  2));
-        players.push_back(Player("Murilo", 3));
+        //std::vector<Player> players;
+        //players.push_back(Player("Laert",  0));
+        //players.push_back(Player("Caique", 1));
+        //players.push_back(Player("Vitor",  2));
+        //players.push_back(Player("Murilo", 3));
+
+        std::vector<std::string> texturePathToMainPlayerCards;
+        texturePathToMainPlayerCards.emplace_back("../../../../TrucoGame/resources/images/cards/Clubs/Ace.png");
+        texturePathToMainPlayerCards.emplace_back("../../../../TrucoGame/resources/images/cards/Clubs/Five.png");
+        texturePathToMainPlayerCards.emplace_back("../../../../TrucoGame/resources/images/cards/Clubs/queen.png");
+
+        std::string texturePathToturnedFaceUpCard = "../../../../TrucoGame/resources/images/cards/Hearts/Ace.png";
 
         Table table;
         Deck deck;        
@@ -84,11 +95,12 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag);
-            mainMenuState->render();
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag, mouseState->getMousePosView(), texturePathToMainPlayerCards, texturePathToturnedFaceUpCard);
+            //mainMenuState->render();
 
             //Update Mouse
-            mainMenuState->update();
+            mouseState->updateMousePosition();
+
 
             pGraphicManager->showElements();
         }

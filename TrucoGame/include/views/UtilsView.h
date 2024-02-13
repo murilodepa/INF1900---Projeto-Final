@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <SFML/Graphics.hpp>
+#define CARD_BACK_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/cardBack.png"
 
 using namespace sf;
 
@@ -9,6 +10,7 @@ namespace TrucoGame {
     namespace UtilsView {
 
         Texture loadTexture(const std::string texturePath);
+        Texture loadTextureBack();
         Font loadFont(const std::string fontPath);
         
         template <typename T>

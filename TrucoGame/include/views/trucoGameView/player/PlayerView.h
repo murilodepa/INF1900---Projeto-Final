@@ -23,11 +23,12 @@ namespace TrucoGame {
             Text playerName;
             std::vector<CardView> playerCards;
             Font font;
+            float width, height;
 
             void setFontFromPath(const std::string& fontPath);
 
         public:
-            PlayerView(size_t numCardsInHands, const float windowHeight);
+            PlayerView(size_t numCardsInHands, const float windowHeight, const std::string& name);
             ~PlayerView();
 
             void setPlayerName(std::string name);
