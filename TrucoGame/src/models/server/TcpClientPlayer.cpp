@@ -1,19 +1,19 @@
-#include "../../../include/models/server/Player.h"
+#include "../../../include/models/server/TcpClientPlayer.h"
 
 namespace TrucoGame {
 
     namespace Models {
 
-        ErrorCode Player::StartListening()
+        ErrorCode TcpClientPlayer::StartListening()
         {
-            mListenThread = std::thread(&Player::Listen, this);
+            mListenThread = std::thread(&TcpClientPlayer::Listen, this);
             if (!mListenThread.joinable()) {
                 return ErrorCode::ThreadError;
             }
             return Success;
         }
 
-        void Player::Listen()
+        void TcpClientPlayer::Listen()
         {
             char buffer[1024];
             int bytesRead;
@@ -24,8 +24,6 @@ namespace TrucoGame {
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
                     Packet receivedPacket(receivedJson);
 
-                    std::cout << "Received packet type" << receivedPacket.packetType
-                        << " from client " << id << std::endl;
                 }
                 catch (const std::exception& e) {
                     std::cerr << "Error parsing JSON: " << e.what() << std::endl;
@@ -33,11 +31,12 @@ namespace TrucoGame {
             }
         }
 
-        ErrorCode Player::Send(Packet* packet)
+        ErrorCode TcpClientPlayer::Send(Packet* packet)
         {
             nlohmann::json jsonPacket;
             packet->ToJson(jsonPacket);
             std::string jsonString = jsonPacket.dump();
+            jsonString += "\n";
 
             int result = send(socket, jsonString.c_str(), jsonString.size(), 0);
             if (result == SOCKET_ERROR) {
@@ -47,7 +46,7 @@ namespace TrucoGame {
             return Success;
         }
 
-        Packet* Player::WaitForPacket() {
+        Packet* TcpClientPlayer::WaitForPacket() {
             char buffer[1024];
             int bytesRead;
             
@@ -55,26 +54,9 @@ namespace TrucoGame {
                 std::string receivedData(buffer, bytesRead);
                 try {
                     nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
-                    Packet receivedPacket(receivedJson);
+                    Packet* receivedPacket = new Packet(receivedJson);
 
-                    std::cout << "Received packet type " << receivedPacket.packetType
-                        << " from client " << id << std::endl;
-
-                    switch (receivedPacket.packetType)
-                    {
-                    case PlayerCard:
-                    {
-                        CardPacket* cardPacket = new CardPacket(receivedPacket.payload);
-                        return cardPacket;
-                    }
-                    case Truco:
-                    {
-                        TrucoPacket* truco = new TrucoPacket(receivedPacket.payload);
-                        return truco;
-                    }
-                    default:
-                        continue;
-                    }
+                    return receivedPacket;
                     
                 }
                 catch (const std::exception& e) {

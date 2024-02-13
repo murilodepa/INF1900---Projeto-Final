@@ -27,6 +27,7 @@ namespace TrucoGame {
                 team0Score(team0Score),
                 team1Score(team1Score)
             {
+                ToJson(payload);
             }
             void ToJson(nlohmann::json& j) const override {
                 Packet::ToJson(j);

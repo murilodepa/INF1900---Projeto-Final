@@ -6,22 +6,28 @@ using namespace std;
 
 namespace TrucoGame {
 	namespace Models {
-		struct PlayedCard {
+		class PlayedCard {
+		public:
 			int playerId;
-			Card* card;
+			Card card;
 			bool isCovered;
+			PlayedCard(int playerId, Card card, bool isCovered) :
+				playerId(playerId),
+				card(card),
+				isCovered(isCovered){}
 		};
 
 		class Table {
 		public:
 			Table();
-			Card* turnedCard = nullptr;
-			void placeCard(Card* card, int playerId, bool isCovered);
-			vector<Card> getPlayedCards();
-			int calculateWinner();
-			void cleanPlayedCards();
+			void PlaceCard(Card card, int playerId, bool isCovered);
+			//Returns: playerId of the winner (0 ~ 3)
+			int CalculateWinner();
+			Card* GetAllCards();
+			void SetTableCard(Card card);
+			std::vector<PlayedCard> playedCards;
 		private:
-			PlayedCard playedCards[4];
+			int manilhaValue = -1;
 			int playedCardIndex = 0;
 			int getCardActualValue(PlayedCard playedCard);
 		};

@@ -20,6 +20,11 @@
 namespace TrucoGame {
 	namespace Models {
 
+		typedef std::function<void(StartGamePacket)> StartGamePacketEventHandler;
+		typedef std::function<void(PlayerPlayPacket)> PlayerPlayPacketEventHandler;
+		typedef std::function<void(StartRoundPacket)> StartRoundPacketEventHandler;
+		typedef std::function<void(TrucoPacket)> TrucoPacketEventHandler;
+
 		class TcpClient {
 		private:
 			SOCKET clientSocket;
@@ -28,6 +33,7 @@ namespace TrucoGame {
 			ErrorCode InitializeWinSock();
 			ErrorCode CreateSocket(SOCKET& newSocket);
 			std::thread mListenThread;
+
 		public:
 			ErrorCode Connect(const char* ipAddress, u_short port);
 			ErrorCode Send(const char* message);
@@ -35,6 +41,11 @@ namespace TrucoGame {
 
 			ErrorCode StartListening();
 			void Listen();
+
+			PlayerPlayPacketEventHandler playerPlayPacketReceived;
+			StartGamePacketEventHandler startGamePacketReceived;
+			StartRoundPacketEventHandler startRoundPacketReceived;
+			TrucoPacketEventHandler trucoPacketReceived;
 		};
 	}
 }

@@ -1,5 +1,6 @@
 #include "..\..\include\models\Table.h"
 #include "..\..\include\models\Card.h"
+#include <iostream>
 
 using namespace std;
 
@@ -9,36 +10,24 @@ namespace TrucoGame {
 		Table::Table() {
 			playedCardIndex = 0;
 		}
-		
-		void Table::placeCard(Card* card, int playerId, bool isCovered)
+
+		void Table::PlaceCard(Card card, int playerId, bool isCovered)
 		{
 			if (playedCardIndex >= 4) return;
 
-			PlayedCard playedCard;
-			playedCard.card = card;
-			playedCard.playerId = playerId;
-			playedCard.isCovered = isCovered;
-			playedCards[playedCardIndex] = playedCard;
+			PlayedCard playedCard(playerId, card, isCovered);
+			playedCards.push_back(playedCard);
 			playedCardIndex++;
 		}
-
-		vector<Card> Table::getPlayedCards()
-		{
-			vector<Card> tableCards;
-		
-			for (int i = 0; i < 4; i++)
-			{
-				tableCards.push_back(*playedCards[i].card);
-			}
-			
-			return tableCards;
+				
+		void Table::SetTableCard(Card card) {
+			manilhaValue = (card.getValue() + 1) % 10;
 		}
 
-		int Table::calculateWinner()
+		int Table::CalculateWinner()
 		{
-			PlayedCard winningCard;
-			winningCard = playedCards[0];
-			for(int i = 1; i < 4; i++)
+			PlayedCard winningCard = playedCards[0];
+			for(int i = 1; i < playedCards.size(); i++)
 			{
 				int newCardValue = getCardActualValue(playedCards[i]);
 				int oldCardValue = getCardActualValue(winningCard);
@@ -51,24 +40,32 @@ namespace TrucoGame {
 					winningCard.playerId = -1;
 				}
 			}
+
+			std::cout << "Winner: " << winningCard.playerId << ": " << winningCard.card.getValue() << " " << winningCard.card.getSuit() << std::endl;
+			
+			playedCardIndex = 0;
+
 			return winningCard.playerId;
 		}
 
 		int Table::getCardActualValue(PlayedCard playedCard)
 		{
-			int baseValue = playedCard.card->getValue();
+			int baseValue = playedCard.card.getValue();
 
-			if (turnedCard == nullptr)
+			if (manilhaValue == -1)
 				return baseValue;
 
 			if (playedCard.isCovered)
 				return -1;
 
+			int actualValue;
 			//is manilha
-			if (baseValue == (turnedCard->getValue() + 1) % 10)
-				return baseValue + (10 * playedCard.card->getSuit());
+			if (baseValue == manilhaValue)
+				actualValue = baseValue + (10 * playedCard.card.getSuit());
 			else
-				return baseValue;
+				actualValue = baseValue;
+
+			return actualValue;
 		}
 	}
 }
