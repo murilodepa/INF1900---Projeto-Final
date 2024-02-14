@@ -29,7 +29,9 @@ namespace TrucoGame {
             vector<TcpClientPlayer*> clients;
 
             TrucoResult calculateTrucoResult(TrucoResult a, TrucoResult b);
-            
+            bool canPlayerRequestTruco(int playerId);
+
+            int lastToRequestTruco = -1;
             int teamRefusedTruco = -1;
             int nextTurnPlayer = 0;
             int nextRoundPlayer = 0;

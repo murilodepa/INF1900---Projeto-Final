@@ -29,11 +29,8 @@ namespace TrucoGame {
 
         int ServerGameManager::startRound()
         {
-            //Give players hand cards
-            deck.reset();
             Card tableCard = deck.pop();
             table.SetTableCard(tableCard);
-            score.resetRound();
 
             nextTurnPlayer = nextRoundPlayer;
             std::cout << "Starting Round (" << nextTurnPlayer << ")" << std::endl;
@@ -109,7 +106,7 @@ namespace TrucoGame {
         }
 
         void ServerGameManager::startPlay(int currentPlayer) {
-            PlayerPlayPacket playerPlayPacket(currentPlayer);
+            PlayerPlayPacket playerPlayPacket(currentPlayer, (int)canPlayerRequestTruco(currentPlayer));
             clients[currentPlayer]->Send(&playerPlayPacket);
 
         waitForPlayerPacket:
@@ -126,6 +123,8 @@ namespace TrucoGame {
 
                 while (score.getStakes() < score.maxStakes && result == TrucoResult::Raise) {
                     tcpServer.SendToClients(clients, &trucoPacket);
+
+                    lastToRequestTruco = !trucoPacket.responseTeamId;
 
                     int teamId = trucoPacket.responseTeamId;
                     TcpClientPlayer* players[] = { clients[teamId], clients[teamId + 2] };
@@ -149,11 +148,27 @@ namespace TrucoGame {
 
                 if (result == TrucoResult::No) {
                     teamRefusedTruco = !trucoPacket.responseTeamId;
-                    return;
+                    return;     
                 }
 
                 goto waitForPlayerPacket; //After truco, wait for requester player card
             }
+        }
+
+        bool ServerGameManager::canPlayerRequestTruco(int playerId) {
+            if (score.getStakes() == score.maxStakes)
+                return false;
+
+            if (playerId % 2 == lastToRequestTruco) 
+                return false;
+            
+            if (playerId % 2 == 0 && score.getTeam0GameScore() + 1 == POINT_TO_WIN)
+                return false;
+            if (playerId % 2 == 1 && score.getTeam1GameScore() + 1 == POINT_TO_WIN)
+                return false;
+
+            return true;
+               
         }
 
         TrucoResult ServerGameManager::calculateTrucoResult(TrucoResult a, TrucoResult b)
@@ -190,8 +205,11 @@ namespace TrucoGame {
         int ServerGameManager::endRound(int roundWinner)
         {
             int gameWinner = score.updateRoundWon(roundWinner);
+
             nextRoundPlayer = (nextRoundPlayer + 1) % 4;
-            //TODO: CleanPlayerCards(); ClearTurnedCard();
+            lastToRequestTruco = -1;
+            deck.reset();
+            score.resetRound();
 
             std::cout << "========== ROUND ENDED ========== ";
             std::cout << score.getTeam0GameScore() << " x " << score.getTeam1GameScore() << std::endl;
