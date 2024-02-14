@@ -108,7 +108,7 @@ namespace TrucoGame {
                 std::cout << "Truco was accepted" << std::endl;
 
                 if (trucoAccepted)
-                    trucoAccepted();
+                    trucoAccepted(score.getStakes());
 
                 if (packet.requesterId == player->playerId)
                 {

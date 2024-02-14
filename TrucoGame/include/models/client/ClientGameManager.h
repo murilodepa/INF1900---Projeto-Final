@@ -20,7 +20,7 @@ namespace TrucoGame {
         typedef std::function<void(Card)> IronHandRoundStartedEventHandler;
         typedef std::function<void(int, int, int)> RoundEndedEventHandler;
         typedef std::function<void(int, int)> TurnEndedEventHandler;
-        typedef std::function<void()> TrucoAcceptedEventHandler;
+        typedef std::function<void(int)> TrucoAcceptedEventHandler;
         typedef std::function<void()> TrucoRefusedEventHandler;
         typedef std::function<void(int, int)> TrucoResquestedEventHandler;
         typedef std::function<void()> GameWonEventHandler;

@@ -21,7 +21,7 @@ namespace TrucoGame {
 				gameModel->ironHandRoundStarted = [this](Card tableCard) { OnIronHandRoundStarted(tableCard); };
 				gameModel->roundEnded = [this](int winnerTeamId, int team0Score, int team1Score) { OnRoundEnded(winnerTeamId, team0Score, team1Score); };
 				gameModel->turnEnded = [this](int winnerTeamId, int winnerPlayerId) { OnTurnEnded(winnerTeamId, winnerPlayerId); };
-				gameModel->trucoAccepted = [this]() { OnTrucoAccepted(); };
+				gameModel->trucoAccepted = [this](int currentStakes) { OnTrucoAccepted(currentStakes); };
 				gameModel->trucoRefused = [this]() { OnTrucoRefused(); };
 				gameModel->trucoRequested = [this](int requesterId, int currentStakes) { OnTrucoResquested(requesterId, currentStakes); };
 				gameModel->gameWon = [this]() { OnGameWon(); };
@@ -46,7 +46,7 @@ namespace TrucoGame {
 
 			void OnTurnEnded(int winnerTeamId, int winnerPlayerId);
 
-			void OnTrucoAccepted();
+			void OnTrucoAccepted(int currentStakes);
 			void OnTrucoRefused();
 			void OnTrucoResquested(int requesterId, int currentStakes);
 
@@ -66,6 +66,8 @@ namespace TrucoGame {
 			// 1   3
 			//   2
 			int ModelIdToViewId(int modelId); 
+
+			bool IsMyTeam(int teamId);
 		};
 	}
 }
