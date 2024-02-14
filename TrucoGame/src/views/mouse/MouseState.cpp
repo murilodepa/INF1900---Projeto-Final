@@ -1,35 +1,29 @@
-#include "../../include/views/State.h"
+#include "../../../include/views/mouse/MouseState.h"
 
 namespace TrucoGame {
 
     namespace View {
 
-        State::State(RenderWindow* window)
+        MouseState::MouseState(RenderWindow* window)
         {
             this->window = window;
-            this->quit = false;
         }
 
-        State::~State()
+        MouseState::~MouseState()
         {
 
         }
 
-        const bool& State::getQuit() const
-        {
-            return this->quit;
-        }
-
-        void State::checkForQuit()
-        {
-            // TODO - Quit game
-        }
-
-        void State::updateMousePosition()
+        void MouseState::updateMousePosition()
         {
             this->mousePosScreen = Mouse::getPosition();
             this->mousePosWindow = Mouse::getPosition(*this->window);
             this->mousePosView = this->window->mapPixelToCoords(Mouse::getPosition(*this->window));
+        }
+
+        Vector2f MouseState::getMousePosView()
+        {
+            return mousePosView;
         }
     }
 }

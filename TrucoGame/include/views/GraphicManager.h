@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "trucoGameView/CardView.h"
+#include "../../include/views/button/ButtonBase.h"
 
 #define SCREEN_X 2267.2f
 #define SCREEN_Y 1512.0f
@@ -25,6 +26,7 @@ namespace TrucoGame {
             void clearWindow();
             void GraphicManager::drawElement(sf::Sprite& sprite);
             void GraphicManager::drawElement(CardView& cardView);
+            void GraphicManager::drawElement(ButtonBase& button);
             void drawElement(sf::RectangleShape& rectangleShape);
             void GraphicManager::drawElement(sf::CircleShape& circleShape);
             void drawElement(sf::Text& text);

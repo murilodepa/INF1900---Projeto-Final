@@ -1,9 +1,6 @@
 #ifndef SCORE_VIEW_H
 #define SCORE_VIEW_H
 
-// File path for the Arial.ttf font used "We" and "They" labels and round score
-#define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"
-
 // Define for the x-axis position of the score rectangle
 #define CALCULATE_SCORE_RECTANGLE_X_POSITION 0.09f
 
@@ -45,6 +42,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "../text/TextView.h"
 
 using namespace sf;
 
@@ -59,19 +57,9 @@ namespace TrucoGame {
 			std::vector<sf::CircleShape> ourCircles;
 			std::vector<sf::CircleShape> theirCircles;
 
-			Text roundScoreText;
-			Text weText;
-			Text theyText;
+			TextView *roundScoreText, *weText, *theyText;
 			Font textsFont;
 			size_t numRounds = 3;
-
-			float roundScoreTextWidth;
-			float weTextWidth;
-			float theyTextWidth;
-
-			float roundScoreTextHeight;
-			float weTextHeight;
-			float theyTextHeight;
 
 			void createScoreRectangle(float rectangleScoreXPosition, float rectangleScoreYPosition, 
 				Vector2f& scoreRectangleDimensions, std::shared_ptr<float>& rectangleScoreWidth, 
@@ -93,9 +81,9 @@ namespace TrucoGame {
 			CircleShape getOurCircles(size_t index);
 			CircleShape getTheirCircles(size_t index);
 
-			Text getRoundScoreText();
-			Text getWeText();
-			Text getTheyText();
+			TextView getRoundScoreText();
+			TextView getWeText();
+			TextView getTheyText();
 
 			void changeRoundScoreText(size_t newRoundScore); // TODO Enum 1 - 2 -3
 		};

@@ -1,6 +1,16 @@
 #pragma once 
 
 #include <SFML/Graphics.hpp>
+#include "CardsEnum.h"
+
+// Define the default path for the card textures
+#define DEFAULT_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/"
+
+// Define the full path for the texture of the card back
+#define CARD_BACK_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/cardBack.png"
+
+// Define the default extension for image files
+#define IMAGE_EXTENSION ".png"
 
 using namespace sf;
 
@@ -9,8 +19,10 @@ namespace TrucoGame {
     namespace UtilsView {
 
         Texture loadTexture(const std::string texturePath);
+        Texture loadTextureBack();
         Font loadFont(const std::string fontPath);
-        
+        std::string findTexturePathByNumberAndSuit(CardStruct& cardStruct);
+
         template <typename T>
         inline T** initializeMatrix(int rows, int columns) {
             T** matrix = new T * [rows];
@@ -29,11 +41,6 @@ namespace TrucoGame {
                 delete[] matrix[i];
             }
             delete[] matrix;
-        }
-
-        template <typename Function, typename... Args>
-        void createThread(Function&& function, Args&&... args) {
-            std::thread(std::forward<Function>(function), std::forward<Args>(args)...).detach();
         }
     }
 }
