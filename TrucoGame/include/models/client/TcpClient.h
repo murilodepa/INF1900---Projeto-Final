@@ -12,6 +12,7 @@
 #include "../packets/PlayerPlayPacket.h"
 #include "../packets/CardPacket.h"
 #include "../packets/TrucoPacket.h"
+#include "../packets/ElevenHandPacket.h"
 #include <nlohmann/json.hpp>
 
 #pragma comment(lib,"WS2_32")
@@ -19,6 +20,12 @@
 
 namespace TrucoGame {
 	namespace Models {
+
+		typedef std::function<void(StartGamePacket)> StartGamePacketEventHandler;
+		typedef std::function<void(PlayerPlayPacket)> PlayerPlayPacketEventHandler;
+		typedef std::function<void(StartRoundPacket)> StartRoundPacketEventHandler;
+		typedef std::function<void(TrucoPacket)> TrucoPacketEventHandler;
+		typedef std::function<void(ElevenHandPacket)> ElevenHandPacketEventHandler;
 
 		class TcpClient {
 		private:
@@ -28,6 +35,7 @@ namespace TrucoGame {
 			ErrorCode InitializeWinSock();
 			ErrorCode CreateSocket(SOCKET& newSocket);
 			std::thread mListenThread;
+
 		public:
 			ErrorCode Connect(const char* ipAddress, u_short port);
 			ErrorCode Send(const char* message);
@@ -35,6 +43,12 @@ namespace TrucoGame {
 
 			ErrorCode StartListening();
 			void Listen();
+
+			PlayerPlayPacketEventHandler playerPlayPacketReceived;
+			StartGamePacketEventHandler startGamePacketReceived;
+			StartRoundPacketEventHandler startRoundPacketReceived;
+			TrucoPacketEventHandler trucoPacketReceived;
+			ElevenHandPacketEventHandler elevenHandPacketReceived;
 		};
 	}
 }

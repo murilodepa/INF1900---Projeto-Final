@@ -11,14 +11,15 @@ namespace TrucoGame {
 		class Player
 		{
 		public:
-			Player(string name, int id);
-			vector<Card*> &getHand();
-			void setHand(vector<Card*> shuffleCards);
+			Player(int id, string name) : playerName(name), playerId(id) {};
+
+			vector<Card> hand;
+			Card popCardByIndex(int index);
+			int playerId;
+			void setHand(vector<Card> shuffleCards);
 			void cleanHand();
 		private:
 			string playerName;
-			int playerId;
-			vector<Card*> hand;
 		};
 	}
 }

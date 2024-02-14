@@ -60,6 +60,23 @@ namespace TrucoGame {
             return Success;
         }
 
+        std::vector<std::string> customSplit(std::string str, char separator) {
+            int startIndex = 0, endIndex = 0;
+            std::vector<std::string> strings;
+            for (int i = 0; i <= str.size(); i++) {
+
+                // If we reached the end of the word or the end of the input.
+                if (str[i] == separator || i == str.size()) {
+                    endIndex = i;
+                    std::string temp;
+                    temp.append(str, startIndex, endIndex - startIndex);
+                    strings.push_back(temp);
+                    startIndex = endIndex + 1;
+                }
+            }
+            return strings;
+        }
+
         void TcpClient::Listen()
         {
             char buffer[1024];
@@ -67,57 +84,73 @@ namespace TrucoGame {
 
             while ((bytesRead = recv(clientSocket, buffer, sizeof(buffer), 0)) > 0) {
                 std::string receivedData(buffer, bytesRead);
-                try {
-                    nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
-                    Packet receivedPacket(receivedJson);
-
-                    switch (receivedPacket.packetType)
-                    {
-                    case StartGame:
-                    {
-                        StartGamePacket startGamePacket(receivedPacket.payload);
-                        break;
+                auto jsonStrings = customSplit(receivedData, '\n');
+                for(int i = 0; i < jsonStrings.size()-1; i++)
+                {
+                    receivedData = jsonStrings[i];
+                    try {
+                        nlohmann::json receivedJson = nlohmann::json::parse(receivedData);
+                        Packet receivedPacket(receivedJson);
+                        
+                        switch (receivedPacket.packetType)
+                        {
+                        case StartGame:
+                        {
+                            StartGamePacket startGamePacket(receivedPacket.payload);
+                            std::cout << startGamePacket.playerId << " " << startGamePacket.teamId;
+                            if (startGamePacketReceived)
+                                startGamePacketReceived(startGamePacket);
+                            break;
+                        }
+                        case StartRound:
+                        {
+                            StartRoundPacket startRoundPacket(receivedPacket.payload);
+                            if (startRoundPacketReceived)
+                                startRoundPacketReceived(startRoundPacket);
+                            break;
+                        }
+                        case EndRound:
+                        {
+                            EndRoundPacket endRoundPacket(receivedPacket.payload);
+                            break;
+                        }
+                        case EndTurn:
+                        {
+                            EndTurnPacket endTurn(receivedPacket.payload);
+                            break;
+                        }
+                        case PlayerPlay:
+                        {
+                            PlayerPlayPacket playPacket(receivedPacket.payload);
+                            if (playerPlayPacketReceived)
+                                playerPlayPacketReceived(playPacket);
+                            break;
+                        }
+                        case PlayerCard:
+                        {
+                            CardPacket cardPacket(receivedPacket.payload);
+                            break;
+                        }
+                        case Truco:
+                        {
+                            TrucoPacket truco(receivedPacket.payload);
+                            trucoPacketReceived(truco);
+                            break;
+                        }
+                        case ElevenHand:
+                        {
+                            ElevenHandPacket elevenHandPacket(receivedPacket.payload);
+                            elevenHandPacketReceived(elevenHandPacket);
+                            break;
+                        }
+                        default:
+                            break;
+                        }
+                        std::cout << std::endl;
                     }
-                    case StartRound:
-                    {
-                        StartRoundPacket startRoundPacket(receivedPacket.payload);
-                        break;
+                    catch (const std::exception& e) {
+                        std::cerr << "[CLIENT] Error parsing JSON: " << e.what() << std::endl;
                     }
-                    case EndRound:
-                    {
-                        EndRoundPacket endRoundPacket(receivedPacket.payload);
-                        break;
-                    }
-                    case EndTurn:
-                    {
-                        EndTurnPacket endTurn(receivedPacket.payload);
-                        break;
-                    }
-                    case PlayerPlay:
-                    {
-                        PlayerPlayPacket playPacket(receivedPacket.payload);
-                        break;
-                    }
-                    case PlayerCard:
-                    {
-                        CardPacket cardPacket(receivedPacket.payload);
-                        break;
-                    }
-                    case Truco:
-                    {
-                        TrucoPacket truco(receivedPacket.payload);
-                        break;
-                    }
-                    default:
-                        break;
-                    }
-
-                    std::cout << "[CLIENT] Received packet type " << receivedPacket.packetType
-                        << " from server" << std::endl;
-
-                }
-                catch (const std::exception& e) {
-                    std::cerr << "[CLIENT] Error parsing JSON: " << e.what() << std::endl;
                 }
             }
         }

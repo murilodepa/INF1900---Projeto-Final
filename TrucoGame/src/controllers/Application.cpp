@@ -7,7 +7,7 @@
 #include "../../include/models/Player.h"
 #include "../../include/models/Table.h"
 #include "../../include/models/Card.h"
-#include "../../include/models/GameManager.h"
+#include "../../include/models/Score.h"
 
 using namespace TrucoGame::View;
 using namespace TrucoGame::Models;
@@ -53,24 +53,17 @@ namespace TrucoGame {
     {
 
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
-        // TEST CODE FOR THE MODELS, WILL BE REMOVED LATER
-        //std::vector<Player> players;
-        //players.push_back(Player("Laert",  0));
-        //players.push_back(Player("Caique", 1));
-        //players.push_back(Player("Vitor",  2));
-        //players.push_back(Player("Murilo", 3));
-
         std::vector<std::string> texturePathToMainPlayerCards;
         CardStruct cardStruct;
 
         cardStruct.rank = CardRank::Ace;
         cardStruct.suit = CardSuit::Spades;
         texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
-        
+
         cardStruct.rank = CardRank::Five;
         cardStruct.suit = CardSuit::Hearts;
         texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
-        
+
         cardStruct.rank = CardRank::Queen;
         cardStruct.suit = CardSuit::Diamonds;
         texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
@@ -78,26 +71,7 @@ namespace TrucoGame {
         cardStruct.rank = CardRank::Ace;
         cardStruct.suit = CardSuit::Clubs;
         std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
-
-        Table table;
-        Deck deck;        
-        Models::Card* cards[4];
-        table.turnedCard = deck.pop();
-
-      /*  GameManager gameManager;
-        gameManager.players = players;
-        gameManager.popAllPlayersCards();
-        gameManager.cleanPlayerCards();*/
-
-        // get 4 cards and place them at the table, (player 2 covers)
-        for (int i = 0; i < 4; i++) {
-            cards[i] = deck.pop();
-            bool isCovered = false;
-            if (i == 2) isCovered = true;
-            table.placeCard(cards[i], i, isCovered);
-        }
-        int winner = table.calculateWinner(); //calculate winner and does nothing
-
+        
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window

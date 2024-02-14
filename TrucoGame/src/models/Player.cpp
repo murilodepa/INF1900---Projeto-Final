@@ -5,25 +5,21 @@ using namespace std;
 namespace TrucoGame {
 
 	namespace Models {
-
-		Player::Player(string name, int id) {
-			playerName = name;
-			playerId = id;
-		}
-
-		vector<Card*> &Player::getHand()
+		Card Player::popCardByIndex(int index) 
 		{
-			return hand;
+			Card card = hand[index];
+			hand.erase(hand.begin() + index);
+			return card;
 		}
 
-		void Player::setHand(vector<Card*> shuffleCards)
+		void Player::setHand(vector<Card> shuffleCards)
 		{
 			hand = shuffleCards;
 		}
 		
 		void Player::cleanHand()
 		{
-			 getHand().clear();
+			 hand.clear();
 		}
 	}
 }

@@ -30,6 +30,7 @@ namespace TrucoGame {
                 responseTeamId(responseTeamId),
                 result(result)
             {
+                ToJson(payload);
             }
 
             void ToJson(nlohmann::json& j) const override {

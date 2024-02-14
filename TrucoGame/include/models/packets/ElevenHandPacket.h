@@ -5,24 +5,30 @@
 
 namespace TrucoGame {
     namespace Models {  
-        class StartRoundPacket : public Packet {
+        class ElevenHandPacket : public Packet {
         public:
             Card tableCard;
             std::vector<Card> handCards;
+            std::vector<Card> partnerHand;
 
         public:
-            StartRoundPacket(const nlohmann::json& j):
+            ElevenHandPacket(const nlohmann::json& j):
                 Packet(j),
                 tableCard(j["payload"]["tableCard"])
             {
                 for (const auto& cardJson : j["payload"]["handCards"]) {
                     handCards.push_back(Card::FromJson(cardJson));
                 }
+                for (const auto& cardJson : j["payload"]["partnerHand"]) {
+                    partnerHand.push_back(Card::FromJson(cardJson));
+                }
             }
-            StartRoundPacket(Card tablecard, std::vector<Card> handCards):
-                Packet(PacketType::StartRound),
+            ElevenHandPacket(Card tablecard, std::vector<Card> handCards, std::vector<Card> partnerHand):
+                Packet(PacketType::ElevenHand),
                 tableCard(tablecard),
-                handCards(handCards)
+                handCards(handCards),
+                partnerHand(partnerHand)
+
             {
                 ToJson(payload);
             }
@@ -33,6 +39,11 @@ namespace TrucoGame {
                     nlohmann::json cardJson;
                     card.ToJson(cardJson);
                     j["payload"]["handCards"].push_back(cardJson);
+                }
+                for (const auto& card : partnerHand) {
+                    nlohmann::json cardJson;
+                    card.ToJson(cardJson);
+                    j["payload"]["partnerHand"].push_back(cardJson);
                 }
             }
         };

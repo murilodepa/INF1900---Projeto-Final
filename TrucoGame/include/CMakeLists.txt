@@ -15,6 +15,7 @@ set(HEADER_FILES
 
     # Models
     "models/client/TcpClient.h"
+    "models/client/ClientGameManager.h"
     "models/packets/CardPacket.h"
     "models/packets/EndRoundPacket.h"
     "models/packets/EndTurnPacket.h"
@@ -23,12 +24,17 @@ set(HEADER_FILES
     "models/packets/StartGamePacket.h"
     "models/packets/StartRoundPacket.h"
     "models/packets/TrucoPacket.h"
-    "models/server/Player.h"
+    "models/packets/ElevenHandPacket.h"
+    "models/packets/ElevenHandResponsePacket.h"
+    "models/server/AIPlayer.h"
+    "models/server/TcpClientPlayer.h"
     "models/server/TcpServer.h"
+    "models/server/ServerGameManager.h" 
     "models/Card.h"
     "models/Deck.h"
     "models/ErrorCode.h"
     "models/Player.h"
+    "models/Score.h"
     "models/Table.h"
 
     # Views

@@ -8,7 +8,7 @@
 #include "../ErrorCode.h"
 #include "../packets/Packet.h"
 #include <nlohmann/json.hpp>
-#include "Player.h"
+#include "TcpClientPlayer.h"
 
 #pragma comment(lib,"WS2_32")
 #pragma warning(disable:4996)
@@ -25,16 +25,17 @@ namespace TrucoGame {
             bool running;
 
         public:
-            std::vector<Player*> players;
+            std::vector<TcpClientPlayer*> players;
 
             ErrorCode Open(u_short port);
             ErrorCode StartAcceptingClients();
             ErrorCode StopAcceptingClients();
 
             ErrorCode StartListeningClients();
-            ErrorCode SendToAllClients(Packet* packet);
+            ErrorCode SendToClients(std::vector<TcpClientPlayer*> players, Packet* packet);
+            std::pair<Packet*, Packet*> TcpServer::WaitForTeamPacket(TcpClientPlayer* players[]);
 
-            std::vector<Player*> AcceptPlayers(int numberOfClients);
+            std::vector<TcpClientPlayer*> AcceptPlayers(int numberOfClients);
 
 
             ErrorCode Close();
