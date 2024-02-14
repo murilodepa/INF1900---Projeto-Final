@@ -6,8 +6,6 @@ namespace TrucoGame {
 
         class Score {
         private:
-            int team0GameScore;
-            int team1GameScore;
             int stakes;
             int team0TurnsWon;
             int team1TurnsWon;
@@ -24,10 +22,11 @@ namespace TrucoGame {
             int getTeam0TurnsWon();
             // Best of three turn score (max is 2)
             int getTeam1TurnsWon();
+            
             // Game score (max is 12)
-            int getTeam0GameScore();
+            int team0GameScore;
             // Game score (max is 12)
-            int getTeam1GameScore();
+            int team1GameScore;
 
             // Parameters:
             // winnerTeamId: (1 or 0) to winning team or (-1) if draw

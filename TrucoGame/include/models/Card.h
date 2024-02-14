@@ -17,7 +17,10 @@ namespace TrucoGame {
             Card(const nlohmann::json& j);
             ~Card();
             Suit getSuit();
+            // Power value (strongest/weakest)
             int getValue();
+            // Actual card number
+            int getNumber();
             void ToJson(nlohmann::json& j) const;
             static Card FromJson(const nlohmann::json& j);
         };

@@ -33,12 +33,14 @@ namespace TrucoGame {
             }
             case PlayerPlay:
             {
+                PlayerPlayPacket playerPlayPacket(packet->payload);
+
                 std::random_device rd;
                 std::mt19937 gen(rd());
                 std::uniform_int_distribution<> distrib(0, 100);
                 int randomIndex = distrib(gen);
 
-                if (randomIndex < chanceOfRequestingTruco)
+                if (randomIndex < chanceOfRequestingTruco && playerPlayPacket.canRequestTruco)
                 {
                     nextPlay = new TrucoPacket(id, (id + 1) % 2, TrucoResult::Raise);
                 }

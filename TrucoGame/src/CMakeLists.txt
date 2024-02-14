@@ -16,6 +16,7 @@ set(SRC_FILES
     # Controllers
     "controllers/Application.cpp"
     "controllers/TableController.cpp"
+    "controllers/GMController.cpp"
 
     # Models
     "models/client/ClientGameManager.cpp"
