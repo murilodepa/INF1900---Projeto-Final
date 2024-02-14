@@ -15,7 +15,7 @@ namespace TrucoGame {
 				gameModel(gameModel) 
 			{
 				gameModel->myTurnStarted = [this](bool canRequestTruco) { OnMyTurnStarted(canRequestTruco); };
-				gameModel->anotherPlayerPlayed = [this](Card card, int playerId) { OnAnotherPlayerPlayed(card, playerId); };
+				gameModel->anotherPlayerPlayed = [this](Card card, int playerId, bool isCovered) { OnAnotherPlayerPlayed(card, playerId, isCovered); };
 				gameModel->roundStarted = [this](Card tableCard, std::vector<Card> handCards) { OnRoundStarted(tableCard, handCards); };
 				gameModel->elevenHandRoundStarted = [this](Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards) { OnElevenHandRoundStart(tableCard, handCards, partnerHandCards); };
 				gameModel->ironHandRoundStarted = [this](Card tableCard) { OnIronHandRoundStarted(tableCard); };
@@ -36,7 +36,7 @@ namespace TrucoGame {
 			// MODEL CALLS THIS METHODS (events)
 
 			void OnMyTurnStarted(bool canRequestTruco);
-			void OnAnotherPlayerPlayed(Card card, int playerId);
+			void OnAnotherPlayerPlayed(Card card, int playerId, bool isCovered);
 
 			void OnRoundStarted(Card tableCard, std::vector<Card> handCards);
 			void OnElevenHandRoundStart(Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards);

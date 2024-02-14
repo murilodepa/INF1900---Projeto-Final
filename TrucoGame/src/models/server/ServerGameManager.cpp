@@ -43,11 +43,11 @@ namespace TrucoGame {
                 playerHands[player->id].push_back(deck.pop());
             }
 
-            if (score.getTeam0GameScore() != score.getTeam1GameScore()) {
-                if (score.getTeam0GameScore() + 1 == POINT_TO_WIN) {
+            if (score.team0GameScore != score.team1GameScore) {
+                if (score.team0GameScore + 1 == POINT_TO_WIN) {
                     return startElevenHandRound(0, playerHands, tableCard);
                 }
-                else if (score.getTeam1GameScore() + 1 == POINT_TO_WIN) {
+                else if (score.team1GameScore + 1 == POINT_TO_WIN) {
                     return startElevenHandRound(1, playerHands, tableCard);
                 }
             }
@@ -162,9 +162,9 @@ namespace TrucoGame {
             if (playerId % 2 == lastToRequestTruco) 
                 return false;
             
-            if (playerId % 2 == 0 && score.getTeam0GameScore() + 1 == POINT_TO_WIN)
+            if (playerId % 2 == 0 && score.team0GameScore + 1 == POINT_TO_WIN)
                 return false;
-            if (playerId % 2 == 1 && score.getTeam1GameScore() + 1 == POINT_TO_WIN)
+            if (playerId % 2 == 1 && score.team1GameScore + 1 == POINT_TO_WIN)
                 return false;
 
             return true;
@@ -212,7 +212,7 @@ namespace TrucoGame {
             score.resetRound();
 
             std::cout << "========== ROUND ENDED ========== ";
-            std::cout << score.getTeam0GameScore() << " x " << score.getTeam1GameScore() << std::endl;
+            std::cout << score.team0GameScore << " x " << score.team1GameScore << std::endl;
             return gameWinner;
         }
 

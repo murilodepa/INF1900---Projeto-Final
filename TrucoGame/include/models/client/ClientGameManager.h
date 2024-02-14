@@ -1,7 +1,8 @@
 #pragma once
 #include <functional>
-#include "TcpClient.h";
-#include "../Player.h";
+#include "TcpClient.h"
+#include "../Score.h"
+#include "../Player.h"
 #include "../packets/StartGamePacket.h"
 #include "../packets/StartRoundPacket.h"
 #include "../packets/PlayerPlayPacket.h"
@@ -13,7 +14,7 @@
 namespace TrucoGame {
     namespace Models {
         typedef std::function<void(bool)> MyTurnStartedEventHandler;
-        typedef std::function<void(Card, int)> AnotherPlayerPlayedEventHandler;
+        typedef std::function<void(Card, int, bool)> AnotherPlayerPlayedEventHandler;
         typedef std::function<void(Card, std::vector<Card>)> RoundStartedEventHandler;
         typedef std::function<void(Card, std::vector<Card>, std::vector<Card>)> ElevenHandRoundStartEventHandler;
         typedef std::function<void(Card)> IronHandRoundStartedEventHandler;
@@ -29,12 +30,17 @@ namespace TrucoGame {
         class ClientGameManager {
         private:
             TcpClient client;
+            Score score;
+
             void GetPlayerInputAndSend();
             void OnStartGamePacketReceived(StartGamePacket packet);
             void OnStartRoundPacketReceived(StartRoundPacket packet);
             void OnPlayPacketReceived(PlayerPlayPacket packet);
             void OnTrucoPacketReceived(TrucoPacket packet);
             void OnElevenHandPacketReceived(ElevenHandPacket packet);
+            void OnCardPacketReceived(CardPacket packet);
+            void OnEndTurnPacketReceived(EndTurnPacket packet);
+            void OnEndRoundPacketReceived(EndRoundPacket packet);
         public:
             Player* player;
             ClientGameManager();
