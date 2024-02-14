@@ -2,6 +2,11 @@
 
 namespace TrucoGame {
 	namespace Controller {
+
+		// ---------------------------
+		// MODEL -> CONTROLLER -> VIEW
+		// ---------------------------
+
 		void GMController::OnMyTurnStarted(bool canRequestTruco){
 			// TODO: enable card buttons and truco button if needed
 		}
@@ -47,6 +52,25 @@ namespace TrucoGame {
 		void GMController::OnGameLost(){
 			// TODO
 		}
+
+		// ---------------------------
+		// VIEW -> CONTROLLER -> MODEL
+		// ---------------------------
+
+		void GMController::UserRequestedTruco() {
+			// TODO: send truco packet to server
+		}
+		void GMController::UserSelectedCard(int cardIndex, bool isCovered) {
+			// TODO: send card packet to server
+			// disable card button
+		}
+		void GMController::UserRespondedTruco(int trucoResult) {
+			// TODO: send truco packet with the response to server
+		}
+		void GMController::UserRespondedElevenHand(bool accepted) {
+			// TODO: send eleven hand response packet to the server
+		}
+
 
 		int GMController::ModelIdToViewId(int modelId)
 		{
