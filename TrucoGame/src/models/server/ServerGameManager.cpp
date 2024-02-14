@@ -3,7 +3,7 @@
 
 
 #define NUM_OF_PLAYERS 4
-#define NUM_OF_HUMANS 2
+#define NUM_OF_HUMANS 0
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {
@@ -34,6 +34,9 @@ namespace TrucoGame {
             Card tableCard = deck.pop();
             table.SetTableCard(tableCard);
             score.resetRound();
+
+            nextTurnPlayer = nextRoundPlayer;
+            std::cout << "Starting Round (" << nextTurnPlayer << ")" << std::endl;
 
             std::vector<Card> playerHands[4];
 
@@ -95,7 +98,8 @@ namespace TrucoGame {
         }
 
         void ServerGameManager::startTurn() {
-            int startingPlayer = 0;
+            int startingPlayer = nextTurnPlayer;
+            std::cout << "Starting Turn (" << nextTurnPlayer << ")" << std::endl;
             for (int i = 0; i < clients.size(); i++) {
                 int currentPlayer = (i + startingPlayer) % 4;
                 if(teamRefusedTruco == -1)
@@ -173,6 +177,9 @@ namespace TrucoGame {
             }
             int turnWinner = table.CalculateWinner();
             roundWinner = score.updateTurnWon(turnWinner % 2);
+            
+            nextTurnPlayer = (turnWinner != -1) ? turnWinner : (nextTurnPlayer + 1) % 4;
+
             table.playedCards.clear();
             //TODO: clear table cards
             std::cout << "===== TURN ENDED ===== ";
@@ -183,6 +190,7 @@ namespace TrucoGame {
         int ServerGameManager::endRound(int roundWinner)
         {
             int gameWinner = score.updateRoundWon(roundWinner);
+            nextRoundPlayer = (nextRoundPlayer + 1) % 4;
             //TODO: CleanPlayerCards(); ClearTurnedCard();
 
             std::cout << "========== ROUND ENDED ========== ";
