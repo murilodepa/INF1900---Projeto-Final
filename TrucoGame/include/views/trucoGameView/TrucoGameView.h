@@ -10,6 +10,9 @@
 #include "Player/PlayerView.h"
 #include "Player/PlayerCards.h"
 #include "buttonsTruco/CardButton.h"
+#include "buttonsTruco/TrucoButton.h"
+//#include "buttonsTruco/IncreaseStakesButton.h"
+//#include "buttonsTruco/RefuseTrucoButton.h"
 
 // Define a constant to calculate the spacing between cards.
 #define CALCULATE_CARDS_SPACING 0.02f
@@ -34,6 +37,13 @@ namespace TrucoGame {
         private:
             TableView tableView;
             ScoreView scoreView;
+
+            TrucoButton* trucoButton;
+
+            //IncreaseStakesButton* increaseStakesButton;
+            //RefuseTrucoButton* refuseTrucoButton;
+
+
             PlayerCards playerCards;
             std::vector<PlayerView*> players;
             std::vector<CardButton*> cardButtons;
@@ -46,10 +56,14 @@ namespace TrucoGame {
             void setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing);
             void setNamesPositions(float screenWidth, float screenHeight, float textAndTableSpacing);
             void setPositionToDiscardCards();
+            void initializeTrucoButton();
 
             void drawScore(GraphicManager* pGraphicManager);
             void drawCardsOnTheTable(GraphicManager* pGraphicManager);
             void drawPlayerNames(GraphicManager* pGraphicManager);
+            void drawTrucoButton(GraphicManager* pGraphicManager, Vector2f& mousePosView);
+
+            
             void checkIftheCardHasBeenDiscardedAndDraw(GraphicManager* pGraphicManager, Vector2f& mousePosView);
             void distributeCardsToPlayers(std::vector<std::string>& texturePathToMainPlayerCards);
             void discardCard(size_t player, size_t card, std::string& cardTexturePath);

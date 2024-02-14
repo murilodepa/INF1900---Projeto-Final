@@ -1,19 +1,18 @@
 #include "../../../include/views/button/ButtonBase.h"
 
-TrucoGame::View::ButtonBase::ButtonBase(float x, float y, float width, float height, Color hoverColor)
+TrucoGame::View::ButtonBase::ButtonBase(float x, float y, float width, float height)
 {
 	this->buttonState = BTN_IDLE;
 
 	this->setPosition(Vector2f(x, y));
 	this->setSize(Vector2f(width, height));
-
-	this->hoverColor = hoverColor;
 }
 
 TrucoGame::View::ButtonBase::ButtonBase(float x, float y, float width, float height, Color idleColor, Color hoverColor, Color activeColor) :
-	ButtonBase(x, y, width, height, hoverColor)
+	ButtonBase(x, y, width, height)
 {
 	this->idleColor = idleColor;
+	this->hoverColor = hoverColor;
 	this->activeColor = activeColor;
 }
 

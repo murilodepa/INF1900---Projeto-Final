@@ -45,7 +45,7 @@ void TrucoGame::View::CardButton::onIdle() {
 }
 
 TrucoGame::View::CardButton::CardButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture) :
-	ButtonBase(x, y, width, height, hoverColor)
+	ButtonBase(x, y, width, height)
 {
 	this->setFillColor(Color::Transparent);
 	this->setOutlineColor(Color::Transparent);

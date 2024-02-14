@@ -24,6 +24,7 @@ void TrucoGame::View::TrucoGameView::initialize(const std::vector<std::string>& 
 	float textAndTableSpacing = windowSize.y * CALCULATE_TEXT_AND_TABLE_SPACING;
 	setNamesPositions(windowSize.x, windowSize.y, textAndTableSpacing);
 	setPositionToDiscardCards();
+	initializeTrucoButton();
 }
 
 void TrucoGame::View::TrucoGameView::setCardPositionsOfThePlayers(float screenWidth, float screenHeight, float cardWidth, float cardHeight, float cardsSpacing, float cardAndTableSpacing) {
@@ -96,12 +97,27 @@ void TrucoGame::View::TrucoGameView::setNamesPositions(float screenWidth, float 
 void TrucoGame::View::TrucoGameView::setPositionToDiscardCards() {
 	//Vector2f(0.70f * windowSize.x, 0.63f * windowSize.y);
 	positionToDiscardCards[0] = Vector2f(0.35f * windowSize.x, 0.42f * windowSize.y); // front
-	
 	positionToDiscardCards[1] = Vector2f(0.35f * windowSize.x, 0.65f * windowSize.y); // left
-
 	positionToDiscardCards[2] = Vector2f(0.75f * windowSize.x, 0.65f * windowSize.y); //Main player
-
 	positionToDiscardCards[3] = Vector2f(0.75f * windowSize.x, 0.42f * windowSize.y); // right
+}
+
+void TrucoGame::View::TrucoGameView::initializeTrucoButton() {
+
+	Vector2f trucoButtonPosition = Vector2f(0.85f * windowSize.x, 0.8f * windowSize.y);
+	Vector2f trucoButtonDimensions = Vector2f(0.1f * windowSize.x, 0.06f * windowSize.y);
+	trucoButton = new TrucoButton(trucoButtonPosition.x, trucoButtonPosition.y, trucoButtonDimensions.x, trucoButtonDimensions.y);
+	trucoButton->setIsButtonAvailable(true);
+
+	trucoButtonPosition = Vector2f(0.1f * windowSize.x, 0.1f * windowSize.y);
+	trucoButtonDimensions = Vector2f(0.1f * windowSize.x, 0.1f * windowSize.y);
+
+	//increaseStakesButton = new IncreaseStakesButton(trucoButtonPosition.x, trucoButtonPosition.y, trucoButtonDimensions.x, trucoButtonDimensions.y);
+
+	trucoButtonPosition = Vector2f(0.4f * windowSize.x, 0.4f * windowSize.y);
+	trucoButtonDimensions = Vector2f(0.1f * windowSize.x, 0.1f * windowSize.y);
+	//	refuseTrucoButton = new RefuseTrucoButton(trucoButtonPosition.x, trucoButtonPosition.y, trucoButtonDimensions.x, trucoButtonDimensions.y);
+
 }
 
 void TrucoGame::View::TrucoGameView::drawScore(GraphicManager* pGraphicManager)
@@ -135,6 +151,20 @@ void TrucoGame::View::TrucoGameView::drawPlayerNames(GraphicManager* pGraphicMan
 {
 	for (size_t playerIndex = 0; playerIndex < NUM_PLAYERS; playerIndex++) {
 		pGraphicManager->drawElement(players[playerIndex]->getPlayerName());
+	}
+}
+
+void TrucoGame::View::TrucoGameView::drawTrucoButton(GraphicManager* pGraphicManager, Vector2f& mousePosView)
+{
+	if (trucoButton->getIsButtonAvailable()) {
+		trucoButton->update(mousePosView);
+		pGraphicManager->drawElement(*trucoButton);
+		pGraphicManager->drawElement(trucoButton->getText());
+
+		//increaseStakesButton->update(mousePosView);
+		//refuseTrucoButton->update(mousePosView);
+		//pGraphicManager->drawElement(*increaseStakesButton);
+		//pGraphicManager->drawElement(*refuseTrucoButton);
 	}
 }
 
@@ -267,5 +297,6 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		drawPlayerNames(pGraphicManager);
 		drawScore(pGraphicManager);
 		checkIftheCardHasBeenDiscardedAndDraw(pGraphicManager, mousePosView);
+		drawTrucoButton(pGraphicManager, mousePosView);
 	}
 }
