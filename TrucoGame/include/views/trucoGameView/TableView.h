@@ -3,6 +3,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <windows.h>
 #include "../../../include/views/GraphicManager.h"
 #include "CardView.h"
 
@@ -59,6 +60,7 @@ namespace TrucoGame {
             void moveDeckAndTurnUpCard(const float cardScale, float speed, std::string& texturePathToturnedFaceUpCard);
             void setTurnedFaceUpCardTexture(std::string& texturePath);
             void setTextureFromPath(const std::string& texturePath);
+            int trucoReceived(const std::string trucoValue);
         };
     }
 }

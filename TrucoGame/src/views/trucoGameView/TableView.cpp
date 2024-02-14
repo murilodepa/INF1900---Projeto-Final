@@ -90,4 +90,29 @@ void TrucoGame::View::TableView::setTextureFromPath(const std::string& texturePa
 	this->texture = new Texture(UtilsView::loadTexture(texturePath));
 }
 
+int TrucoGame::View::TableView::trucoReceived(std::string trucoValue) {
+	std::string popupMessage = "Truco de " + trucoValue + "!";
+	int result = MessageBoxA(NULL, "Aceita o truco?", popupMessage.c_str(), MB_YESNO);
+
+	switch (result)
+	{
+	case IDYES:
+		//Truco accepted
+		result = MessageBoxA(NULL, "Aumenta o valor do Truco?", popupMessage.c_str(), MB_YESNO);
+
+		switch (result)
+		{
+		case IDYES:
+			//Increase Truco's value
+			return 2;
+		case IDNO:
+			break;
+		}
+
+		return 1;
+	case IDNO:
+		//Truco was not accepted
+		return 0;
+	}
+}
 
