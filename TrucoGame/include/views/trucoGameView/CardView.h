@@ -3,8 +3,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../../../include/views/UtilsView.h"
-#include "CardsEnum.h"
+#include "../../../include/views/utils/UtilsView.h"
 
 using namespace sf;
 
@@ -14,8 +13,8 @@ namespace TrucoGame {
         private:
             //Texture cardTexture;
             float cardScale;
-            float cardWidth; //= playerHands[0][0].getGlobalBounds().width; // 427
-            float cardHeight; //= playerHands[0][0].getGlobalBounds().height; // 600
+            float cardWidth;
+            float cardHeight;
 
         public:
             CardView() = default;

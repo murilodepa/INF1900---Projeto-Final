@@ -40,28 +40,16 @@ Texture* TrucoGame::View::PlayerCards::getCardTexture(size_t player, size_t card
 	return this->cardsTexture[player][cardIndex];
 }
 
-void TrucoGame::View::PlayerCards::setCardTexture(CardStruct& cardStruct, Texture* texture)
-{
-	if (cardStruct.rank == CardRank::Back) {
-		*texture = UtilsView::loadTexture(CARD_BACK_TEXTURE_PATH);
-	}
-	else {
-		// TODO
-	}
-}
-
 void TrucoGame::View::PlayerCards::initializePlayerCards(Vector2f& initialDeckPositionVector2f, const float cardScale)
 {
 	cardsInHands = UtilsView::initializeMatrix<CardView>(numPlayers, quantityOfCardsInHands);
 	cardsTexture = initializeTextureMatrix(numPlayers, quantityOfCardsInHands);
-	CardStruct cardStruct;
-	cardStruct.rank = CardRank::Back;
 
 	// Initialize players' cards
 	for (size_t playerIndex = 0; playerIndex < numPlayers; playerIndex++) {
 		for (size_t cardIndex = 0; cardIndex < quantityOfCardsInHands; cardIndex++) {
 			Texture* cardTexture = cardsTexture[playerIndex][cardIndex];
-			setCardTexture(cardStruct, cardTexture);
+			*cardTexture = UtilsView::loadTextureBack();
 			cardsInHands[playerIndex][cardIndex] = CardView(initialDeckPositionVector2f, *cardTexture, 0.19f);
 		}
 	}

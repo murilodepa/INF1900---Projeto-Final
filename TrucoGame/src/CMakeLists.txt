@@ -32,18 +32,22 @@ set(SRC_FILES
     "models/Score.cpp"
     
     # Views
-    "views/trucoGameView/Player/PlayerCards.cpp"
-    "views/trucoGameView/Player/PlayerView.cpp"
+    "views/button/ButtonBase.cpp"
+    "views/mouse/MouseState.cpp"
+    "views/text/TextView.cpp"
+    "views/trucoGameView/buttonsTruco/CardButton.cpp"
+    "views/trucoGameView/buttonsTruco/IncreaseScoreButton.cpp"
+     "views/trucoGameView/buttonsTruco/TrucoButton.cpp"
+    "views/trucoGameView/player/PlayerCards.cpp"
+    "views/trucoGameView/player/PlayerView.cpp"
     "views/trucoGameView/Animator.cpp"
     "views/trucoGameView/CardView.cpp"
     "views/trucoGameView/ScoreView.cpp"
     "views/trucoGameView/TableView.cpp"
     "views/trucoGameView/TrucoGameView.cpp"
-    "views/Button.cpp"
     "views/GraphicManager.cpp"
-    "views/MainMenuState.cpp"
-    "views/State.cpp"
-    "views/UtilsView.cpp"
+    "views/utils/MutexView.cpp"
+    "views/utils/UtilsView.cpp"
 )
 
 # Add source to this project's executable.

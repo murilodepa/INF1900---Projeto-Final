@@ -8,7 +8,7 @@ namespace TrucoGame {
 
 			while (destinationPosition.x != sprite.getPosition().x && destinationPosition.y != sprite.getPosition().y) {
 				direction = destinationPosition - sprite.getPosition();
-				if (direction.x > speed || direction.y > speed) {
+				if (std::abs(direction.x) > speed || std::abs(direction.y) > speed) {
 					distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 					// Normalizing the direction to maintain a constant speed
@@ -34,7 +34,7 @@ namespace TrucoGame {
 
 			while (destinationPosition.x != sprite.getPosition().x || destinationPosition.y != sprite.getPosition().y || sprite.getRotation() != finalRotation) {
 				direction = destinationPosition - sprite.getPosition();
-				if (direction.x > speed || direction.y > speed) {
+				if (std::abs(direction.x) > speed || std::abs(direction.y) > speed) {
 					distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
 					// Normalizing the direction to maintain a constant speed
@@ -83,19 +83,19 @@ namespace TrucoGame {
 			}
 		}
 
-		void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, Texture* texture, const std::string& newTexturePath, const Vector2f& destinationPosition, float finalRotation, float speed, const float cardScale)
+		void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, Texture* texture, const std::string& newTexturePath, const Vector2f& destinationPosition, float speed, const float cardScale)
 		{
 			moveSpriteTo(sprite, destinationPosition, speed);
-			flipCard(sprite, 1.5f, texture, newTexturePath, cardScale);
+			flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, true);
 		}
 
 		void Animator::animationWithCardTurnedFaceUpAndInitialDeck(Sprite& cardTurnedFaceUp, Texture* texture, const std::string& newTexturePath, Sprite& initialDeck, const Vector2f& cardTurnedFaceUpDestinationPosition, const Vector2f& initialDeckDestinationPosition, float finalRotation, float speed, const float cardScale)
 		{
-			moveAndFlipCardTurnedFaceUpTo(cardTurnedFaceUp, texture, newTexturePath, cardTurnedFaceUpDestinationPosition, finalRotation, speed, cardScale);
+			moveAndFlipCardTurnedFaceUpTo(cardTurnedFaceUp, texture, newTexturePath, cardTurnedFaceUpDestinationPosition, speed, cardScale);
 			moveAndRotateSpriteTo(initialDeck, initialDeckDestinationPosition, finalRotation, speed);
 		}
 
-		void Animator::flipCard(Sprite& card, float duration, Texture* texture, const std::string& newTexturePath, const float cardScale) {
+		void Animator::flipCard(Sprite& card, float duration, Texture* texture, const std::string& newTexturePath, const float cardScale, bool flipHorizontally) {
 
 			float initialScaleX = card.getScale().x;
 
@@ -119,7 +119,24 @@ namespace TrucoGame {
 
 			// Make sure that the final scale be exaclty like 0 to avoid numerics mistakes
 			card.setScale(cardScale, cardScale);
-			card.setPosition(card.getPosition().x - card.getGlobalBounds().width, card.getPosition().y);
+			if (flipHorizontally) {
+				card.setPosition(card.getPosition().x - card.getGlobalBounds().width, card.getPosition().y);
+			}
+			else {
+				card.setPosition(card.getPosition().x, card.getPosition().y - card.getGlobalBounds().width);
+			}
 		}
+
+		void Animator::discardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, const sf::Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation) {
+			if (finalRotation != 0) {
+				moveAndRotateSpriteTo(sprite, destinationPosition, finalRotation, speed);
+			}
+			else {
+				moveSpriteTo(sprite, destinationPosition, speed);
+			}
+
+			flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, false);
+		}
+
 	}
 }
