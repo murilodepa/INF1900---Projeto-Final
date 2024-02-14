@@ -4,7 +4,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../../../include/views/GraphicManager.h"
-#include "../../../include/views/UtilsView.h"
+#include "../../../include/views/utils/UtilsView.h"
 #include "TableView.h"
 #include "ScoreView.h"
 #include "Player/PlayerView.h"

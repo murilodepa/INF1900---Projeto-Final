@@ -1,6 +1,6 @@
 #include "../../include/controllers/Application.h"
 #include "../../include/views/trucoGameView/Animator.h"
-#include "../../include/views/UtilsView.h"
+#include "../../include/views/utils/UtilsView.h"
 #include <thread>
 #include <iostream>
 #include "../../include/models/Deck.h"
@@ -61,11 +61,23 @@ namespace TrucoGame {
         //players.push_back(Player("Murilo", 3));
 
         std::vector<std::string> texturePathToMainPlayerCards;
-        texturePathToMainPlayerCards.emplace_back("../../../../TrucoGame/resources/images/cards/Clubs/Ace.png");
-        texturePathToMainPlayerCards.emplace_back("../../../../TrucoGame/resources/images/cards/Clubs/Five.png");
-        texturePathToMainPlayerCards.emplace_back("../../../../TrucoGame/resources/images/cards/Clubs/queen.png");
+        CardStruct cardStruct;
 
-        std::string texturePathToturnedFaceUpCard = "../../../../TrucoGame/resources/images/cards/Hearts/Ace.png";
+        cardStruct.rank = CardRank::Ace;
+        cardStruct.suit = CardSuit::Spades;
+        texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
+        
+        cardStruct.rank = CardRank::Five;
+        cardStruct.suit = CardSuit::Hearts;
+        texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
+        
+        cardStruct.rank = CardRank::Queen;
+        cardStruct.suit = CardSuit::Diamonds;
+        texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
+
+        cardStruct.rank = CardRank::Ace;
+        cardStruct.suit = CardSuit::Clubs;
+        std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
 
         Table table;
         Deck deck;        

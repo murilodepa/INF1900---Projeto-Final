@@ -4,7 +4,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include "../../../include/views/UtilsView.h"
+#include "../../../include/views/utils/UtilsView.h"
 
 using namespace sf;
 

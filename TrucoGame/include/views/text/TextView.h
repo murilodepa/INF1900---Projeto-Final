@@ -2,7 +2,7 @@
 #define TEXT_VIEW_H
 
 #include <SFML/Graphics.hpp>
-#include "../UtilsView.h"
+#include "../utils/UtilsView.h"
 
 // File path for the Arial.ttf font used for names
 #define NAME_FONT_PATH "../../../../TrucoGame/resources/fonts/Arial.ttf"

@@ -33,6 +33,7 @@ set(HEADER_FILES
 
     # Views
     "views/button/ButtonBase.h"
+    "views/mouse/MouseState.h"
     "views/text/TextView.h"
     "views/trucoGameView/buttonsTruco/CardButton.h"
     "views/trucoGameView/buttonsTruco/IncreaseScoreButton.h"
@@ -41,15 +42,14 @@ set(HEADER_FILES
     "views/trucoGameView/player/PlayerView.h"
     "views/trucoGameView/Animator.h"
     "views/trucoGameView/CardDeck.h"
-    "views/trucoGameView/CardsEnum.h"
     "views/trucoGameView/CardView.h"
     "views/trucoGameView/ScoreView.h"
     "views/trucoGameView/TableView.h"
     "views/trucoGameView/TrucoGameView.h"
     "views/GraphicManager.h"
-    "views/MouseState.h"
-    "views/MutexView.h"
-    "views/UtilsView.h"
+    "views/utils/CardsEnum.h"
+    "views/utils/MutexView.h"
+    "views/utils/UtilsView.h"
 )
 
 # Include directories

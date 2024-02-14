@@ -1,5 +1,5 @@
 #include "../../../include/views/trucoGameView/ScoreView.h"
-#include "../../../include/views/UtilsView.h"
+#include "../../../include/views/utils/UtilsView.h"
 
 void TrucoGame::View::ScoreView::createScoreRectangle(float scoreRectangleXPosition, float scoreRectangleYPosition, Vector2f& scoreRectangleDimensions, std::shared_ptr<float>& rectangleWidthToCircles, std::shared_ptr<float>& rectangleScoreHeight, std::shared_ptr<float>& textsWidth)
 {

@@ -1,4 +1,4 @@
-#include "../../include/views/MouseState.h"
+#include "../../../include/views/mouse/MouseState.h"
 
 namespace TrucoGame {
 

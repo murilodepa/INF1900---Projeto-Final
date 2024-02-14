@@ -1,12 +1,9 @@
 #ifndef CARD_DECK_H
 #define CARD_DECK_H
 
-
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "../CardView.h"
-
-#define DEFAULT_TEXTURE_PATH "../../../../TrucoGame/resources/images/cards/"
 
 using namespace sf;
 
@@ -24,7 +21,6 @@ namespace TrucoGame {
             ~PlayerCards();
 
             Texture* getCardTexture(size_t player, size_t cardIndex);
-            void setCardTexture(CardStruct &cardStruct, Texture* texture);
 
             void initializePlayerCards(Vector2f& initialDeckPositionVector2f, const float cardScale);
         };

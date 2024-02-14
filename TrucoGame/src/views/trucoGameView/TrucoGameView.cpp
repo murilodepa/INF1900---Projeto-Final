@@ -1,8 +1,8 @@
 #include "../../../include/views/trucoGameView/TrucoGameView.h"
 #include "../../../include/views/trucoGameView/Animator.h"
+#include "../../../include/views/utils/MutexView.h"
 
 #include <thread>
-#include "../../../include/views/MutexView.h"
 
 void TrucoGame::View::TrucoGameView::initialize(const std::vector<std::string>& playerNames)
 {
@@ -166,7 +166,6 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers(std::vector<std::s
 				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), animationSpeed));
 			}
 			else if (player == 2) {
-				//std::string newTexturePath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
 				Texture* cardTexture = playerCards.getCardTexture(player, card);
 
 				Vector2f destinationPosition = players[player]->getCardPosition(card);
@@ -222,7 +221,7 @@ void TrucoGame::View::TrucoGameView::testDiscartCards()
 	for (size_t player = 0; player < NUM_PLAYERS; player++) {
 		for (size_t card = 0; card < CARDS_IN_HAND; card++) {
 			CardView* cardView = &playerCards.cardsInHands[player][card];
-			std::string cardTexturePath = "../../../../TrucoGame/resources/images/cards/Clubs/Ace.png";
+			std::string cardTexturePath = "../../../../TrucoGame/resources/images/cards/clubs/Ace.png";
 			
 			discardCard(player, card, cardTexturePath);
 		}

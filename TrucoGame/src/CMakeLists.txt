@@ -28,6 +28,7 @@ set(SRC_FILES
     
     # Views
     "views/button/ButtonBase.cpp"
+    "views/mouse/MouseState.cpp"
     "views/text/TextView.cpp"
     "views/trucoGameView/buttonsTruco/CardButton.cpp"
     "views/trucoGameView/buttonsTruco/IncreaseScoreButton.cpp"
@@ -40,9 +41,8 @@ set(SRC_FILES
     "views/trucoGameView/TableView.cpp"
     "views/trucoGameView/TrucoGameView.cpp"
     "views/GraphicManager.cpp"
-    "views/MouseState.cpp"
-    "views/MutexView.cpp"
-    "views/UtilsView.cpp"
+    "views/utils/MutexView.cpp"
+    "views/utils/UtilsView.cpp"
 )
 
 # Add source to this project's executable.

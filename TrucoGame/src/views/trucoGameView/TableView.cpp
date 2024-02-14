@@ -1,9 +1,8 @@
 #include "../../../include/views/trucoGameView/TableView.h"
-#include "../../../include/views/UtilsView.h"
-#include <thread>
+#include "../../../include/views/utils/UtilsView.h"
 #include "../../../include/views/trucoGameView/Animator.h"
 
-
+#include <thread>
 
 void TrucoGame::View::TableView::initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f, const float cardScale)
 {

@@ -9,7 +9,7 @@
 // Views
 #include "../views/GraphicManager.h"
 #include "../views/trucoGameView/TrucoGameView.h"
-#include "../views/MouseState.h"
+#include "../views/mouse/MouseState.h"
 
 #include <thread>
 

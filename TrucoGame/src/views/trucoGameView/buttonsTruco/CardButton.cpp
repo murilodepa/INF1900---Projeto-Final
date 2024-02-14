@@ -1,6 +1,6 @@
 #include "../../../../include/views/trucoGameView/buttonsTruco/CardButton.h"
 #include "../../../../include/views/trucoGameView/Animator.h"
-#include "../../../../include/views/MutexView.h"
+#include "../../../../include/views/utils/MutexView.h"
 
 #include <thread>
 

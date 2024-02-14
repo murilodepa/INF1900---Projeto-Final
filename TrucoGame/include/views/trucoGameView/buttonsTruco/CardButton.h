@@ -2,7 +2,7 @@
 #define CARD_BUTTON_H
 
 #include "../../../../include/views/button/ButtonBase.h"
-#include "../../UtilsView.h"
+#include "../../utils/UtilsView.h"
 
 namespace TrucoGame {
     namespace View {
