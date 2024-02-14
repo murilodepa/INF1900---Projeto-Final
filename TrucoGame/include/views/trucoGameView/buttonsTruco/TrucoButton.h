@@ -1,7 +1,14 @@
 #ifndef TRUCO_BUTTON_H
 #define TRUCO_BUTTON_H
 
-#include "../../../include/views/ButtonBase.h"
+#include "../../../../include/views/button/ButtonBase.h"
+#include "../../text/TextView.h"
+
+// Background color of the score rectangle 
+#define TRUCO_BUTTON_BACKGROUNG_COLOR Color::Red
+
+// Character size for the player name display
+#define CONSTANT_TO_CALCULATE_TRUCO_CHARACTER_SIZE 0.16f
 
 namespace TrucoGame {
     namespace View {
@@ -9,10 +16,7 @@ namespace TrucoGame {
 
         private:
             bool isButtonAvailable;
-            Font font;
-            float width, height;
-
-            void setFontFromPath(const std::string& fontPath);
+            TextView* text;
 
         protected:
             void onHover();
@@ -21,15 +25,13 @@ namespace TrucoGame {
             void onIdle();
 
         public:
-            TrucoButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize);
+            TrucoButton(float x, float y, float width, float height);
             ~TrucoButton();
 
             bool getIsButtonAvailable();
             void setIsButtonAvailable(bool isButtonAvailable);
-            float getTextWidth(size_t playerIndex) const;
-            float getTextHeight(size_t playerIndex) const;
-            float getHalfTextWidth(size_t playerIndex) const;
-            Vector2f getCardPosition(size_t cardIndex) const;
+
+            TextView getText();
         };
     }
 }

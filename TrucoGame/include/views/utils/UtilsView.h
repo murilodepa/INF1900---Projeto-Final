@@ -22,6 +22,7 @@ namespace TrucoGame {
         Texture loadTextureBack();
         Font loadFont(const std::string fontPath);
         std::string findTexturePathByNumberAndSuit(CardStruct& cardStruct);
+        Vector2f getPositionTextInButton(float x, float y, float width, float height, float textWidth, float textHeight);
 
         template <typename T>
         inline T** initializeMatrix(int rows, int columns) {

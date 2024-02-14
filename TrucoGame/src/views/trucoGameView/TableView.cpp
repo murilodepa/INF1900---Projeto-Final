@@ -92,6 +92,32 @@ void TrucoGame::View::TableView::moveTurnUpCardToDeck(const float cardScale, flo
 	delete animationThread;
 }
 
+int TrucoGame::View::TableView::trucoReceived(std::string trucoValue) {
+	std::string popupMessage = "Truco de " + trucoValue + "!";
+	int result = MessageBoxA(NULL, "Aceita o truco?", popupMessage.c_str(), MB_YESNO);
+
+	switch (result)
+	{
+	case IDYES:
+		//Truco accepted
+		result = MessageBoxA(NULL, "Aumenta o valor do Truco?", popupMessage.c_str(), MB_YESNO);
+
+		switch (result)
+		{
+		case IDYES:
+			//Increase Truco's value
+			return 2;
+		case IDNO:
+			break;
+		}
+
+		return 1;
+	case IDNO:
+		//Truco was not accepted
+		return 0;
+	}
+}
+
 void TrucoGame::View::TableView::setTurnedFaceUpCardTexture(std::string& texturePath)
 {
 	this->turnedFaceUpCardTexture = UtilsView::loadTexture(texturePath);

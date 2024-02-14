@@ -5,6 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include "../../../include/views/GraphicManager.h"
 #include "CardView.h"
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+#include <windows.h>
 
 using namespace sf;
 
@@ -61,6 +64,7 @@ namespace TrucoGame {
             void moveTurnUpCardToDeck(const float cardScale, float speed);
             void setTurnedFaceUpCardTexture(std::string& texturePath);
             void setTextureFromPath(const std::string& texturePath);
+            int TrucoGame::View::TableView::trucoReceived(std::string trucoValue);
 
             CardView* getCardTurnedFaceUp();
             CardView* getDeck();
