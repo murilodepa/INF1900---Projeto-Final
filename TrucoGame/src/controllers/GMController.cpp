@@ -79,16 +79,20 @@ namespace TrucoGame {
 
 		void GMController::UserRequestedTruco() {
 			// TODO: send truco packet to server
+			gameModel->RequestTruco();
 		}
 		void GMController::UserSelectedCard(int cardIndex, bool isCovered) {
 			// TODO: send card packet to server
+			gameModel->PlayCard(cardIndex, isCovered);
 			// disable card button
 		}
 		void GMController::UserRespondedTruco(int trucoResult) {
 			// TODO: send truco packet with the response to server
+			gameModel->RespondTrucoRequest(trucoResult);
 		}
 		void GMController::UserRespondedElevenHand(bool accepted) {
 			// TODO: send eleven hand response packet to the server
+			gameModel->RespondElevenHand(accepted);
 		}
 
 

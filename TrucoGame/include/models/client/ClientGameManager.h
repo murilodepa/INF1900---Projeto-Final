@@ -31,6 +31,7 @@ namespace TrucoGame {
         private:
             TcpClient client;
             Score score;
+            TrucoPacket lastReceivedTrucoPacket = nullptr;
 
             void GetPlayerInputAndSend();
             void OnStartGamePacketReceived(StartGamePacket packet);
@@ -59,6 +60,11 @@ namespace TrucoGame {
             TrucoResquestedEventHandler trucoRequested;
             GameWonEventHandler gameWon;
             GameLostEventHandler gameLost;
+
+            void RequestTruco();
+            void PlayCard(int index, bool isCovered);
+            void RespondTrucoRequest(int trucoResult);
+            void RespondElevenHand(bool accepted);
         };
     }
 }

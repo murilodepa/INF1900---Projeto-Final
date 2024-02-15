@@ -47,25 +47,6 @@ namespace TrucoGame {
             client.StartListening();
         }
 
-        void ClientGameManager::GetPlayerInputAndSend()
-        {
-            std::cin.clear();
-            int input;
-            std::cin >> input;
-            if (input < player->hand.size())
-            {
-                CardPacket p = CardPacket(player->playerId, player->popCardByIndex(input), false);
-                client.Send(&p);
-            }
-            else
-            {
-                std::cout << std::endl << "Requesting Truco..." << std::endl;
-                int id = player->playerId;
-                TrucoPacket p(id, (id + 1) % 2, TrucoResult::Raise);
-                client.Send(&p);
-            }
-        }
-
         void ClientGameManager::OnStartGamePacketReceived(StartGamePacket packet)
         {
             player = new Player(packet.playerId, "Player " + packet.playerId);
@@ -97,13 +78,12 @@ namespace TrucoGame {
 
             if(myTurnStarted)
                 myTurnStarted(packet.canRequestTruco);
-            //GetPlayerInputAndSend();
         }
 
         void ClientGameManager::OnTrucoPacketReceived(TrucoPacket packet) 
         {
             std::cout << "Received Truco Packet " << packet.result << std::endl;
-
+            lastReceivedTrucoPacket = packet;
             if (packet.result == TrucoResult::Yes) {
                 std::cout << "Truco was accepted" << std::endl;
 
@@ -125,14 +105,6 @@ namespace TrucoGame {
                 {
                     if (trucoRequested)
                         trucoRequested(packet.requesterId, score.getStakes());
-                    /*std::cout << "Yes : 0 | No : 1 | Raise : 2" << std::endl;
-                    int input;
-                    std::cin.clear();
-                    std::cin >> input;
-                    packet.result = (TrucoResult)input;
-                    packet.responseTeamId = !packet.responseTeamId;
-                    client.Send(&packet);*/
-
                 }
             }
             else {
@@ -159,13 +131,6 @@ namespace TrucoGame {
 
             if (elevenHandRoundStarted)
                 elevenHandRoundStarted(packet.tableCard, packet.handCards, packet.partnerHand);
-
-            /*std::cout << "Yes : 1 | No : 0" << std::endl;
-            int input;
-            std::cin.clear();
-            std::cin >> input;
-            ElevenHandResponsePacket response(input);
-            client.Send(&response);*/
         }
 
         void ClientGameManager::OnCardPacketReceived(CardPacket packet)
@@ -209,6 +174,27 @@ namespace TrucoGame {
                         gameLost();
                 }
             }
+        }
+
+        void ClientGameManager::RequestTruco()
+        {
+            TrucoPacket p(player->playerId, (player->playerId + 1) % 2, TrucoResult::Raise);
+            client.Send(&p);
+        }
+        void ClientGameManager::PlayCard(int index, bool isCovered) 
+        {
+            CardPacket p = CardPacket(player->playerId, player->popCardByIndex(index), isCovered);
+            client.Send(&p);
+        }
+        void ClientGameManager::RespondTrucoRequest(int trucoResult)
+        {
+            TrucoPacket packet(lastReceivedTrucoPacket.requesterId, !lastReceivedTrucoPacket.responseTeamId, (TrucoResult)trucoResult);
+            client.Send(&packet);
+        }
+        void ClientGameManager::RespondElevenHand(bool accepted)
+        {
+            ElevenHandResponsePacket response(accepted);
+            client.Send(&response);
         }
         
     }
