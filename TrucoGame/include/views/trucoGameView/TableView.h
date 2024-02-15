@@ -43,6 +43,7 @@ namespace TrucoGame {
             CardView* cardTurnedFaceUp;
             CardView* deck;
             Vector2f **cardPositionsInPlayerHands;
+            Vector2f initialDeckPositionVector2f;
             
 
             void initialize(Vector2f windowSize, Vector2f& initialDeckPositionVector2f, const float cardScale);
@@ -57,8 +58,14 @@ namespace TrucoGame {
             void setTableClothScale(Vector2f& windowSize, Vector2u& textureSize);
             void drawElementsOnTheTable(GraphicManager* pGraphicManager) const;
             void moveDeckAndTurnUpCard(const float cardScale, float speed, std::string& texturePathToturnedFaceUpCard);
+            void moveTurnUpCardToDeck(const float cardScale, float speed);
             void setTurnedFaceUpCardTexture(std::string& texturePath);
             void setTextureFromPath(const std::string& texturePath);
+
+            CardView* getCardTurnedFaceUp();
+            CardView* getDeck();
+            Vector2f getDeckPosition();
+            float getDeckRotation();
         };
     }
 }

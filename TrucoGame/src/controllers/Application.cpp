@@ -68,9 +68,13 @@ namespace TrucoGame {
         cardStruct.suit = CardSuit::Diamonds;
         texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
 
+        trucoGameView.setTexturePathToMainPlayerCards(texturePathToMainPlayerCards);
+
+
         cardStruct.rank = CardRank::Ace;
         cardStruct.suit = CardSuit::Clubs;
         std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
+        trucoGameView.setTexturePathToturnedFaceUpCard(texturePathToturnedFaceUpCard);
         
         while (pGraphicManager->checkWindowOpen()) {
 
@@ -81,7 +85,7 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag, mouseState->getMousePosView(), texturePathToMainPlayerCards, texturePathToturnedFaceUpCard);
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag, mouseState->getMousePosView());
             //mainMenuState->render();
 
             //Update Mouse

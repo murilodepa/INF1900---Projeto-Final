@@ -14,6 +14,7 @@ void TrucoGame::View::TableView::initialize(Vector2f windowSize, Vector2f& initi
 
 	setTextureFromPath(CARD_BACK_TEXTURE_PATH);
 	
+	this->initialDeckPositionVector2f = initialDeckPositionVector2f;
 	cardTurnedFaceUp = new CardView(initialDeckPositionVector2f, *texture, cardScale);
 	deck = new CardView(initialDeckPositionVector2f, backCardTexture, cardScale);
 
@@ -80,6 +81,17 @@ void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, fl
 	delete animationThread;
 }
 
+void TrucoGame::View::TableView::moveTurnUpCardToDeck(const float cardScale, float speed)
+{	
+	std::thread* animationThread = new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo,
+		std::ref(*cardTurnedFaceUp), cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed);
+
+	*texture = UtilsView::loadTextureBack();
+
+	animationThread->detach();
+	delete animationThread;
+}
+
 void TrucoGame::View::TableView::setTurnedFaceUpCardTexture(std::string& texturePath)
 {
 	this->turnedFaceUpCardTexture = UtilsView::loadTexture(texturePath);
@@ -90,4 +102,22 @@ void TrucoGame::View::TableView::setTextureFromPath(const std::string& texturePa
 	this->texture = new Texture(UtilsView::loadTexture(texturePath));
 }
 
+TrucoGame::View::CardView* TrucoGame::View::TableView::getCardTurnedFaceUp()
+{
+	return cardTurnedFaceUp;
+}
 
+TrucoGame::View::CardView* TrucoGame::View::TableView::getDeck()
+{
+	return deck;
+}
+
+Vector2f TrucoGame::View::TableView::getDeckPosition()
+{
+	return cardTurnedFaceUpAndDeck.deckPosition;
+}
+
+float TrucoGame::View::TableView::getDeckRotation()
+{
+	return cardTurnedFaceUpAndDeck.deckRotation;
+}

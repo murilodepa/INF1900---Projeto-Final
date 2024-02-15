@@ -14,6 +14,7 @@ namespace TrucoGame {
             Vector2f discardOnTheTablePosition;
             float animationSpeed;
             Texture* cardTexture;
+            size_t cardIndex;
 
             void discardCardOnTheTable();
 
@@ -24,7 +25,7 @@ namespace TrucoGame {
             void onIdle();
 
         public:
-            CardButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture);
+            CardButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture, size_t cardIndex);
             ~CardButton();
 
             bool getAreCardsInTheHandsOfThePlayer();

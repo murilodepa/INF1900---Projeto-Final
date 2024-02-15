@@ -48,6 +48,7 @@ set(SRC_FILES
     "views/trucoGameView/TrucoGameView.cpp"
     "views/GraphicManager.cpp"
     "views/utils/MutexView.cpp"
+    "views/utils/StatesView.cpp"
     "views/utils/UtilsView.cpp"
 )
 

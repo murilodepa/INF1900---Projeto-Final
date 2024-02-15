@@ -1,4 +1,6 @@
 #include "../../../include/views/trucoGameView/Animator.h"
+#include "../../../include/views/utils/MutexView.h"
+#include "../../../include/views/utils/StatesView.h"
 
 namespace TrucoGame {
 	namespace View {
@@ -73,6 +75,9 @@ namespace TrucoGame {
 		{
 			// Calculating the gradual rotation
 			float rotation = sprite.getRotation();
+			if (rotation == finalRotation && finalRotation != 0) {
+				finalRotation = finalRotation + rotation;
+			}
 			float rotationSpeed = std::min(speed, finalRotation - rotation) / initialDistance * 100;
 
 			if (rotation < finalRotation - rotationSpeed) {
@@ -127,16 +132,54 @@ namespace TrucoGame {
 			}
 		}
 
-		void Animator::discardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, const sf::Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation) {
+		void Animator::animationToDiscardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, sf::Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation, std::vector<Sprite*>& playersCardsOnTable, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck) {
+			cardMutex.lock();
+			if (cardState == CardState::Covered) 
+			{
+				destinationPosition.y = destinationPosition.y - sprite.getGlobalBounds().width;
+			}
+			cardMutex.unlock();
+			
 			if (finalRotation != 0) {
 				moveAndRotateSpriteTo(sprite, destinationPosition, finalRotation, speed);
 			}
-			else {
+			else 
+			{
 				moveSpriteTo(sprite, destinationPosition, speed);
 			}
 
-			flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, false);
-		}
+			cardMutex.lock();
+			if (cardState != CardState::Covered)
+			{
+				flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, false);
+			}
+			cardMutex.unlock();
 
+			isRoundTurnOrDiscartMutex.lock();
+			if (isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::TurnEnded) {
+				for (Sprite* card : playersCardsOnTable) {
+					moveAndRotateSpriteTo(*card, deckPosition, 35, speed);
+				}
+			}
+			else if (isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::RoundEnded) {
+				for (size_t player = 0; player < 4; player++) {
+					for (size_t card = 0; card < 3; card++) {
+						Sprite* cardSprite = &cardsInHands[player][card];
+						cardSprite->setRotation(0);
+						cardSprite->setPosition(Vector2f(0, 0));
+					}
+				}
+				cardTurnedFaceUp->setRotation(0);
+				cardTurnedFaceUp->setPosition(Vector2f(0, 0));
+				deck->setRotation(0);
+				deck->setPosition(Vector2f(0, 0));
+
+				distributeCardsToPlayersMutex.lock();
+				distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
+				distributeCardsToPlayersMutex.unlock();
+			}
+			isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::WaitingPlayer;
+			isRoundTurnOrDiscartMutex.unlock();
+		}
 	}
 }

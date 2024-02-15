@@ -56,6 +56,7 @@ set(HEADER_FILES
     "views/GraphicManager.h"
     "views/utils/CardsEnum.h"
     "views/utils/MutexView.h"
+    "views/utils/StateView.h"
     "views/utils/UtilsView.h"
 )
 

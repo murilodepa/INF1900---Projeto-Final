@@ -24,10 +24,18 @@ enum class CardSuit {
     Spades = 2      // Spades suit
 };
 
+// Enum representing the index of cards
+enum class CardIndex {
+    Left = 0, 
+    Middle = 1,
+    Right = 2
+};
+
 // Struct to hold a card's rank and suit
 struct CardStruct {
     CardRank rank;  // Rank of the card
     CardSuit suit;  // Suit of the card
+    CardIndex index;
 };
 
 #endif // CARDS_ENUM_H

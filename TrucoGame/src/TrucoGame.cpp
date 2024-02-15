@@ -72,6 +72,7 @@ int main()
 
     TrucoGame::Application applicationObject(names);
     applicationObject.run();
+
     TestTcp();
     return 0;
 }
