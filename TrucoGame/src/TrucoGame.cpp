@@ -10,21 +10,11 @@
 #include "../include/models/server/ServerGameManager.h"
 #include "../include/models/client/ClientGameManager.h"
 
-
-std::string ip = "127.0.0.1";
-void Client() {
-    using namespace TrucoGame::Models;
-    ClientGameManager clientGameManager;
-    clientGameManager.Start(ip);
-
-    while (true) {}
-}
-
 void Server() {
     using namespace TrucoGame::Models;
     ServerGameManager gameManager;
 
-    std::thread clientThread(Client);
+    //std::thread clientThread(Client);
     gameManager.waitForPlayersToConnect();
 
     int gameWinner = -1;
@@ -53,8 +43,11 @@ void Server() {
     while (true) {}
 }
 
-void TestTcp() {
+int main()
+{
     int choice;
+    std::string ip = "127.0.0.1";
+
     std::cout << "1 - SERVER \n2 - CLIENT\n";
     std::cin >> choice;
     if (choice == 1) {
@@ -63,16 +56,11 @@ void TestTcp() {
     }
     else {
         std::cin >> ip;
-        std::thread tcpThread(Client);
-        tcpThread.join();
+     //   std::thread tcpThread(Client);
+     //   tcpThread.join();
     }
-}
 
-int main()
-{
-    TestTcp();
-
-    TrucoGame::Controller::Application applicationObject;
+    TrucoGame::Controller::Application applicationObject(ip);
     applicationObject.drawGameScreen();
 
     return 0;

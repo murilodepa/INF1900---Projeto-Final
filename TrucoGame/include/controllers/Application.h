@@ -30,7 +30,7 @@ namespace TrucoGame {
             //static void commonUpdateLoop(TrucoGame::View::GraphicManager& pGraphicManager, std::shared_ptr<bool>& firstTimeFlag, TrucoGame::View::TrucoGameView& pTrucoGameView, std::unique_ptr<TrucoGame::View::MainMenuState>& pMainMenuState);
             void initialize();
         public:
-            Application();
+            Application(std::string ip = "127.0.0.1");
             ~Application();
             void drawGameScreen();
         };

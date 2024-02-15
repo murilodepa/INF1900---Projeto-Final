@@ -36,6 +36,13 @@ namespace TrucoGame {
 
         void ClientGameManager::Start(std::string ip) 
         {
+           this->ip = ip;
+           std::thread tcpThread(&ClientGameManager::Run, this);
+           tcpThread.detach();
+        }
+
+        void ClientGameManager::Run()
+        {
             std::cout << "[CLIENT] Starting client Thread" << std::endl;
 
             ErrorCode result = ErrorCode::SocketError;

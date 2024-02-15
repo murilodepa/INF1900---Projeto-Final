@@ -16,7 +16,7 @@ namespace TrucoGame {
 
     GraphicManager* TrucoGame::Controller::Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    TrucoGame::Controller::Application::Application() :
+    TrucoGame::Controller::Application::Application(std::string ip) :
         trucoGameView([&]() {
         Vector2f windowSize;
         if ((pGraphicManager != nullptr)) {
@@ -37,15 +37,11 @@ namespace TrucoGame {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
             exit(1);
         }
-        initialize();
+        clientGameManager.Start(ip);
     }
 
     TrucoGame::Controller::Application::~Application() {
 
-    }
-
-    void TrucoGame::Controller::Application::initialize() {
-        // TODO Define the initial state of the window
     }
 
     void TrucoGame::Controller::Application::drawGameScreen()

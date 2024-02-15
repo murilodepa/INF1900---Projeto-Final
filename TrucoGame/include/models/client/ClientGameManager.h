@@ -33,6 +33,7 @@ namespace TrucoGame {
             Score score;
             int lastTrucoRequesterId;
             int lastTrucoReponseTeamId;
+            std::string ip;
 
             void GetPlayerInputAndSend();
             void OnStartGamePacketReceived(StartGamePacket packet);
@@ -47,6 +48,7 @@ namespace TrucoGame {
             Player* player;
             ClientGameManager();
             void Start(std::string ip);
+            void Run();
 
              //EVENTS 
             MyTurnStartedEventHandler myTurnStarted;
