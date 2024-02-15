@@ -10,10 +10,12 @@
 #include "../include/models/server/ServerGameManager.h"
 #include "../include/models/client/ClientGameManager.h"
 
+
+std::string ip = "127.0.0.1";
 void Client() {
     using namespace TrucoGame::Models;
     ClientGameManager clientGameManager;
-    clientGameManager.Start("127.0.0.1");
+    clientGameManager.Start(ip);
 
     while (true) {}
 }
@@ -60,6 +62,7 @@ void TestTcp() {
         tcpThread.join();
     }
     else {
+        std::cin >> ip;
         std::thread tcpThread(Client);
         tcpThread.join();
     }
@@ -67,9 +70,10 @@ void TestTcp() {
 
 int main()
 {
+    TestTcp();
+
     TrucoGame::Controller::Application applicationObject;
     applicationObject.drawGameScreen();
 
-    TestTcp();
     return 0;
 }

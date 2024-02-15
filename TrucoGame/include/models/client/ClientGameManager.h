@@ -31,7 +31,8 @@ namespace TrucoGame {
         private:
             TcpClient client;
             Score score;
-            TrucoPacket lastReceivedTrucoPacket = nullptr;
+            int lastTrucoRequesterId;
+            int lastTrucoReponseTeamId;
 
             void GetPlayerInputAndSend();
             void OnStartGamePacketReceived(StartGamePacket packet);

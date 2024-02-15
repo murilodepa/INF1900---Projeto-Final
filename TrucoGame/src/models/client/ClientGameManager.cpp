@@ -83,7 +83,8 @@ namespace TrucoGame {
         void ClientGameManager::OnTrucoPacketReceived(TrucoPacket packet) 
         {
             std::cout << "Received Truco Packet " << packet.result << std::endl;
-            lastReceivedTrucoPacket = packet;
+            lastTrucoRequesterId = packet.requesterId;
+            lastTrucoReponseTeamId = packet.responseTeamId;
             if (packet.result == TrucoResult::Yes) {
                 std::cout << "Truco was accepted" << std::endl;
 
@@ -188,7 +189,7 @@ namespace TrucoGame {
         }
         void ClientGameManager::RespondTrucoRequest(int trucoResult)
         {
-            TrucoPacket packet(lastReceivedTrucoPacket.requesterId, !lastReceivedTrucoPacket.responseTeamId, (TrucoResult)trucoResult);
+            TrucoPacket packet(lastTrucoRequesterId, !lastTrucoReponseTeamId, (TrucoResult)trucoResult);
             client.Send(&packet);
         }
         void ClientGameManager::RespondElevenHand(bool accepted)
