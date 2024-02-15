@@ -9,13 +9,18 @@ enum class DistributeCardsToPlayersState {
 };
 extern DistributeCardsToPlayersState distributeCardsToPlayersState;
 
-enum class IsRoundTurnOrDiscartState {
-    WaitingPlayer,
-    DiscardCard,
+enum class RoundAndTurnState {
     RoundEnded,
-    TurnEnded
+    TurnEnded,
+    RoundAndTurnRunning
 };
-extern IsRoundTurnOrDiscartState isRoundTurnOrDiscartState;
+extern RoundAndTurnState roundAndTurnState;
+
+enum class DiscardCardState {
+    WaitingPlayer,
+    DiscardCard
+};
+extern DiscardCardState discardCardState;
 
 enum class CardState {
     TurnedUp,

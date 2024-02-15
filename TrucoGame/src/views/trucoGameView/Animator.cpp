@@ -155,31 +155,35 @@ namespace TrucoGame {
 			}
 			cardMutex.unlock();
 
-			isRoundTurnOrDiscartMutex.lock();
-			if (isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::TurnEnded) {
-				for (Sprite* card : playersCardsOnTable) {
-					moveAndRotateSpriteTo(*card, deckPosition, 35, speed);
-				}
-			}
-			else if (isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::RoundEnded) {
-				for (size_t player = 0; player < 4; player++) {
-					for (size_t card = 0; card < 3; card++) {
-						Sprite* cardSprite = &cardsInHands[player][card];
-						cardSprite->setRotation(0);
-						cardSprite->setPosition(Vector2f(0, 0));
+			if (playersCardsOnTable.size() == NUM_PLAYERS) {
+				roundAndTurnMutex.lock();
+				RoundAndTurnState roundAndTurnStateLocal = roundAndTurnState;
+				roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
+				roundAndTurnMutex.unlock();
+
+				if (roundAndTurnStateLocal == RoundAndTurnState::TurnEnded) {
+					for (Sprite* card : playersCardsOnTable) {
+						moveAndRotateSpriteTo(*card, deckPosition, 35, speed);
 					}
 				}
-				cardTurnedFaceUp->setRotation(0);
-				cardTurnedFaceUp->setPosition(Vector2f(0, 0));
-				deck->setRotation(0);
-				deck->setPosition(Vector2f(0, 0));
+				else if (roundAndTurnStateLocal == RoundAndTurnState::RoundEnded) {
+					for (size_t player = 0; player < 4; player++) {
+						for (size_t card = 0; card < 3; card++) {
+							Sprite* cardSprite = &cardsInHands[player][card];
+							cardSprite->setRotation(0);
+							cardSprite->setPosition(Vector2f(0, 0));
+						}
+					}
+					cardTurnedFaceUp->setRotation(0);
+					cardTurnedFaceUp->setPosition(Vector2f(0, 0));
+					deck->setRotation(0);
+					deck->setPosition(Vector2f(0, 0));
 
-				distributeCardsToPlayersMutex.lock();
-				distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
-				distributeCardsToPlayersMutex.unlock();
+					distributeCardsToPlayersMutex.lock();
+					distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
+					distributeCardsToPlayersMutex.unlock();
+				}
 			}
-			isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::WaitingPlayer;
-			isRoundTurnOrDiscartMutex.unlock();
 		}
 	}
 }

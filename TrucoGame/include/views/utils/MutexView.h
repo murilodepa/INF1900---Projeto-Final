@@ -6,7 +6,8 @@
 extern std::mutex uIThreadMutex;
 extern std::mutex distributeCardsToPlayersMutex;
 extern std::mutex isPlayerTurnToPlayMutex;
-extern std::mutex isRoundTurnOrDiscartMutex;
+extern std::mutex roundAndTurnMutex;
+extern std::mutex discardCardMutex;
 extern std::mutex cardMutex;
 extern std::mutex playerIdMutex;
 extern std::mutex cardStructMutex;

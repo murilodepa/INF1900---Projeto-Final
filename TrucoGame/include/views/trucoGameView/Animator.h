@@ -8,6 +8,12 @@
 #include <thread>
 #include "CardView.h"
 
+// Define to represent the number of players
+#define NUM_PLAYERS 4
+
+// Define to represent the number of cards in hand
+#define CARDS_IN_HAND 3
+
 using namespace sf;
 
 namespace TrucoGame {

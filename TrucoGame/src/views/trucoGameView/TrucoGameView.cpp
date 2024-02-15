@@ -168,12 +168,13 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 		for (size_t card = 0; card < CARDS_IN_HAND; card++) {
 			CardView* cardView = &playerCards.cardsInHands[player][card];
 			float rotation = cardView->getRotation();
+			Texture* cardTexture = playerCards.getCardTexture(player, card);
+
 			if (player == 0) {
+				*cardTexture = UtilsView::loadTextureBack();
 				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), animationSpeed));
 			}
 			else if (player == 2) {
-				Texture* cardTexture = playerCards.getCardTexture(player, card);
-
 				Vector2f destinationPosition = players[player]->getCardPosition(card);
 				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo,
 					std::ref(*cardView), cardTexture, texturePathToMainPlayerCards[card], destinationPosition, animationSpeed, cardScale));
@@ -184,6 +185,7 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 				cardButtons[card]->setAreCardsInTheHandsOfThePlayer(true);
 			}
 			else {
+				*cardTexture = UtilsView::loadTextureBack();
 				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), 90.0f, animationSpeed));
 			}
 		}
@@ -251,6 +253,16 @@ TrucoGame::View::TrucoGameView::~TrucoGameView()
 	}
 }
 
+void TrucoGame::View::TrucoGameView::verifyIfPlayerDiscardedCard()
+{
+	discardCardMutex.lock();
+	if (discardCardState == DiscardCardState::DiscardCard) {
+		discardCardState = DiscardCardState::WaitingPlayer;
+		discardCard();
+	}
+	discardCardMutex.unlock();
+}
+
 void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag, Vector2f& mousePosView)
 {
 	if (pGraphicManager) {
@@ -269,11 +281,7 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		drawPlayerNames(pGraphicManager);
 		drawScore(pGraphicManager);
 		checkIftheCardHasBeenDiscardedAndDraw(pGraphicManager, mousePosView);
-
-		if (isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::DiscardCard) {
-			isRoundTurnOrDiscartState == IsRoundTurnOrDiscartState::WaitingPlayer;
-			discardCard();
-		}
+		verifyIfPlayerDiscardedCard();
 	}
 }
 
@@ -330,5 +338,9 @@ void TrucoGame::View::TrucoGameView::discardCard()
 		}
 
 		tableView.moveTurnUpCardToDeck(cardScale, animationSpeed);
+
+		if (playersCardsOnTable.size() == NUM_PLAYERS) {
+			playersCardsOnTable.clear();
+		}
 	}
 }

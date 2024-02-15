@@ -2,7 +2,8 @@
 
 DistributeCardsToPlayersState distributeCardsToPlayersState;
 IsPlayerTurnToPlayState isPlayerTurnToPlayState;
-IsRoundTurnOrDiscartState isRoundTurnOrDiscartState;
+RoundAndTurnState roundAndTurnState;
+DiscardCardState discardCardState;
 CardState cardState;
 PlayerIdState playerIdState;
 CardStruct cardStructState;

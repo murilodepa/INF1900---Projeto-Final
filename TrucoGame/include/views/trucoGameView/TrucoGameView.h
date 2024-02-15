@@ -60,6 +60,7 @@ namespace TrucoGame {
         public:
             TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition, const std::vector<std::string>& playerNames);
             ~TrucoGameView();
+            void verifyIfPlayerDiscardedCard();
             void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag, Vector2f& mousePosView);
             void setTexturePathToMainPlayerCards(std::vector<std::string>& texturePathToMainPlayerCards);
             void setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard);
