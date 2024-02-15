@@ -4,8 +4,8 @@
 #include "CardsEnum.h"
 
 enum class DistributeCardsToPlayersState {
-    Distribute,
-    NotDistribute
+    NotDistribute,
+    Distribute
 };
 extern DistributeCardsToPlayersState distributeCardsToPlayersState;
 
@@ -38,8 +38,8 @@ extern PlayerIdState playerIdState;
 extern CardStruct cardStructState;
 
 enum class IsPlayerTurnToPlayState {
-    PlayerTurn,
-    NotPlayerTurn
+    NotPlayerTurn,
+    PlayerTurn
 };
 extern IsPlayerTurnToPlayState isPlayerTurnToPlayState;
 

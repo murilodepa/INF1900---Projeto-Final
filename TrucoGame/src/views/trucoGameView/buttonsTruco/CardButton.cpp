@@ -31,7 +31,9 @@ void TrucoGame::View::CardButton::onPressLeft()
 		discardCardOnTheTable();
 	}
 	isPlayerTurnToPlayMutex.unlock();
-	// TODO - Retornar para o Model o Index da carta que foi retornado
+
+
+	cardButtonClick(this->cardIndex, false);
 }
 
 void TrucoGame::View::CardButton::onPressRight()
@@ -46,7 +48,7 @@ void TrucoGame::View::CardButton::onPressRight()
 		discardCardOnTheTable();
 	}
 	isPlayerTurnToPlayMutex.unlock();
-	// TODO - Retornar para o Model o Index da carta que foi retornado
+	cardButtonClick(this->cardIndex, true);
 }
 
 void TrucoGame::View::CardButton::onHover() {

@@ -1,4 +1,6 @@
 #include "..\..\include\controllers\GMController.h"
+#include "../../include/views/utils/StatesView.h"
+#include "../../include/views/utils/MutexView.h"
 
 namespace TrucoGame {
 	namespace Controller {
@@ -24,19 +26,71 @@ namespace TrucoGame {
 			gameModel->gameWon = [this]() { OnGameWon(); };
 			gameModel->gameLost = [this]() { OnGameLost(); };
 
-			//gameView->userRequestedTruco = [this]() { UserRequestedTruco() };
+			gameView->userSelectCard = [this](int index, bool covered) { UserSelectedCard(index, covered); };
 		}
 
 		void GMController::OnMyTurnStarted(bool canRequestTruco){
 			// TODO: enable card buttons and truco button if needed
+
+			isPlayerTurnToPlayMutex.lock();
+			isPlayerTurnToPlayState = IsPlayerTurnToPlayState::PlayerTurn;
+			isPlayerTurnToPlayMutex.unlock();
 		}
 		void GMController::OnAnotherPlayerPlayed(Card card, int playerId, bool isCovered) {
 			int viewPlayerId = ModelIdToViewId(playerId);
+
+			cardStructMutex.lock();
+			cardStructState.rank = CardRank(card.getNumber());
+			cardStructState.suit = CardSuit(card.getSuit());
+			cardStructState.index = CardIndex(currentTurn);
+			cardStructMutex.unlock();
+
+			playerIdMutex.lock();
+			playerIdState = PlayerIdState(viewPlayerId);
+			playerIdMutex.unlock();
+
+			cardMutex.lock();
+			if (isCovered) {
+				cardState = CardState::Covered;
+			}
+			else {
+				cardState = CardState::TurnedUp;
+			}
+
+			cardMutex.unlock();
+
+			discardCardMutex.lock();
+			discardCardState = DiscardCardState::DiscardCard;
+			discardCardMutex.unlock();
+			
+			
+			//std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
 			// TODO: show other card player on the screen
 		}
 
 		void GMController::OnRoundStarted(Card tableCard, std::vector<Card> handCards){
 			// TODO: show hand cards and table card (keep card buttons disabled)
+			
+			CardStruct cardStruct;
+
+			cardStruct.rank = CardRank(tableCard.getNumber());
+			cardStruct.suit = CardSuit(tableCard.getSuit());
+			std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
+			gameView->setTexturePathToturnedFaceUpCard(texturePathToturnedFaceUpCard);
+
+			std::vector<std::string> texturePathToMainPlayerCards;
+			for (Card& card : handCards)
+			{
+				cardStruct.rank = CardRank(card.getNumber());
+				cardStruct.suit = CardSuit(card.getSuit());
+				texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
+			}
+
+			gameView->setTexturePathToMainPlayerCards(texturePathToMainPlayerCards);
+
+			distributeCardsToPlayersMutex.lock();
+			distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
+			distributeCardsToPlayersMutex.unlock();
 		}
 		void GMController::OnElevenHandRoundStart(Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards){
 			// TODO: show partner cards, show hand cards (keep card buttons disabled)
@@ -48,10 +102,12 @@ namespace TrucoGame {
 		}
 
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
+			this->currentTurn = 0;
 			// TODO: update score on the screen, clear cards from hands
 		}
 
 		void GMController::OnTurnEnded(int winnerTeamId, int winnerPlayerId){
+			this->currentTurn++;
 			// TODO: update score on the screen (the circles) and clear cards from table to the next turn
 		}
 

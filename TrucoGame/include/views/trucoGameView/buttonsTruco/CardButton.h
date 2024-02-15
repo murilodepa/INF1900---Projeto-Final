@@ -4,8 +4,13 @@
 #include "../../../../include/views/button/ButtonBase.h"
 #include "../../utils/UtilsView.h"
 
+#include <functional>
+
 namespace TrucoGame {
     namespace View {
+
+        typedef std::function<void(int, bool)> CardButtonClickEventHandler;
+
         class CardButton : public ButtonBase {
 
         private:
@@ -30,6 +35,7 @@ namespace TrucoGame {
 
             bool getAreCardsInTheHandsOfThePlayer();
             void setAreCardsInTheHandsOfThePlayer(bool areCardsInTheHandsOfThePlayer);
+            CardButtonClickEventHandler cardButtonClick;
         };
     }
 }

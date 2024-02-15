@@ -46,7 +46,7 @@ namespace TrucoGame {
 
     void TrucoGame::Controller::Application::drawGameScreen()
     {
-
+        /*
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);
         std::vector<std::string> texturePathToMainPlayerCards;
         CardStruct cardStruct;
@@ -71,6 +71,7 @@ namespace TrucoGame {
         std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
         trucoGameView.setTexturePathToturnedFaceUpCard(texturePathToturnedFaceUpCard);
         
+        */
         while (pGraphicManager->checkWindowOpen()) {
 
             // Check if the user intends to close the window
@@ -80,7 +81,7 @@ namespace TrucoGame {
             pGraphicManager->clearWindow();
 
             //Draw
-            trucoGameView.drawElementsOnTheWindow(pGraphicManager, firstTimeFlag, mouseState->getMousePosView());
+            trucoGameView.drawElementsOnTheWindow(pGraphicManager, mouseState->getMousePosView());
             //mainMenuState->render();
 
             //Update Mouse

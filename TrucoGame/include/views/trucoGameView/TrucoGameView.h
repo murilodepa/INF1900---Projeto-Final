@@ -11,6 +11,8 @@
 #include "Player/PlayerCards.h"
 #include "buttonsTruco/CardButton.h"
 
+#include <functional> 
+
 // Define a constant to calculate the spacing between cards.
 #define CALCULATE_CARDS_SPACING 0.02f
 
@@ -30,6 +32,8 @@ using namespace sf;
 
 namespace TrucoGame {
     namespace View {
+        typedef std::function<void(int, bool)> SelectCardEventHandler;
+
         class TrucoGameView {
         private:
             TableView tableView;
@@ -61,11 +65,13 @@ namespace TrucoGame {
             TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition, const std::vector<std::string>& playerNames);
             ~TrucoGameView();
             void verifyIfPlayerDiscardedCard();
-            void drawElementsOnTheWindow(GraphicManager* pGraphicManager, std::shared_ptr<bool> firstTimeFlag, Vector2f& mousePosView);
+            void drawElementsOnTheWindow(GraphicManager* pGraphicManager, Vector2f& mousePosView);
             void setTexturePathToMainPlayerCards(std::vector<std::string>& texturePathToMainPlayerCards);
             void setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard);
             void discardCard();
             void endTurnAndReturnCardsToDeck();
+
+            SelectCardEventHandler userSelectCard;
         };
     }
 }

@@ -52,7 +52,7 @@ int main()
     std::cin >> choice;
     if (choice == 1) {
         std::thread tcpThread(Server);
-        tcpThread.join();
+        tcpThread.detach();
     }
     else {
         std::cin >> ip;

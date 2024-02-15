@@ -24,7 +24,7 @@ namespace TrucoGame {
             return suit;
         }
         int Card::getNumber() {
-            switch (suit) {
+            switch (value) {
             case 0:
                 return 4;
             case 1:

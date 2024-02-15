@@ -16,6 +16,8 @@ namespace TrucoGame {
 			TrucoGameView* gameView;
 			ClientGameManager* gameModel;
 
+			int currentTurn = 0;
+
 			// MODEL CALLS THIS METHODS (events)
 
 			void OnMyTurnStarted(bool canRequestTruco);

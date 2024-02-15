@@ -3,7 +3,7 @@
 
 
 #define NUM_OF_PLAYERS 4
-#define NUM_OF_HUMANS 0
+#define NUM_OF_HUMANS 1
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {
@@ -114,6 +114,11 @@ namespace TrucoGame {
             if (packet->packetType == PacketType::PlayerCard) {
                 CardPacket cardPacket(packet->payload);
                 std::cout << cardPacket.playerId << ": " << "[" << cardPacket.card.getValue() << " " << cardPacket.card.getSuit() << "] | ";
+                
+                for (int i = 0; i < clients.size(); i++) {
+                    if(i != currentPlayer)
+                        clients[i]->Send(&cardPacket);
+                }
 
                 table.PlaceCard(cardPacket.card, cardPacket.playerId, false); 
             }
