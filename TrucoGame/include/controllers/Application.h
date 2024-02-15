@@ -12,22 +12,27 @@
 #include "../views/mouse/MouseState.h"
 
 #include <thread>
+#include "GMController.h"
 
 using namespace TrucoGame::View;
+using namespace TrucoGame::Models;
 
 namespace TrucoGame {
+    namespace Controller {
+        class Application {
+        private:
+            static View::GraphicManager* pGraphicManager;
+            TrucoGame::View::TrucoGameView trucoGameView;
+            std::unique_ptr<TrucoGame::View::MouseState> mouseState;
+            ClientGameManager clientGameManager;
+            GMController gMController;
 
-    class Application {
-    private:
-        static View::GraphicManager* pGraphicManager;
-        TrucoGame::View::TrucoGameView trucoGameView;
-        std::unique_ptr<TrucoGame::View::MouseState> mouseState;
-        
-        //static void commonUpdateLoop(TrucoGame::View::GraphicManager& pGraphicManager, std::shared_ptr<bool>& firstTimeFlag, TrucoGame::View::TrucoGameView& pTrucoGameView, std::unique_ptr<TrucoGame::View::MainMenuState>& pMainMenuState);
-        void initialize();
-    public:
-        Application(const std::vector<std::string>& playerNames);
-        ~Application();
-        void run();
-    };
+            //static void commonUpdateLoop(TrucoGame::View::GraphicManager& pGraphicManager, std::shared_ptr<bool>& firstTimeFlag, TrucoGame::View::TrucoGameView& pTrucoGameView, std::unique_ptr<TrucoGame::View::MainMenuState>& pMainMenuState);
+            void initialize();
+        public:
+            Application();
+            ~Application();
+            void drawGameScreen();
+        };
+    }
 }

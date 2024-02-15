@@ -14,9 +14,9 @@ using namespace TrucoGame::Models;
 
 namespace TrucoGame {
 
-    GraphicManager* Application::pGraphicManager = GraphicManager::getGraphicManager();
+    GraphicManager* TrucoGame::Controller::Application::pGraphicManager = GraphicManager::getGraphicManager();
 
-    Application::Application(const std::vector<std::string>& playerNames) :
+    TrucoGame::Controller::Application::Application() :
         trucoGameView([&]() {
         Vector2f windowSize;
         if ((pGraphicManager != nullptr)) {
@@ -28,11 +28,10 @@ namespace TrucoGame {
         float initialDeckPosition = windowSize.x * CALCULATE_INITIAL_DECK_POSITION;
         float cardScale = windowSize.y / CALCULATE_CARD_SCALE;
 
-        std::vector<std::string> names = playerNames.empty() ? std::vector<std::string>{ "Jogador 1", "Jogador 2", "Jogador 3", "Jogador 4" } : playerNames;
-
-        return TrucoGameView(windowSize, cardScale, Vector2f(initialDeckPosition, initialDeckPosition), names);
+        return TrucoGameView(windowSize, cardScale, Vector2f(initialDeckPosition, initialDeckPosition), { "Jogador 1", "Jogador 2", "Jogador 3", "Jogador 4" });
         }()),
-        mouseState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MouseState>(pGraphicManager->getWindow()) : nullptr)
+        mouseState((pGraphicManager != nullptr) ? std::make_unique<TrucoGame::View::MouseState>(pGraphicManager->getWindow()) : nullptr),
+        gMController(&trucoGameView, &clientGameManager)
     {
         if (pGraphicManager == nullptr || mouseState == nullptr) {
             std::cout << "ERROR::TrucoGame::Application - Failed to create GraphicManager." << std::endl;
@@ -41,15 +40,15 @@ namespace TrucoGame {
         initialize();
     }
 
-    Application::~Application() {
+    TrucoGame::Controller::Application::~Application() {
 
     }
 
-    void Application::initialize() {
+    void TrucoGame::Controller::Application::initialize() {
         // TODO Define the initial state of the window
     }
 
-    void Application::run()
+    void TrucoGame::Controller::Application::drawGameScreen()
     {
 
         std::shared_ptr<bool> firstTimeFlag = std::make_shared<bool>(true);

@@ -67,11 +67,8 @@ void TestTcp() {
 
 int main()
 {
-    std::vector<std::string> names;
-    names = { "Caique", "Laert", "Murilo", "Vitor" };
-
-    TrucoGame::Application applicationObject(names);
-    applicationObject.run();
+    TrucoGame::Controller::Application applicationObject;
+    applicationObject.drawGameScreen();
 
     TestTcp();
     return 0;

@@ -7,6 +7,26 @@ namespace TrucoGame {
 		// MODEL -> CONTROLLER -> VIEW
 		// ---------------------------
 
+		GMController::GMController(TrucoGameView* gameView, ClientGameManager* gameModel) :
+			gameView(gameView),
+			gameModel(gameModel)
+		{
+			gameModel->myTurnStarted = [this](bool canRequestTruco) { OnMyTurnStarted(canRequestTruco); };
+			gameModel->anotherPlayerPlayed = [this](Card card, int playerId, bool isCovered) { OnAnotherPlayerPlayed(card, playerId, isCovered); };
+			gameModel->roundStarted = [this](Card tableCard, std::vector<Card> handCards) { OnRoundStarted(tableCard, handCards); };
+			gameModel->elevenHandRoundStarted = [this](Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards) { OnElevenHandRoundStart(tableCard, handCards, partnerHandCards); };
+			gameModel->ironHandRoundStarted = [this](Card tableCard) { OnIronHandRoundStarted(tableCard); };
+			gameModel->roundEnded = [this](int winnerTeamId, int team0Score, int team1Score) { OnRoundEnded(winnerTeamId, team0Score, team1Score); };
+			gameModel->turnEnded = [this](int winnerTeamId, int winnerPlayerId) { OnTurnEnded(winnerTeamId, winnerPlayerId); };
+			gameModel->trucoAccepted = [this](int currentStakes) { OnTrucoAccepted(currentStakes); };
+			gameModel->trucoRefused = [this]() { OnTrucoRefused(); };
+			gameModel->trucoRequested = [this](int requesterId, int currentStakes) { OnTrucoResquested(requesterId, currentStakes); };
+			gameModel->gameWon = [this]() { OnGameWon(); };
+			gameModel->gameLost = [this]() { OnGameLost(); };
+
+			//gameView->userRequestedTruco = [this]() { UserRequestedTruco() };
+		}
+
 		void GMController::OnMyTurnStarted(bool canRequestTruco){
 			// TODO: enable card buttons and truco button if needed
 		}
