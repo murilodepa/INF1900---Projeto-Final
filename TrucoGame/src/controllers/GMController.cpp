@@ -103,11 +103,22 @@ namespace TrucoGame {
 
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
 			this->currentTurn = 0;
+
+			roundAndTurnMutex.lock();
+			roundAndTurnState = RoundAndTurnState::RoundEnded;
+			roundAndTurnMutex.unlock();
 			// TODO: update score on the screen, clear cards from hands
 		}
 
 		void GMController::OnTurnEnded(int winnerTeamId, int winnerPlayerId){
 			this->currentTurn++;
+			roundAndTurnMutex.lock();
+			roundAndTurnState = RoundAndTurnState::TurnEnded;
+			roundAndTurnMutex.unlock();
+
+			std::chrono::seconds sleepDuration(2);
+			std::this_thread::sleep_for(sleepDuration);
+
 			// TODO: update score on the screen (the circles) and clear cards from table to the next turn
 		}
 
