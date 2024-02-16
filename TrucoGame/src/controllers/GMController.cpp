@@ -149,6 +149,13 @@ namespace TrucoGame {
 		}
 
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
+			if (IsMyTeam(winnerTeamId)) {
+				gameView->notifyPlayer("Vencemos essa rodada!");
+			}
+			else {
+				gameView->notifyPlayer("Perdemos essa rodada.");
+			}
+
 			this->currentTurn = 0;
 
 			gameScoreMutex.lock();
@@ -211,6 +218,7 @@ namespace TrucoGame {
 		// ---------------------------
 
 		void GMController::UserRequestedTruco() {
+			gameView->notifyPlayer("TRUCO!");
 			gameModel->RequestTruco();
 		}
 		void GMController::UserSelectedCard(int cardIndex, bool isCovered) {
