@@ -2,10 +2,12 @@
 
 DistributeCardsToPlayersState distributeCardsToPlayersState;
 IsPlayerTurnToPlayState isPlayerTurnToPlayState;
-RoundAndTurnState roundAndTurnState;
 DiscardCardState discardCardState;
 CardState cardState;
 PlayerIdState playerIdState;
 CardStruct cardStructState;
+TrucoRoundState trucoRoundState;
+TurnState turnState;
 RoundState roundState;
 std::vector<sf::Sprite*> playersCardsOnTheTable;
+

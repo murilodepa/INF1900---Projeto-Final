@@ -40,6 +40,33 @@ namespace TrucoGame {
 		}
 
 		void GMController::OnAnotherPlayerPlayed(Card card, int playerId, bool isCovered) {
+			// Blocking wait state
+			
+			while (true) 
+			{
+				roundMutex.lock();
+				if(roundState == RoundState::RoundRunning) 
+				{
+					roundMutex.unlock();
+					break;
+				}
+				roundMutex.unlock();
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+
+			// Blocking wait state
+			while (true)
+			{
+				turnMutex.lock();
+				if (turnState == TurnState::TurnRunning)
+				{
+					turnMutex.unlock();
+					break;
+				}
+				turnMutex.unlock();
+				std::this_thread::sleep_for(std::chrono::seconds(1));
+			}
+			
 			int viewPlayerId = ModelIdToViewId(playerId);
 
 			CardStruct cardStructLocal = CardIdToCardView(card);
@@ -78,10 +105,6 @@ namespace TrucoGame {
 			gameView->scoreView.changeRoundScoreText(int(1));
 			roundScoreMutex.unlock();
 
-			roundAndTurnMutex.lock();
-			roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
-			roundAndTurnMutex.unlock();
-
 			CardStruct cardStruct = CardIdToCardView(tableCard);
 			std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
 			gameView->setTexturePathToturnedFaceUpCard(texturePathToturnedFaceUpCard);
@@ -102,13 +125,23 @@ namespace TrucoGame {
 			roundMutex.unlock();
 			*/
 			
-			roundMutex.lock();
-			roundState = RoundState::NormalRound;
-			roundMutex.unlock();
+			trucoRoundMutex.lock();
+			trucoRoundState = TrucoRoundState::NormalRound;
+			trucoRoundMutex.unlock();
 			
-			distributeCardsToPlayersMutex.lock();
-			distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
-			distributeCardsToPlayersMutex.unlock();
+			roundMutex.lock();
+			if (roundState == RoundState::RoundReadyToStart)
+			{
+				distributeCardsToPlayersMutex.lock();
+				distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
+				distributeCardsToPlayersMutex.unlock();
+				roundState = RoundState::RoundRunning;
+				turnState = TurnState::TurnRunning;
+			}
+			//if (roundAndTurnState != RoundAndTurnState::RoundEnded) {
+			//	roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
+			//}
+			roundMutex.unlock();
 		}
 		void GMController::OnElevenHandRoundStart(Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards){
 			// TODO: show partner cards, show hand cards (keep card buttons disabled)
@@ -130,9 +163,9 @@ namespace TrucoGame {
 			}
 			gameView->setTexturePathToPartnerHandCards(texturePathToCards);
 			
-			roundMutex.lock();
-			roundState = RoundState::ElevenHandRound;
-			roundMutex.unlock();
+			trucoRoundMutex.lock();
+			trucoRoundState = TrucoRoundState::ElevenHandRound;
+			trucoRoundMutex.unlock();
 
 			distributeCardsToPlayersMutex.lock();
 			distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
@@ -143,9 +176,9 @@ namespace TrucoGame {
 		}
 		void GMController::OnIronHandRoundStarted(Card tableCard){
 			// TODO: just show table card (keep card buttons disabled)
-			roundMutex.lock();
-			roundState = RoundState::IronHandRound;
-			roundMutex.unlock();
+			trucoRoundMutex.lock();
+			trucoRoundState = TrucoRoundState::IronHandRound;
+			trucoRoundMutex.unlock();
 		}
 
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
@@ -162,24 +195,43 @@ namespace TrucoGame {
 			gameView->scoreView.changeGameScoreText(IsMyTeam(0) ? team0Score : team1Score, IsMyTeam(1) ? team0Score : team1Score);
 			gameScoreMutex.unlock();
 
-			roundAndTurnMutex.lock();
-			roundAndTurnState = RoundAndTurnState::RoundEnded;
-			roundAndTurnMutex.unlock();
-			//asdfasdf
+			roundMutex.lock();
+			roundState = RoundState::RoundEnded;
+			roundMutex.unlock();
+			
 			std::chrono::seconds sleepDuration(2);
 			std::this_thread::sleep_for(sleepDuration);
 
+			//std::chrono::seconds sleepDuration(5);
+			//std::this_thread::sleep_for(sleepDuration);
 			// TODO: update score on the screen, clear cards from hands
 		}
 
 		void GMController::OnTurnEnded(int winnerTeamId, int winnerPlayerId){
-			this->currentTurn++;
-			roundAndTurnMutex.lock();
-			roundAndTurnState = RoundAndTurnState::TurnEnded;
-			roundAndTurnMutex.unlock();
 
-			std::chrono::seconds sleepDuration(2);
-			std::this_thread::sleep_for(sleepDuration);
+			turnMutex.lock();
+			turnState = TurnState::TurnEnded;
+			turnMutex.unlock();
+
+			if (winnerTeamId == -1) {
+				gameScoreMutex.lock();
+				gameView->scoreView.changeColor(currentTurn, 0);
+				gameScoreMutex.unlock();
+			}
+			else if (IsMyTeam(winnerTeamId)) {
+				gameScoreMutex.lock();
+				gameView->scoreView.changeColor(currentTurn, 1);
+				gameScoreMutex.unlock();
+			}
+			else {
+				gameScoreMutex.lock();
+				gameView->scoreView.changeColor(currentTurn, -1);
+				gameScoreMutex.unlock();
+			}
+			this->currentTurn++;
+
+			//std::chrono::seconds sleepDuration(5);
+			//std::this_thread::sleep_for(sleepDuration);
 			//scoreView.updateScoreColor();
 
 			// TODO: update score on the screen (the circles) and clear cards from table to the next turn

@@ -57,12 +57,12 @@ namespace TrucoGame {
 			Vector2f roundScoreTextPosition;
 			float spacingScoreTextWidth;
 
-			std::vector<sf::CircleShape> ourCircles;
-			std::vector<sf::CircleShape> theirCircles;
-
 			TextView *roundScoreText, *weScoreText, *theyScoreText, *weText, *theyText;
 			Font textsFont;
 			size_t numRounds = 3;
+
+			std::vector<sf::CircleShape> ourCircles;
+			std::vector<sf::CircleShape> theirCircles;
 
 			void createScoreRectangle(float rectangleScoreXPosition, float rectangleScoreYPosition, 
 				Vector2f& scoreRectangleDimensions, std::shared_ptr<float>& rectangleScoreWidth, 
@@ -76,6 +76,9 @@ namespace TrucoGame {
 		public:
 			ScoreView(const Vector2f& windowSize);
 			~ScoreView();
+
+			void changeColor(int turn, int vefiryColor);
+
 
 			RectangleShape getScoreRectangle();
 			RectangleShape getRectangleDivWidth();

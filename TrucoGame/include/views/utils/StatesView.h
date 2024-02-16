@@ -11,12 +11,21 @@ enum class DistributeCardsToPlayersState {
 };
 extern DistributeCardsToPlayersState distributeCardsToPlayersState;
 
-enum class RoundAndTurnState {
-    RoundEnded,
+enum class TurnState {
+    TurnRunning,
     TurnEnded,
-    RoundAndTurnRunning
+    ReturnCardsToDeck,
+    DiscardCard
 };
-extern RoundAndTurnState roundAndTurnState;
+extern TurnState turnState;
+
+enum class RoundState {
+    RoundReadyToStart,
+    RoundEnded,
+    RoundRunning,
+    DistribuiteCards
+};
+extern RoundState roundState;
 
 enum class DiscardCardState {
     WaitingPlayer,
@@ -45,12 +54,12 @@ enum class IsPlayerTurnToPlayState {
 };
 extern IsPlayerTurnToPlayState isPlayerTurnToPlayState;
 
-enum class RoundState {
+enum class TrucoRoundState {
     NormalRound,
     ElevenHandRound,
     IronHandRound
 };
-extern RoundState roundState;
+extern TrucoRoundState trucoRoundState;
 
 extern std::vector<sf::Sprite*> playersCardsOnTheTable;
 #endif // STATE_VIEW_H

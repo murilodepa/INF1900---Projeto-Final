@@ -83,6 +83,7 @@ namespace TrucoGame {
             void setTexturePathToPartnerHandCards(std::vector<std::string>& texturePathToPartnerHandCards);
             void setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard);
             void discardCard();
+            void verifyRoundEnded();
             void notifyPlayer(std::string message);
 
             TableView tableView;

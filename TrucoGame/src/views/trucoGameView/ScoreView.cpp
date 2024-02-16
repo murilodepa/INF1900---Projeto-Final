@@ -77,6 +77,20 @@ TrucoGame::View::ScoreView::~ScoreView()
 {
 }
 
+void TrucoGame::View::ScoreView::changeColor(int turn, int vefiryColor)
+{
+    if (vefiryColor == 0) {
+        ourCircles[turn].setFillColor(Color::Yellow);
+        theirCircles[turn].setFillColor(Color::Yellow);
+    } else if (vefiryColor == 1) {
+        ourCircles[turn].setFillColor(Color::Green);
+        theirCircles[turn].setFillColor(Color::Red);
+    }
+    else {
+        ourCircles[turn].setFillColor(Color::Red);
+        theirCircles[turn].setFillColor(Color::Green);
+    }
+}
 RectangleShape TrucoGame::View::ScoreView::getScoreRectangle()
 {
     return scoreRectangle;
