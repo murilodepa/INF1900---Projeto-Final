@@ -107,6 +107,20 @@ int TrucoGame::View::TableView::trucoReceived(int trucoValue) {
 	}
 }
 
+bool TrucoGame::View::TableView::elevenHandReceived() {
+	std::string popupMessage = "Mão de 11!";
+	int result = MessageBoxA(NULL, "Aceita o jogo?", popupMessage.c_str(), MB_YESNO);
+
+	switch (result)
+	{
+	case IDYES:
+		return 0;
+	case IDNO:
+		//ElevenHand was not accepted
+		return 1;
+	}
+}
+
 void TrucoGame::View::TableView::setTurnedFaceUpCardTexture(std::string& texturePath)
 {
 	this->turnedFaceUpCardTexture = UtilsView::loadTexture(texturePath);

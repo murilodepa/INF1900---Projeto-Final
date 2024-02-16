@@ -136,6 +136,9 @@ namespace TrucoGame {
 			distributeCardsToPlayersMutex.lock();
 			distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
 			distributeCardsToPlayersMutex.unlock();
+
+			bool result = gameView->tableView.elevenHandReceived();
+			UserRespondedElevenHand(result);
 		}
 		void GMController::OnIronHandRoundStarted(Card tableCard){
 			// TODO: just show table card (keep card buttons disabled)

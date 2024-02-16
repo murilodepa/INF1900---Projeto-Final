@@ -64,6 +64,7 @@ namespace TrucoGame {
             void setTurnedFaceUpCardTexture(std::string& texturePath);
             void setTextureFromPath(const std::string& texturePath);
             int TrucoGame::View::TableView::trucoReceived(int trucoValue);
+            bool TrucoGame::View::TableView::elevenHandReceived();
 
             CardView* getCardTurnedFaceUp();
             CardView* getDeck();
