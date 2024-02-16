@@ -60,7 +60,7 @@ namespace TrucoGame {
 			std::vector<sf::CircleShape> ourCircles;
 			std::vector<sf::CircleShape> theirCircles;
 
-			TextView *roundScoreText, *weText, *theyText;
+			TextView *roundScoreText, *weScoreText, *theyScoreText, *weText, *theyText;
 			Font textsFont;
 			size_t numRounds = 3;
 
@@ -84,10 +84,14 @@ namespace TrucoGame {
 			CircleShape getOurCircles(size_t index);
 			CircleShape getTheirCircles(size_t index);
 
+
 			TextView getRoundScoreText();
+			TextView getWeScoreText();
+			TextView getTheyScoreText();
 			TextView getWeText();
 			TextView getTheyText();
 
+			void changeGameScoreText(int team0Score, int team1Score);
 			void changeRoundScoreText(int newRoundScore); // TODO Enum 1 - 2 -3
 			void updateScoreColor();
 		};

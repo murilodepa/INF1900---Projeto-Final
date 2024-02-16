@@ -141,6 +141,9 @@ void TrucoGame::View::TrucoGameView::drawScore(GraphicManager* pGraphicManager)
 	pGraphicManager->drawElement(scoreView.getRoundScoreText());
 	roundScoreMutex.unlock();
 
+	pGraphicManager->drawElement(scoreView.getWeScoreText());
+	pGraphicManager->drawElement(scoreView.getTheyScoreText());
+	
 	pGraphicManager->drawElement(scoreView.getWeText());
 	pGraphicManager->drawElement(scoreView.getTheyText());
 }
