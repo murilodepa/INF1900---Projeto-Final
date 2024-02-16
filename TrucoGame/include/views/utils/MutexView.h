@@ -11,6 +11,7 @@ extern std::mutex discardCardMutex;
 extern std::mutex cardMutex;
 extern std::mutex playerIdMutex;
 extern std::mutex cardStructMutex;
+extern std::mutex gameScoreMutex;
 extern std::mutex roundScoreMutex;
 extern std::mutex roundMutex;
 extern std::mutex changePlayersCardsOnTheTableMutex;

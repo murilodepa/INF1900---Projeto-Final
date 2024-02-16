@@ -11,7 +11,7 @@ void TrucoGame::View::ScoreView::createScoreRectangle(float scoreRectangleXPosit
 
     float rectangleScoreWidth = scoreRectangle.getGlobalBounds().width;
     *rectangleScoreHeight = scoreRectangle.getGlobalBounds().height;
-    *textsWidth = rectangleScoreWidth / 5;
+    *textsWidth = rectangleScoreWidth / 6;
     *rectangleWidthToCircles = rectangleScoreWidth - *textsWidth;
 
     rectangleDivWidth.setSize(sf::Vector2f(*rectangleWidthToCircles, BORDER_THICKNESS));
@@ -107,6 +107,16 @@ TrucoGame::View::TextView TrucoGame::View::ScoreView::getRoundScoreText()
     return *roundScoreText;
 }
 
+TrucoGame::View::TextView TrucoGame::View::ScoreView::getWeScoreText()
+{
+    return *weScoreText;
+}
+
+TrucoGame::View::TextView TrucoGame::View::ScoreView::getTheyScoreText()
+{
+    return *theyScoreText;
+}
+
 TrucoGame::View::TextView TrucoGame::View::ScoreView::getWeText()
 {
     return *weText;
@@ -115,6 +125,12 @@ TrucoGame::View::TextView TrucoGame::View::ScoreView::getWeText()
 TrucoGame::View::TextView TrucoGame::View::ScoreView::getTheyText()
 {
     return *theyText;
+}
+
+void TrucoGame::View::ScoreView::changeGameScoreText(int team0Score, int team1Score)
+{
+    weScoreText->setString(std::to_string(team0Score));
+    theyScoreText->setString(std::to_string(team1Score));
 }
 
 void TrucoGame::View::ScoreView::changeRoundScoreText(int newRoundScore)
@@ -142,6 +158,8 @@ void TrucoGame::View::ScoreView::setTextsFont(const std::string& fontPath)
 void TrucoGame::View::ScoreView::initializeTexts(const float scoreRectangleWidth)
 {
     roundScoreText = new TextView("1", CALCULATE_SCORE_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
+    weScoreText = new TextView("0", CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
+    theyScoreText = new TextView("0", CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
     weText = new TextView("Nós", CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
     theyText = new TextView("Eles", CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
 }
@@ -150,6 +168,8 @@ void TrucoGame::View::ScoreView::initializeTexts(const float scoreRectangleWidth
 void TrucoGame::View::ScoreView::setTextsPosition(float scoreRectangleXPosition, float scoreRectangleYPosition, float rectangleWidthToCircles, float rectangleScoreHeight, float textsWidth)
 {
     spacingScoreTextWidth = (textsWidth - roundScoreText->getTextWidth()) / 2;
+    float spacingWeScoreTextWidth = (textsWidth - weScoreText->getTextWidth()) / 2;
+    float spacingTheyScoreTextWidth = (textsWidth - theyScoreText->getTextWidth()) / 2;
     float spacingWeTextWidth = (textsWidth - weText->getTextWidth()) / 2;
     float spacingTheyTextWidth = (textsWidth - theyText->getTextWidth()) / 2;
 
@@ -157,11 +177,17 @@ void TrucoGame::View::ScoreView::setTextsPosition(float scoreRectangleXPosition,
     float rectangleToWeAndTheyHeight = (rectangleDivWidthYPosition - scoreRectangleYPosition);
 
     float spacingScoreTextHeight = (rectangleScoreHeight - roundScoreText->getTextHeight()) / 2 - 10;
+    float spacingWeScoreTextHeight = (rectangleToWeAndTheyHeight - weScoreText->getTextHeight()) / 2 - 6;
+    float spacingTheyScoreTextHeight = (rectangleToWeAndTheyHeight - theyScoreText->getTextHeight()) / 2 - 6;
     float spacingWeTextHeight = (rectangleToWeAndTheyHeight - weText->getTextHeight()) / 2 - 6;
     float spacingTheyTextHeight = (rectangleToWeAndTheyHeight - theyText->getTextHeight()) / 2 - 6;
        
-    roundScoreTextPosition = Vector2f(rectangleDivHeight.getPosition().x + spacingScoreTextWidth, scoreRectangleYPosition + spacingScoreTextHeight);
+    roundScoreTextPosition = Vector2f(rectangleDivHeight.getPosition().x + spacingScoreTextWidth + spacingScoreTextWidth, scoreRectangleYPosition + spacingScoreTextHeight);
     roundScoreText->setPosition(roundScoreTextPosition);
+
+    weScoreText->setPosition(Vector2f(rectangleDivHeight.getPosition().x + spacingScoreTextWidth, scoreRectangleYPosition + spacingWeScoreTextHeight));
+    theyScoreText->setPosition(Vector2f(rectangleDivHeight.getPosition().x + spacingScoreTextWidth, rectangleDivWidthYPosition + spacingTheyScoreTextHeight));
+
     weText->setPosition(Vector2f(scoreRectangleXPosition + spacingWeTextWidth, scoreRectangleYPosition + spacingWeTextHeight));
     theyText->setPosition(Vector2f(scoreRectangleXPosition + spacingTheyTextWidth, rectangleDivWidthYPosition + spacingTheyTextHeight));
 }

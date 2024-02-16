@@ -9,6 +9,7 @@ std::mutex discardCardMutex;
 std::mutex cardMutex;
 std::mutex playerIdMutex;
 std::mutex cardStructMutex;
+std::mutex gameScoreMutex;
 std::mutex roundScoreMutex;
 std::mutex roundMutex;
 std::mutex changePlayersCardsOnTheTableMutex;

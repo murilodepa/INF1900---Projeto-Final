@@ -151,10 +151,14 @@ namespace TrucoGame {
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
 			this->currentTurn = 0;
 
+			gameScoreMutex.lock();
+			gameView->scoreView.changeGameScoreText(IsMyTeam(0) ? team0Score : team1Score, IsMyTeam(1) ? team0Score : team1Score);
+			gameScoreMutex.unlock();
+
 			roundAndTurnMutex.lock();
 			roundAndTurnState = RoundAndTurnState::RoundEnded;
 			roundAndTurnMutex.unlock();
-
+			//asdfasdf
 			std::chrono::seconds sleepDuration(2);
 			std::this_thread::sleep_for(sleepDuration);
 
