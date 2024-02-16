@@ -22,8 +22,7 @@ void TrucoGame::View::TrucoGameView::initialize(const std::vector<std::string>& 
 		float cardsSpacing = windowSize.x * CALCULATE_CARDS_SPACING;
 		setCardPositionsOfThePlayers(windowSize.x, windowSize.y, playerCards.cardsInHands[0][0].getCardWidth(), playerCards.cardsInHands[0][0].getCardHeight(), cardsSpacing, tableAndCardsSpacing);
 	}
-	// TODO - Remove mocked names
-	//names = { "Caique", "Laert", "Murilo", "Vitor" };
+
 	float textAndTableSpacing = windowSize.y * CALCULATE_TEXT_AND_TABLE_SPACING;
 	setNamesPositions(windowSize.x, windowSize.y, textAndTableSpacing);
 	setPositionToDiscardCards();
@@ -120,7 +119,11 @@ void TrucoGame::View::TrucoGameView::initializeTrucoButton() {
 	trucoButtonPosition = Vector2f(0.4f * windowSize.x, 0.4f * windowSize.y);
 	trucoButtonDimensions = Vector2f(0.1f * windowSize.x, 0.1f * windowSize.y);
 	//	refuseTrucoButton = new RefuseTrucoButton(trucoButtonPosition.x, trucoButtonPosition.y, trucoButtonDimensions.x, trucoButtonDimensions.y);
-
+	trucoButton->trucoButtonClick = [this]() 
+	{
+	if (trucoEventHandler)
+		trucoEventHandler();
+	};
 }
 
 void TrucoGame::View::TrucoGameView::drawScore(GraphicManager* pGraphicManager)
@@ -319,7 +322,13 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		drawPlayerNames(pGraphicManager);
 		drawScore(pGraphicManager);
 		checkIftheCardHasBeenDiscardedAndDraw(pGraphicManager, mousePosView);
-		drawTrucoButton(pGraphicManager, mousePosView);
+		
+		isPlayerTurnToPlayMutex.lock();
+		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn /* TODO - Verificar se user pode trucar */ ) {
+			drawTrucoButton(pGraphicManager, mousePosView);
+		}
+		isPlayerTurnToPlayMutex.unlock();
+
 		verifyIfPlayerDiscardedCard();
 	}
 }

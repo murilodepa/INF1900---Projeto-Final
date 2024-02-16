@@ -2,11 +2,11 @@
 
 void TrucoGame::View::TrucoButton::onPressLeft()
 {
+	trucoButtonClick();
 }
 
 void TrucoGame::View::TrucoButton::onPressRight()
 {
-	// TODO - Pedir Truco
 }
 
 void TrucoGame::View::TrucoButton::onHover() {

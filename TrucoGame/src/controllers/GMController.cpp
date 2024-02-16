@@ -27,6 +27,7 @@ namespace TrucoGame {
 			gameModel->gameLost = [this]() { OnGameLost(); };
 
 			gameView->userSelectCard = [this](int index, bool covered) { UserSelectedCard(index, covered); };
+			gameView->trucoEventHandler = [this]() { UserRequestedTruco(); };
 		}
 
 		void GMController::OnMyTurnStarted(bool canRequestTruco){
@@ -36,6 +37,7 @@ namespace TrucoGame {
 			isPlayerTurnToPlayState = IsPlayerTurnToPlayState::PlayerTurn;
 			isPlayerTurnToPlayMutex.unlock();
 		}
+
 		void GMController::OnAnotherPlayerPlayed(Card card, int playerId, bool isCovered) {
 			int viewPlayerId = ModelIdToViewId(playerId);
 
@@ -131,6 +133,9 @@ namespace TrucoGame {
 		void GMController::OnTrucoResquested(int requesterId, int currentStakes){
 			// TODO: show popup on the screen to responde [yes = 0, no = 1, raise = 2]
 			// where the response should somehow call for UserRespondedTruco
+
+			int result = gameView->tableView.trucoReceived(currentStakes);
+			UserRespondedTruco(result);
 		}
 
 		void GMController::OnGameWon(){

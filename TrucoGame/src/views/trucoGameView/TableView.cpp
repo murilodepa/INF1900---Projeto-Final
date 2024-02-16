@@ -92,8 +92,8 @@ void TrucoGame::View::TableView::moveTurnUpCardToDeck(const float cardScale, flo
 	delete animationThread;
 }
 
-int TrucoGame::View::TableView::trucoReceived(std::string trucoValue) {
-	std::string popupMessage = "Truco de " + trucoValue + "!";
+int TrucoGame::View::TableView::trucoReceived(int trucoValue) {
+	std::string popupMessage = "Truco de " + std::to_string(trucoValue) + "!";
 	int result = MessageBoxA(NULL, "Aceita o truco?", popupMessage.c_str(), MB_YESNO);
 
 	switch (result)
@@ -111,10 +111,10 @@ int TrucoGame::View::TableView::trucoReceived(std::string trucoValue) {
 			break;
 		}
 
-		return 1;
+		return 0;
 	case IDNO:
 		//Truco was not accepted
-		return 0;
+		return 1;
 	}
 }
 

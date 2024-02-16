@@ -2,6 +2,8 @@
 #define BUTTON_BASE_H
 
 #include <SFML/Graphics.hpp>
+#include <functional>
+
 using namespace sf;
 
 enum button_states { BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED_LEFT, BTN_PRESSED_RIGHT};

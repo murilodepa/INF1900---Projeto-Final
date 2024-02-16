@@ -15,6 +15,8 @@
 #include "../packets/ElevenHandPacket.h"
 #include "../packets/PlayerPlayPacket.h"
 #include "../packets/ElevenHandResponsePacket.h"
+#include "../packets/EndRoundPacket.h"
+#include "../packets/EndTurnPacket.h"
 
 namespace TrucoGame {
 

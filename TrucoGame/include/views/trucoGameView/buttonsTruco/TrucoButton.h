@@ -12,6 +12,8 @@
 
 namespace TrucoGame {
     namespace View {
+        typedef std::function<void()> TrucoButtonClickEventHandler;
+
         class TrucoButton : public ButtonBase {
 
         private:
@@ -32,6 +34,7 @@ namespace TrucoGame {
             void setIsButtonAvailable(bool isButtonAvailable);
 
             TextView getText();
+            TrucoButtonClickEventHandler trucoButtonClick;
         };
     }
 }

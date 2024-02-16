@@ -36,10 +36,10 @@ using namespace sf;
 namespace TrucoGame {
     namespace View {
         typedef std::function<void(int, bool)> SelectCardEventHandler;
+        typedef std::function<void()> TrucoEventHandler;
 
         class TrucoGameView {
         private:
-            TableView tableView;
             ScoreView scoreView;
 
             TrucoButton* trucoButton;
@@ -85,7 +85,10 @@ namespace TrucoGame {
             void discardCard();
             void endTurnAndReturnCardsToDeck();
 
+            TableView tableView;
+
             SelectCardEventHandler userSelectCard;
+            TrucoEventHandler trucoEventHandler;
         };
     }
 }

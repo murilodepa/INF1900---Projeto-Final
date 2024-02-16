@@ -86,7 +86,11 @@ namespace TrucoGame {
         }
 
         Packet* AIPlayer::WaitForPacket() {
-            std::chrono::seconds sleepDuration(1);
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> distrib(2, 5);
+            int randomIndex = distrib(gen);
+            std::chrono::seconds sleepDuration(randomIndex);
             std::this_thread::sleep_for(sleepDuration);
             return nextPlay;
         }

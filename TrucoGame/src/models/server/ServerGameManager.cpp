@@ -2,6 +2,7 @@
 #include <iostream>
 
 
+
 #define NUM_OF_PLAYERS 4
 #define NUM_OF_HUMANS 1
 #define DEFAULT_PORT 59821
@@ -111,6 +112,9 @@ namespace TrucoGame {
 
         waitForPlayerPacket:
             Packet* packet = clients[currentPlayer]->WaitForPacket();
+            if (!packet) {
+                goto    waitForPlayerPacket;
+            }
             if (packet->packetType == PacketType::PlayerCard) {
                 CardPacket cardPacket(packet->payload);
                 std::cout << cardPacket.playerId << ": " << "[" << cardPacket.card.getValue() << " " << cardPacket.card.getSuit() << "] | ";
@@ -198,6 +202,11 @@ namespace TrucoGame {
             int turnWinner = table.CalculateWinner();
             roundWinner = score.updateTurnWon(turnWinner % 2);
             
+            for (int i = 0; i < clients.size(); i++) {
+                EndTurnPacket endTurnPacket(turnWinner % 2, turnWinner);
+                clients[i]->Send(&endTurnPacket);
+            }
+
             nextTurnPlayer = (turnWinner != -1) ? turnWinner : (nextTurnPlayer + 1) % 4;
 
             table.playedCards.clear();
@@ -214,6 +223,12 @@ namespace TrucoGame {
             nextRoundPlayer = (nextRoundPlayer + 1) % 4;
             lastToRequestTruco = -1;
             deck.reset();
+
+            for (int i = 0; i < clients.size(); i++) {
+                EndRoundPacket endRoundPacket(roundWinner, score.getStakes(), score.team0GameScore, score.team1GameScore);
+                clients[i]->Send(&endRoundPacket);
+            }
+
             score.resetRound();
 
             std::cout << "========== ROUND ENDED ========== ";

@@ -4,8 +4,6 @@
 #include "../../../../include/views/button/ButtonBase.h"
 #include "../../utils/UtilsView.h"
 
-#include <functional>
-
 namespace TrucoGame {
     namespace View {
 
