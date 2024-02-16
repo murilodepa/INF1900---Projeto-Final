@@ -4,7 +4,7 @@
 
 
 #define NUM_OF_PLAYERS 4
-#define NUM_OF_HUMANS 2
+#define NUM_OF_HUMANS 1
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {

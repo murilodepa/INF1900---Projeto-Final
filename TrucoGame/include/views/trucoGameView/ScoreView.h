@@ -54,6 +54,9 @@ namespace TrucoGame {
 			RectangleShape rectangleDivWidth;
 			RectangleShape rectangleDivHeight;
 
+			Vector2f roundScoreTextPosition;
+			float spacingScoreTextWidth;
+
 			std::vector<sf::CircleShape> ourCircles;
 			std::vector<sf::CircleShape> theirCircles;
 
@@ -86,6 +89,7 @@ namespace TrucoGame {
 			TextView getTheyText();
 
 			void changeRoundScoreText(int newRoundScore); // TODO Enum 1 - 2 -3
+			void updateScoreColor();
 		};
 	}
 }

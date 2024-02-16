@@ -15,6 +15,7 @@ void TrucoGame::View::TrucoGameView::initialize(const std::vector<std::string>& 
 	cardButtons.resize(CARDS_IN_HAND);
 	positionToDiscardCards.resize(NUM_PLAYERS);
 	texturePathToMainPlayerCards.resize(CARDS_IN_HAND);
+	texturePathToPartnerHandCards.resize(CARDS_IN_HAND);
 	//playersCardsOnTable.resize(NUM_PLAYERS);
 
 	if (playerCards.cardsInHands != nullptr) {
@@ -136,12 +137,10 @@ void TrucoGame::View::TrucoGameView::drawScore(GraphicManager* pGraphicManager)
 		pGraphicManager->drawElement(scoreView.getOurCircles(i));
 		pGraphicManager->drawElement(scoreView.getTheirCircles(i));
 	}
-
 	roundScoreMutex.lock();
-	scoreView.changeRoundScoreText(int(roundScoreState));
+	pGraphicManager->drawElement(scoreView.getRoundScoreText());
 	roundScoreMutex.unlock();
 
-	pGraphicManager->drawElement(scoreView.getRoundScoreText());
 	pGraphicManager->drawElement(scoreView.getWeText());
 	pGraphicManager->drawElement(scoreView.getTheyText());
 }
@@ -194,9 +193,10 @@ void TrucoGame::View::TrucoGameView::checkIftheCardHasBeenDiscardedAndDraw(Graph
 	}
 }
 
-
 void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 {
+
+
 	if (playerCards.cardsInHands != nullptr) {
 		float tableAndCardsSpacing = windowSize.y * CALCULATE_TABLE_AND_CARDS_SPACING;
 		float cardsSpacing = windowSize.x * CALCULATE_CARDS_SPACING;
@@ -211,22 +211,68 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 			Texture* cardTexture = playerCards.getCardTexture(player, card);
 
 			if (player == 0) {
-				*cardTexture = UtilsView::loadTextureBack();
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), animationSpeed));
+				roundMutex.lock();
+				if (roundState != RoundState::ElevenHandRound) {
+					*cardTexture = UtilsView::loadTextureBack();
+					animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo, 
+						std::ref(*cardView), 
+						players[player]->getCardPosition(card), 
+						animationSpeed));
+				}
+				else {
+					Vector2f destinationPosition = players[player]->getCardPosition(card);
+					animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo,
+						std::ref(*cardView), 
+						cardTexture, 
+						texturePathToPartnerHandCards[card], 
+						Vector2f(destinationPosition.x + cardView->getCardWidth(), destinationPosition.y), 
+						animationSpeed, 
+						cardScale));
+				}
+				roundMutex.unlock();
 			}
 			else if (player == 2) {
-				std::string test = texturePathToMainPlayerCards[0];
 				Vector2f destinationPosition = players[player]->getCardPosition(card);
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo,
-					std::ref(*cardView), cardTexture, texturePathToMainPlayerCards[card], destinationPosition, animationSpeed, cardScale));
-			
+				roundMutex.lock();
+				if (roundState != RoundState::IronHandRound) {
+					animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndFlipCardTurnedFaceUpTo,
+						std::ref(*cardView), cardTexture, texturePathToMainPlayerCards[card], destinationPosition, animationSpeed, cardScale));
+				}
+				else {
+					*cardTexture = UtilsView::loadTextureBack();
+					animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo,
+						std::ref(*cardView),
+						Vector2f(destinationPosition.x - cardView->getCardWidth(), destinationPosition.y),
+						animationSpeed));
+				}
+				roundMutex.unlock();
+
 				float width = cardView->getCardWidth();
 
 				cardButtons[card] = new CardButton(destinationPosition.x - width, destinationPosition.y, width, cardView->getCardHeight(), COLOR_CARD_HOVER, cardView, windowSize, animationSpeed, positionToDiscardCards[2], cardTexture, card);
 				cardButtons[card]->setAreCardsInTheHandsOfThePlayer(true);
-				cardButtons[card]->cardButtonClick = [this](int index, bool covered) { 
-				if(userSelectCard)
-					userSelectCard(index, covered); 
+				cardButtons[card]->cardButtonClick = [this](Sprite* card, Vector2f discardOnTheTablePosition, int index, bool covered)
+				{
+						std::thread* animationThread;
+
+						animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardMainPlayerCard,
+							std::ref(*card),
+							discardOnTheTablePosition,
+							90.0f,
+							animationSpeed,
+							deckPosition,
+							playerCards.cardsInHands, 
+							tableView.getCardTurnedFaceUp(),
+							tableView.getDeck()
+						);
+
+						animationThread->detach();
+						delete animationThread;
+
+						playersCardsOnTheTable.emplace_back(card);
+
+						if(userSelectCard)
+							userSelectCard(index, covered); 
 				};
 			}
 			else {
@@ -235,41 +281,6 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 			}
 		}
 	}
-
-	for (std::thread* t : animationThreads) {
-		t->detach();
-		delete t;
-	}
-}
-
-void TrucoGame::View::TrucoGameView::testDiscartCards()
-{
-	
-	std::vector<std::thread*> animationThreads;
-
-	CardView* cardView = &playerCards.cardsInHands[0][1];
-	CardStruct cardStruct;
-	cardStruct.rank = CardRank::Ace;
-	cardStruct.suit = CardSuit::Hearts;
-	playersCardsOnTable.push_back(cardView);
-	//discardCard(0, 1, cardStruct);
-
-
-	cardView = &playerCards.cardsInHands[1][1];
-	playersCardsOnTable.push_back(cardView);
-	//discardCard(1, 1, cardStruct);
-
-
-	cardView = &playerCards.cardsInHands[2][1];
-	playersCardsOnTable.push_back(cardView);
-	//discardCard(2, 1, cardStruct);
-
-
-	cardView = &playerCards.cardsInHands[3][1];
-	playersCardsOnTable.push_back(cardView);
-	//discardCard(3, 1, cardStruct);
-
-
 
 	for (std::thread* t : animationThreads) {
 		t->detach();
@@ -288,6 +299,7 @@ TrucoGame::View::TrucoGameView::TrucoGameView(const Vector2f windowSize, const f
 	this->deckPosition = tableView.getDeckPosition();
 	this->deckRotation = tableView.getDeckRotation();
 	initialize(playerNames);
+
 }
 
 
@@ -342,6 +354,11 @@ void TrucoGame::View::TrucoGameView::setTexturePathToMainPlayerCards(std::vector
 	this->texturePathToMainPlayerCards = texturePathToMainPlayerCards;
 }
 
+void TrucoGame::View::TrucoGameView::setTexturePathToPartnerHandCards(std::vector<std::string>& texturePathToPartnerHandCards)
+{
+	this->texturePathToPartnerHandCards = texturePathToPartnerHandCards;
+}
+
 void TrucoGame::View::TrucoGameView::setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard)
 {
 	this->texturePathToturnedFaceUpCard = texturePathToturnedFaceUpCard;
@@ -373,25 +390,72 @@ void TrucoGame::View::TrucoGameView::discardCard()
 		CardView* cardView = &playerCards.cardsInHands[player][cardIndex];
 		std::thread* animationThread;
 
+		changePlayersCardsOnTheTableMutex.lock();
+		playersCardsOnTheTable.emplace_back(cardView);
+		changePlayersCardsOnTheTableMutex.unlock();
+
 		if (player == 3) {
-			animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, std::ref(*cardView), playerCards.getCardTexture(player, cardIndex), cardTexturePath, positionToDiscardCards[3], animationSpeed, cardScale, 0, playersCardsOnTable, deckPosition, playerCards.cardsInHands, tableView.getCardTurnedFaceUp(), tableView.getDeck());
+			animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, 
+				std::ref(*cardView), 
+				playerCards.getCardTexture(player, cardIndex), 
+				cardTexturePath, 
+				positionToDiscardCards[3], 
+				animationSpeed, 
+				cardScale, 
+				0, 
+				deckPosition, 
+				playerCards.cardsInHands, 
+				tableView.getCardTurnedFaceUp(), 
+				tableView.getDeck());
 		}  if (player == 0) {
-			animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, std::ref(*cardView), playerCards.getCardTexture(player, cardIndex), cardTexturePath, positionToDiscardCards[0], animationSpeed, cardScale, 90, playersCardsOnTable, deckPosition, playerCards.cardsInHands, tableView.getCardTurnedFaceUp(), tableView.getDeck());
+			
+			roundMutex.lock();
+			if (roundState != RoundState::ElevenHandRound) {
+				animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, 
+					std::ref(*cardView), 
+					playerCards.getCardTexture(player, cardIndex), 
+					cardTexturePath, 
+					positionToDiscardCards[0], 
+					animationSpeed, 
+					cardScale, 
+					90, 
+					deckPosition, 
+					playerCards.cardsInHands, 
+					tableView.getCardTurnedFaceUp(), 
+					tableView.getDeck());
+			}
+			else {
+				animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardMainPlayerCard, 
+					std::ref(*cardView), 
+					Vector2f(positionToDiscardCards[0].x, positionToDiscardCards[0].y - 1.5*cardView->getCardWidth()),
+					90.0f,
+					animationSpeed,
+					deckPosition, 
+					playerCards.cardsInHands, 
+					tableView.getCardTurnedFaceUp(), 
+					tableView.getDeck());
+			}
+			roundMutex.unlock();
 		}
 		else if (player == 1) {
 			Vector2f destinationPosition = Vector2f(positionToDiscardCards[1].x, positionToDiscardCards[1].y + cardView->getCardWidth());
-			animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, std::ref(*cardView), playerCards.getCardTexture(player, cardIndex), cardTexturePath, destinationPosition, animationSpeed, cardScale, 0, playersCardsOnTable, deckPosition, playerCards.cardsInHands, tableView.getCardTurnedFaceUp(), tableView.getDeck());
+			animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, 
+				std::ref(*cardView), 
+				playerCards.getCardTexture(player, cardIndex), 
+				cardTexturePath, 
+				destinationPosition, 
+				animationSpeed, 
+				cardScale, 
+				0, 
+				deckPosition, 
+				playerCards.cardsInHands, 
+				tableView.getCardTurnedFaceUp(), 
+				tableView.getDeck());
 		}
 
 		if (player != 2 && player != 0 && player != 1) {
 			animationThread->detach();
 			delete animationThread;
-		}
-
-
-		if (playersCardsOnTable.size() == NUM_PLAYERS) {
-			playersCardsOnTable.clear();
-			tableView.moveTurnUpCardToDeck(cardScale, animationSpeed);
 		}
 	}
 }

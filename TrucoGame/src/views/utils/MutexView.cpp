@@ -10,3 +10,5 @@ std::mutex cardMutex;
 std::mutex playerIdMutex;
 std::mutex cardStructMutex;
 std::mutex roundScoreMutex;
+std::mutex roundMutex;
+std::mutex changePlayersCardsOnTheTableMutex;

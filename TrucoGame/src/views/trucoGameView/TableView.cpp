@@ -81,17 +81,6 @@ void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, fl
 	delete animationThread;
 }
 
-void TrucoGame::View::TableView::moveTurnUpCardToDeck(const float cardScale, float speed)
-{	
-	std::thread* animationThread = new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo,
-		std::ref(*cardTurnedFaceUp), cardTurnedFaceUpAndDeck.deckPosition, cardTurnedFaceUpAndDeck.deckRotation, speed);
-
-	*texture = UtilsView::loadTextureBack();
-
-	animationThread->detach();
-	delete animationThread;
-}
-
 int TrucoGame::View::TableView::trucoReceived(int trucoValue) {
 	std::string popupMessage = "Truco de " + std::to_string(trucoValue) + "!";
 	int result = MessageBoxA(NULL, "Aceita o truco?", popupMessage.c_str(), MB_YESNO);

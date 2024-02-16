@@ -8,7 +8,10 @@ namespace TrucoGame {
 			Vector2f direction = destinationPosition - sprite.getPosition();
 			float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 
-			while (destinationPosition.x != sprite.getPosition().x && destinationPosition.y != sprite.getPosition().y) {
+			clock_t startTime = clock();
+
+			while (destinationPosition.x != sprite.getPosition().x && destinationPosition.y != sprite.getPosition().y 
+				&& (clock() - startTime) / CLOCKS_PER_SEC <= 5) {
 				direction = destinationPosition - sprite.getPosition();
 				if (std::abs(direction.x) > speed || std::abs(direction.y) > speed) {
 					distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -34,7 +37,10 @@ namespace TrucoGame {
 			float distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
 			float initialDistance = distance;
 
-			while (destinationPosition.x != sprite.getPosition().x || destinationPosition.y != sprite.getPosition().y || sprite.getRotation() != finalRotation) {
+			clock_t startTime = clock();
+
+			while (destinationPosition.x != sprite.getPosition().x || destinationPosition.y != sprite.getPosition().y || sprite.getRotation() != finalRotation
+				&& (clock() - startTime) / CLOCKS_PER_SEC <= 5) {
 				direction = destinationPosition - sprite.getPosition();
 				if (std::abs(direction.x) > speed || std::abs(direction.y) > speed) {
 					distance = std::sqrt(direction.x * direction.x + direction.y * direction.y);
@@ -132,7 +138,7 @@ namespace TrucoGame {
 			}
 		}
 
-		void Animator::animationToDiscardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, sf::Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation, std::vector<Sprite*>& playersCardsOnTable, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck) {
+		void Animator::animationToDiscardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, sf::Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck) {
 			cardMutex.lock();
 			if (cardState == CardState::Covered) 
 			{
@@ -154,35 +160,50 @@ namespace TrucoGame {
 				flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, false);
 			}
 			cardMutex.unlock();
+			endTurnAndReturnCardsToDeck(deckPosition, cardsInHands, speed, cardTurnedFaceUp, deck);
+		}
 
-			if (playersCardsOnTable.size() == NUM_PLAYERS) {
-				roundAndTurnMutex.lock();
-				RoundAndTurnState roundAndTurnStateLocal = roundAndTurnState;
-				roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
-				roundAndTurnMutex.unlock();
+		void Animator::animationToDiscardMainPlayerCard(sf::Sprite& sprite, Vector2f& destinationPosition, float finalRotation, float speed, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck)
+		{
+			moveAndRotateSpriteTo(sprite, destinationPosition, finalRotation, speed);
+			endTurnAndReturnCardsToDeck(deckPosition, cardsInHands, speed, cardTurnedFaceUp, deck);
+		}
 
-				if (roundAndTurnStateLocal == RoundAndTurnState::TurnEnded) {
-					for (Sprite* card : playersCardsOnTable) {
-						moveAndRotateSpriteTo(*card, deckPosition, 35, speed);
+		void Animator::endTurnAndReturnCardsToDeck(Vector2f& deckPosition, CardView** cardsInHands, float speed, CardView* cardTurnedFaceUp, CardView* deck)
+		{
+			roundAndTurnMutex.lock();
+			RoundAndTurnState roundAndTurnStateLocal = roundAndTurnState;
+			roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
+			roundAndTurnMutex.unlock();
+
+			if (roundAndTurnStateLocal == RoundAndTurnState::TurnEnded) {
+				std::chrono::seconds sleepDuration(1);
+				std::this_thread::sleep_for(sleepDuration);
+				changePlayersCardsOnTheTableMutex.lock();
+				for (Sprite* card : playersCardsOnTheTable) {
+					moveAndRotateSpriteTo(*card, deckPosition, 35, speed);
+				}
+				playersCardsOnTheTable.clear();
+				changePlayersCardsOnTheTableMutex.unlock();
+			}
+			else if (roundAndTurnStateLocal == RoundAndTurnState::RoundEnded) {
+				std::chrono::seconds sleepDuration(1);
+				std::this_thread::sleep_for(sleepDuration);
+				for (size_t player = 0; player < 4; player++) {
+					for (size_t card = 0; card < 3; card++) {
+						Sprite* cardSprite = &cardsInHands[player][card];
+						cardSprite->setRotation(0);
+						cardSprite->setPosition(Vector2f(0, 0));
 					}
 				}
-				else if (roundAndTurnStateLocal == RoundAndTurnState::RoundEnded) {
-					for (size_t player = 0; player < 4; player++) {
-						for (size_t card = 0; card < 3; card++) {
-							Sprite* cardSprite = &cardsInHands[player][card];
-							cardSprite->setRotation(0);
-							cardSprite->setPosition(Vector2f(0, 0));
-						}
-					}
-					cardTurnedFaceUp->setRotation(0);
-					cardTurnedFaceUp->setPosition(Vector2f(0, 0));
-					deck->setRotation(0);
-					deck->setPosition(Vector2f(0, 0));
+				cardTurnedFaceUp->setRotation(0);
+				cardTurnedFaceUp->setPosition(Vector2f(0, 0));
+				deck->setRotation(0);
+				deck->setPosition(Vector2f(0, 0));
 
-					distributeCardsToPlayersMutex.lock();
-					distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
-					distributeCardsToPlayersMutex.unlock();
-				}
+				distributeCardsToPlayersMutex.lock();
+				distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
+				distributeCardsToPlayersMutex.unlock();
 			}
 		}
 	}

@@ -40,22 +40,18 @@ namespace TrucoGame {
 
         class TrucoGameView {
         private:
-            ScoreView scoreView;
-
             TrucoButton* trucoButton;
-
             //IncreaseStakesButton* increaseStakesButton;
             //RefuseTrucoButton* refuseTrucoButton;
-
 
             PlayerCards playerCards;
             std::vector<PlayerView*> players;
             std::vector<CardButton*> cardButtons;
-            std::vector<Sprite*> playersCardsOnTable;
             std::vector<Vector2f> positionToDiscardCards;
             float cardScale, animationSpeed, deckRotation;
             Vector2f windowSize, deckPosition, deckInitialPosition;
             std::vector<std::string> texturePathToMainPlayerCards;
+            std::vector<std::string> texturePathToPartnerHandCards;
             std::string texturePathToturnedFaceUpCard;
 
             void initialize(const std::vector<std::string>& playerNames);
@@ -73,7 +69,6 @@ namespace TrucoGame {
             
             void checkIftheCardHasBeenDiscardedAndDraw(GraphicManager* pGraphicManager, Vector2f& mousePosView);
             void distributeCardsToPlayers();
-            void testDiscartCards();
 
         public:
             TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition, const std::vector<std::string>& playerNames);
@@ -81,11 +76,12 @@ namespace TrucoGame {
             void verifyIfPlayerDiscardedCard();
             void drawElementsOnTheWindow(GraphicManager* pGraphicManager, Vector2f& mousePosView);
             void setTexturePathToMainPlayerCards(std::vector<std::string>& texturePathToMainPlayerCards);
+            void setTexturePathToPartnerHandCards(std::vector<std::string>& texturePathToPartnerHandCards);
             void setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard);
             void discardCard();
-            void endTurnAndReturnCardsToDeck();
 
             TableView tableView;
+            ScoreView scoreView;
 
             SelectCardEventHandler userSelectCard;
             TrucoEventHandler trucoEventHandler;

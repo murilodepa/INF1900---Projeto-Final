@@ -7,4 +7,5 @@ DiscardCardState discardCardState;
 CardState cardState;
 PlayerIdState playerIdState;
 CardStruct cardStructState;
-RoundScoreState roundScoreState;
+RoundState roundState;
+std::vector<sf::Sprite*> playersCardsOnTheTable;

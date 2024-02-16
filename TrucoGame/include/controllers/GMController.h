@@ -53,6 +53,8 @@ namespace TrucoGame {
 			int ModelIdToViewId(int modelId); 
 
 			bool IsMyTeam(int teamId);
+
+			CardStruct CardIdToCardView(Card card);
 		};
 	}
 }

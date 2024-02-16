@@ -8,7 +8,7 @@
 void TrucoGame::View::CardButton::discardCardOnTheTable()
 {	
 	areCardsInTheHandsOfThePlayer = false;
-	std::thread* animationThread;
+	/*std::thread* animationThread;
 
 	animationThread = new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo,
 		std::ref(*card),
@@ -18,7 +18,7 @@ void TrucoGame::View::CardButton::discardCardOnTheTable()
 
 	animationThread->detach();
 
-	delete animationThread;
+	delete animationThread; */
 }
 
 
@@ -27,13 +27,10 @@ void TrucoGame::View::CardButton::onPressLeft()
 	isPlayerTurnToPlayMutex.lock();
 	if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn) {
 		isPlayerTurnToPlayState = IsPlayerTurnToPlayState::NotPlayerTurn;
-		
-		discardCardOnTheTable();
+		areCardsInTheHandsOfThePlayer = false;
+		cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, false);
 	}
 	isPlayerTurnToPlayMutex.unlock();
-
-
-	cardButtonClick(this->cardIndex, false);
 }
 
 void TrucoGame::View::CardButton::onPressRight()
@@ -45,10 +42,10 @@ void TrucoGame::View::CardButton::onPressRight()
 		uIThreadMutex.lock();
 		*cardTexture = UtilsView::loadTextureBack();
 		uIThreadMutex.unlock();
-		discardCardOnTheTable();
+		areCardsInTheHandsOfThePlayer = false;
+		cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, false);
 	}
 	isPlayerTurnToPlayMutex.unlock();
-	cardButtonClick(this->cardIndex, true);
 }
 
 void TrucoGame::View::CardButton::onHover() {

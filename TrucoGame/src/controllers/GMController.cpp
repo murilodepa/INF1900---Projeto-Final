@@ -41,9 +41,10 @@ namespace TrucoGame {
 		void GMController::OnAnotherPlayerPlayed(Card card, int playerId, bool isCovered) {
 			int viewPlayerId = ModelIdToViewId(playerId);
 
+			CardStruct cardStructLocal = CardIdToCardView(card);
 			cardStructMutex.lock();
-			cardStructState.rank = CardRank(card.getNumber());
-			cardStructState.suit = CardSuit(card.getSuit());
+			cardStructState.rank = cardStructLocal.rank;
+			cardStructState.suit = cardStructLocal.suit;
 			cardStructState.index = CardIndex(currentTurn);
 			cardStructMutex.unlock();
 
@@ -72,27 +73,39 @@ namespace TrucoGame {
 
 		void GMController::OnRoundStarted(Card tableCard, std::vector<Card> handCards){
 			// TODO: show hand cards and table card (keep card buttons disabled)
-			
-			CardStruct cardStruct;
 
 			roundScoreMutex.lock();
-			roundScoreState = RoundScoreState::One;
+			gameView->scoreView.changeRoundScoreText(int(1));
 			roundScoreMutex.unlock();
-			cardStruct.rank = CardRank(tableCard.getNumber());
-			cardStruct.suit = CardSuit(tableCard.getSuit());
+
+			roundAndTurnMutex.lock();
+			roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
+			roundAndTurnMutex.unlock();
+
+			CardStruct cardStruct = CardIdToCardView(tableCard);
 			std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
 			gameView->setTexturePathToturnedFaceUpCard(texturePathToturnedFaceUpCard);
 
 			std::vector<std::string> texturePathToMainPlayerCards;
 			for (Card& card : handCards)
 			{
-				cardStruct.rank = CardRank(card.getNumber());
-				cardStruct.suit = CardSuit(card.getSuit());
+				CardStruct cardStruct = CardIdToCardView(card);
 				texturePathToMainPlayerCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
 			}
 
 			gameView->setTexturePathToMainPlayerCards(texturePathToMainPlayerCards);
+			/* Testar mão de ferro
+			gameView->setTexturePathToPartnerHandCards(texturePathToMainPlayerCards);
 
+			roundMutex.lock();
+			roundState = RoundState::ElevenHandRound;
+			roundMutex.unlock();
+			*/
+			
+			roundMutex.lock();
+			roundState = RoundState::NormalRound;
+			roundMutex.unlock();
+			
 			distributeCardsToPlayersMutex.lock();
 			distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
 			distributeCardsToPlayersMutex.unlock();
@@ -100,10 +113,35 @@ namespace TrucoGame {
 		void GMController::OnElevenHandRoundStart(Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards){
 			// TODO: show partner cards, show hand cards (keep card buttons disabled)
 			// and show [yes, no] menu: where the response should somehow call for UserRespondedElevenHand
+			
+			std::vector<std::string> texturePathToCards;
+			for (Card& card : handCards)
+			{
+				CardStruct cardStruct = CardIdToCardView(card);
+				texturePathToCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
+			}
+			gameView->setTexturePathToMainPlayerCards(texturePathToCards);
+			texturePathToCards.clear();
+			for (Card& card : partnerHandCards)
+			{
+				CardStruct cardStruct = CardIdToCardView(card);
+				texturePathToCards.emplace_back(UtilsView::findTexturePathByNumberAndSuit(cardStruct));
+			}
+			gameView->setTexturePathToPartnerHandCards(texturePathToCards);
+			
+			roundMutex.lock();
+			roundState = RoundState::ElevenHandRound;
+			roundMutex.unlock();
 
+			distributeCardsToPlayersMutex.lock();
+			distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;
+			distributeCardsToPlayersMutex.unlock();
 		}
 		void GMController::OnIronHandRoundStarted(Card tableCard){
 			// TODO: just show table card (keep card buttons disabled)
+			roundMutex.lock();
+			roundState = RoundState::IronHandRound;
+			roundMutex.unlock();
 		}
 
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
@@ -123,6 +161,7 @@ namespace TrucoGame {
 
 			std::chrono::seconds sleepDuration(2);
 			std::this_thread::sleep_for(sleepDuration);
+			//scoreView.updateScoreColor();
 
 			// TODO: update score on the screen (the circles) and clear cards from table to the next turn
 		}
@@ -130,7 +169,7 @@ namespace TrucoGame {
 		void GMController::OnTrucoAccepted(int currentStakes){
 			// TODO: update stakes on the screen
 			roundScoreMutex.lock();
-			roundScoreState = RoundScoreState(currentStakes);
+			gameView->scoreView.changeRoundScoreText(int(currentStakes));
 			roundScoreMutex.unlock();
 		}
 		void GMController::OnTrucoRefused(){
@@ -140,7 +179,7 @@ namespace TrucoGame {
 			// TODO: show popup on the screen to responde [yes = 0, no = 1, raise = 2]
 			// where the response should somehow call for UserRespondedTruco
 			roundScoreMutex.lock();
-			roundScoreState = RoundScoreState(currentStakes);
+			gameView->scoreView.changeRoundScoreText(int(currentStakes));
 			roundScoreMutex.unlock();
 			int result = gameView->tableView.trucoReceived(currentStakes);
 			UserRespondedTruco(result);
@@ -180,6 +219,15 @@ namespace TrucoGame {
 
 		bool GMController::IsMyTeam(int teamId) {
 			return (gameModel->player->playerId % 2) == teamId;
+		}
+
+		CardStruct GMController::CardIdToCardView(Card card)
+		{
+			CardStruct cardStruct;
+			cardStruct.rank = CardRank(card.getNumber());
+			cardStruct.suit = CardSuit(card.getSuit());
+			return cardStruct;
+
 		}
 	}
 }

@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "../../../include/views/utils/UtilsView.h"
 #include <thread>
+#include <ctime>
 #include "CardView.h"
 
 // Define to represent the number of players
@@ -27,8 +28,9 @@ namespace TrucoGame {
             static void moveAndFlipCardTurnedFaceUpTo(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, const sf::Vector2f& destinationPosition, float speed, const float cardScale);
             static void animationWithCardTurnedFaceUpAndInitialDeck(sf::Sprite& cardTurnedFaceUp, Texture* texture, const std::string& newTexturePath, sf::Sprite& initialDeck, const sf::Vector2f& cardTurnedFaceUpDestinationPosition, const sf::Vector2f& initialDeckDestinationPosition, float finalRotation, float speed, const float cardScale);
             static void flipCard(sf::Sprite& card, float duration, Texture* texture, const std::string& newTexturePath, const float cardScale, bool flipHorizontally);
-            static void animationToDiscardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation, std::vector<Sprite*>& playersCardsOnTable, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck);
-            static void endTurnAndReturnCardsToDeck(); 
+            static void animationToDiscardCard(sf::Sprite& sprite, Texture* texture, const std::string& newTexturePath, Vector2f& destinationPosition, float speed, const float cardScale, float finalRotation, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck);
+            static void animationToDiscardMainPlayerCard(sf::Sprite& sprite, Vector2f& destinationPosition, float finalRotation, float speed, Vector2f& deckPosition, CardView** cardsInHands, CardView* cardTurnedFaceUp, CardView* deck);
+            static void endTurnAndReturnCardsToDeck(Vector2f& deckPosition, CardView** cardsInHands, float speed, CardView* cardTurnedFaceUp, CardView* deck);
         };
     }
 }

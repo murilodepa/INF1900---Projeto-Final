@@ -1,6 +1,8 @@
 #ifndef STATE_VIEW_H
 #define STATE_VIEW_H
 
+#include <SFML/Graphics.hpp>
+#include <vector>
 #include "CardsEnum.h"
 
 enum class DistributeCardsToPlayersState {
@@ -43,14 +45,13 @@ enum class IsPlayerTurnToPlayState {
 };
 extern IsPlayerTurnToPlayState isPlayerTurnToPlayState;
 
-enum class RoundScoreState {
-    One = 1,
-    Three = 3,
-    Six = 6,
-    Nine = 9,
-    Twelve = 12
+enum class RoundState {
+    NormalRound,
+    ElevenHandRound,
+    IronHandRound
 };
-extern RoundScoreState roundScoreState;
+extern RoundState roundState;
 
+extern std::vector<sf::Sprite*> playersCardsOnTheTable;
 #endif // STATE_VIEW_H
 

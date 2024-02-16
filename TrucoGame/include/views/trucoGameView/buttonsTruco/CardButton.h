@@ -7,7 +7,7 @@
 namespace TrucoGame {
     namespace View {
 
-        typedef std::function<void(int, bool)> CardButtonClickEventHandler;
+        typedef std::function<void(Sprite*, Vector2f, int, bool)> CardButtonClickEventHandler;
 
         class CardButton : public ButtonBase {
 
