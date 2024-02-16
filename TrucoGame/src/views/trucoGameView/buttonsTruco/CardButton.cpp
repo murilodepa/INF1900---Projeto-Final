@@ -2,8 +2,7 @@
 #include "../../../../include/views/trucoGameView/Animator.h"
 
 #include <thread>
-#include "../../../../include/views/utils/MutexView.h"
-#include "../../../../include/views/utils/StatesView.h"
+
 
 void TrucoGame::View::CardButton::onPressLeft() 
 {

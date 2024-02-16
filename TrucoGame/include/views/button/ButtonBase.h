@@ -4,6 +4,9 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 
+#include "../../../include/views/utils/MutexView.h"
+#include "../../../include/views/utils/StatesView.h"
+
 using namespace sf;
 
 enum button_states { BTN_IDLE = 0, BTN_HOVER, BTN_PRESSED_LEFT, BTN_PRESSED_RIGHT};

@@ -55,8 +55,8 @@ enum class TrucoRoundState {
 extern TrucoRoundState trucoRoundState;
 
 enum class CheckTrucoRequestState {
-    CAN_TRUCO_REQUEST,
-    CANNOT_TRUCO_REQUEST
+    CanTrucoRequest,
+    CanNotTrucoRequest
 };
 extern CheckTrucoRequestState checkTrucoRequestState;
 

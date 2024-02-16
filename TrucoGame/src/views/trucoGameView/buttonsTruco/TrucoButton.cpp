@@ -2,7 +2,15 @@
 
 void TrucoGame::View::TrucoButton::onPressLeft()
 {
-	trucoButtonClick();
+	checkTrucoRequestMutex.lock();
+	CheckTrucoRequestState CheckTrucoRequestStateLocal = checkTrucoRequestState;
+	checkTrucoRequestState = CheckTrucoRequestState::CanNotTrucoRequest;
+	checkTrucoRequestMutex.unlock();
+
+	if (CheckTrucoRequestStateLocal != CheckTrucoRequestState::CanNotTrucoRequest)
+	{
+		trucoButtonClick();
+	}
 }
 
 void TrucoGame::View::TrucoButton::onPressRight()

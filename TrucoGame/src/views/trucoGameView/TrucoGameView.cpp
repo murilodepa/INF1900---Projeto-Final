@@ -373,7 +373,7 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		CheckTrucoRequestState checkTrucoRequestStateLocal = checkTrucoRequestState;
 		checkTrucoRequestMutex.unlock();
 
-		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn && checkTrucoRequestStateLocal == CheckTrucoRequestState::CAN_TRUCO_REQUEST) {
+		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn && checkTrucoRequestStateLocal == CheckTrucoRequestState::CanTrucoRequest) {
 			drawTrucoButton(pGraphicManager, mousePosView);
 		}
 		isPlayerTurnToPlayMutex.unlock();

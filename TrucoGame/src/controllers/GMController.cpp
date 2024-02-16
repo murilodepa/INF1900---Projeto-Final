@@ -39,7 +39,7 @@ namespace TrucoGame {
 			isPlayerTurnToPlayMutex.unlock();
 
 			checkTrucoRequestMutex.lock();
-			checkTrucoRequestState = canRequestTruco ? CheckTrucoRequestState::CAN_TRUCO_REQUEST : CheckTrucoRequestState::CANNOT_TRUCO_REQUEST;
+			checkTrucoRequestState = canRequestTruco ? CheckTrucoRequestState::CanTrucoRequest : CheckTrucoRequestState::CanNotTrucoRequest;
 			checkTrucoRequestMutex.unlock();
 		}
 
@@ -180,8 +180,6 @@ namespace TrucoGame {
 			else {
 				gameView->notifyPlayer("Perdemos essa rodada.");
 			}
-
-
 
 			gameScoreMutex.lock();
 			gameView->scoreView.changeGameScoreText(IsMyTeam(0) ? team0Score : team1Score, IsMyTeam(1) ? team0Score : team1Score);
