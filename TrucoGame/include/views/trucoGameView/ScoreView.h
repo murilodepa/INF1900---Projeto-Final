@@ -77,7 +77,8 @@ namespace TrucoGame {
 			ScoreView(const Vector2f& windowSize);
 			~ScoreView();
 
-			void changeColor(int turn, int vefiryColor);
+			void updateScoreColor(int turn, int verifyColor);
+			void resetScoreColor();
 
 
 			RectangleShape getScoreRectangle();
@@ -87,7 +88,6 @@ namespace TrucoGame {
 			CircleShape getOurCircles(size_t index);
 			CircleShape getTheirCircles(size_t index);
 
-
 			TextView getRoundScoreText();
 			TextView getWeScoreText();
 			TextView getTheyScoreText();
@@ -96,7 +96,6 @@ namespace TrucoGame {
 
 			void changeGameScoreText(int team0Score, int team1Score);
 			void changeRoundScoreText(int newRoundScore); // TODO Enum 1 - 2 -3
-			void updateScoreColor();
 		};
 	}
 }

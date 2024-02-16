@@ -77,20 +77,37 @@ TrucoGame::View::ScoreView::~ScoreView()
 {
 }
 
-void TrucoGame::View::ScoreView::changeColor(int turn, int vefiryColor)
+void TrucoGame::View::ScoreView::updateScoreColor(int turn, int verifyColor)
 {
-    if (vefiryColor == 0) {
-        ourCircles[turn].setFillColor(Color::Yellow);
-        theirCircles[turn].setFillColor(Color::Yellow);
-    } else if (vefiryColor == 1) {
-        ourCircles[turn].setFillColor(Color::Green);
-        theirCircles[turn].setFillColor(Color::Red);
-    }
-    else {
-        ourCircles[turn].setFillColor(Color::Red);
-        theirCircles[turn].setFillColor(Color::Green);
+    switch (verifyColor)
+    {
+        case 0:
+            ourCircles[turn].setFillColor(Color::Yellow);
+            theirCircles[turn].setFillColor(Color::Yellow);
+            break;
+        case 1:
+            ourCircles[turn].setFillColor(Color::Green);
+            theirCircles[turn].setFillColor(Color::Red);
+            break;
+        case -1:
+            ourCircles[turn].setFillColor(Color::Red);
+            theirCircles[turn].setFillColor(Color::Green);
+            break;
+        default:
+            ourCircles[turn].setFillColor(CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED);
+            theirCircles[turn].setFillColor(CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED);
+            break;
     }
 }
+
+void TrucoGame::View::ScoreView::resetScoreColor()
+{
+    for (size_t i = 0; i < numRounds; i++) {
+        ourCircles[i].setFillColor(sf::Color(CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED));
+        theirCircles[i].setFillColor(sf::Color(CIRCLE_COLOR_OF_ROUNDS_NOT_PLAYED));
+    }
+}
+
 RectangleShape TrucoGame::View::ScoreView::getScoreRectangle()
 {
     return scoreRectangle;
@@ -156,12 +173,6 @@ void TrucoGame::View::ScoreView::changeRoundScoreText(int newRoundScore)
         roundScoreText->setPosition(rectangleDivHeight.getPosition().x + spacingScoreTextWidth, roundScoreTextPosition.y);
     }
     roundScoreText->setString(std::to_string(newRoundScore));
-}
-
-void TrucoGame::View::ScoreView::updateScoreColor()
-{
-    ourCircles[0].setFillColor(Color::Green);
-    theirCircles[0].setFillColor(Color::Red);;
 }
 
 void TrucoGame::View::ScoreView::setTextsFont(const std::string& fontPath)

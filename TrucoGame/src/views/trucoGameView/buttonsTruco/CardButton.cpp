@@ -5,23 +5,6 @@
 #include "../../../../include/views/utils/MutexView.h"
 #include "../../../../include/views/utils/StatesView.h"
 
-void TrucoGame::View::CardButton::discardCardOnTheTable()
-{	
-	areCardsInTheHandsOfThePlayer = false;
-	/*std::thread* animationThread;
-
-	animationThread = new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo,
-		std::ref(*card),
-		discardOnTheTablePosition,
-		90.0f,
-		animationSpeed);
-
-	animationThread->detach();
-
-	delete animationThread; */
-}
-
-
 void TrucoGame::View::CardButton::onPressLeft() 
 {
 	isPlayerTurnToPlayMutex.lock();
@@ -35,17 +18,24 @@ void TrucoGame::View::CardButton::onPressLeft()
 
 void TrucoGame::View::CardButton::onPressRight()
 {
-	isPlayerTurnToPlayMutex.lock();
-	if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn) {
-		isPlayerTurnToPlayState = IsPlayerTurnToPlayState::NotPlayerTurn;
+	trucoRoundMutex.lock();
+	TrucoRoundState trucoRoundStateLocal = trucoRoundState;
+	trucoRoundMutex.unlock();
 
-		uIThreadMutex.lock();
-		*cardTexture = UtilsView::loadTextureBack();
-		uIThreadMutex.unlock();
-		areCardsInTheHandsOfThePlayer = false;
-		cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, false);
+	if (trucoRoundStateLocal != TrucoRoundState::IronHandRound)
+	{
+		isPlayerTurnToPlayMutex.lock();
+		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn) {
+			isPlayerTurnToPlayState = IsPlayerTurnToPlayState::NotPlayerTurn;
+
+			uIThreadMutex.lock();
+			*cardTexture = UtilsView::loadTextureBack();
+			uIThreadMutex.unlock();
+			areCardsInTheHandsOfThePlayer = false;
+			cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, false);
+		}
+		isPlayerTurnToPlayMutex.unlock();
 	}
-	isPlayerTurnToPlayMutex.unlock();
 }
 
 void TrucoGame::View::CardButton::onHover() {

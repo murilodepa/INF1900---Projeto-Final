@@ -257,13 +257,34 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 				{
 						std::thread* animationThread;
 
-						animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardMainPlayerCard,
-							std::ref(*card),
-							discardOnTheTablePosition,
-							90.0f,
-							animationSpeed,
-							deckPosition
-						);
+						trucoRoundMutex.lock();
+						TrucoRoundState trucoRoundStateLocal = trucoRoundState;
+						trucoRoundMutex.unlock();
+
+						if (trucoRoundStateLocal != TrucoRoundState::IronHandRound)
+						{
+							animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardMainPlayerCard,
+								std::ref(*card),
+								discardOnTheTablePosition,
+								90.0f,
+								animationSpeed,
+								deckPosition
+							);
+						}
+						else {
+							Texture* mainPlayerCardTexture = playerCards.getCardTexture(2, index);
+							animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard,
+								std::ref(*card),
+								playerCards.getCardTexture(2, index),
+								texturePathToMainPlayerCards[index],
+								Vector2f(discardOnTheTablePosition.x, discardOnTheTablePosition.y + card->getGlobalBounds().width),
+								animationSpeed,
+								cardScale,
+								90.0f,
+								deckPosition,
+								false
+							);
+						}
 
 						animationThread->detach();
 						delete animationThread;
@@ -347,7 +368,12 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		checkIftheCardHasBeenDiscardedAndDraw(pGraphicManager, mousePosView);
 		
 		isPlayerTurnToPlayMutex.lock();
-		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn /* TODO - Verificar se user pode trucar */ ) {
+
+		checkTrucoRequestMutex.lock();
+		CheckTrucoRequestState checkTrucoRequestStateLocal = checkTrucoRequestState;
+		checkTrucoRequestMutex.unlock();
+
+		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn && checkTrucoRequestStateLocal == CheckTrucoRequestState::CAN_TRUCO_REQUEST) {
 			drawTrucoButton(pGraphicManager, mousePosView);
 		}
 		isPlayerTurnToPlayMutex.unlock();
@@ -372,27 +398,45 @@ void TrucoGame::View::TrucoGameView::setTexturePathToturnedFaceUpCard(std::strin
 	this->texturePathToturnedFaceUpCard = texturePathToturnedFaceUpCard;
 }
 
+void TrucoGame::View::TrucoGameView::setCardToDiscard(std::string& texture, bool isCovered, size_t playerIdState, size_t cardIndex)
+{
+	this->cardToDiscard.isCovered = isCovered;
+	this->cardToDiscard.textureToDiscardCard = texture;
+	this->cardToDiscard.playerIdState = playerIdState;
+	this->cardToDiscard.cardIndex = cardIndex;
+}
+
+void TrucoGame::View::TrucoGameView::coverPartnerHandCardsInElevenHandRound()
+{
+	int partnerIndex = 0;
+
+	for (size_t card = 0; card < CARDS_IN_HAND; card++) {
+		CardView* cardView = &playerCards.cardsInHands[partnerIndex][card];
+		Texture* cardTexture = playerCards.getCardTexture(partnerIndex, card);
+		*cardTexture = UtilsView::loadTextureBack();
+	}
+}
+
+void TrucoGame::View::TrucoGameView::setCardToDiscard(bool isCovered, size_t playerIdState, size_t cardIndex)
+{
+	this->cardToDiscard.isCovered = isCovered;
+	this->cardToDiscard.textureToDiscardCard = "";
+	this->cardToDiscard.playerIdState = playerIdState;
+	this->cardToDiscard.cardIndex = cardIndex;
+}
+
 void TrucoGame::View::TrucoGameView::discardCard()
 {
-	playerIdMutex.lock();
-	size_t player = static_cast<size_t>(playerIdState);
-	playerIdMutex.unlock();
+	size_t player = cardToDiscard.playerIdState;
+	size_t cardIndex = cardToDiscard.cardIndex;
 
-	cardStructMutex.lock();
-	CardStruct cardStruct = cardStructState;
-	cardStructMutex.unlock();
-
-	size_t cardIndex = static_cast<size_t>(cardStruct.index);
 	std::string cardTexturePath;
-
-	cardMutex.lock();
-	if (cardState == CardState::Covered) {
+	if (cardToDiscard.isCovered || cardToDiscard.textureToDiscardCard == "") {
 		cardTexturePath = CARD_BACK_TEXTURE_PATH;
 	}
 	else {
-		cardTexturePath = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
+		cardTexturePath = cardToDiscard.textureToDiscardCard;
 	}
-	cardMutex.unlock();
 	
 	if (player < NUM_PLAYERS && player >= 0 && cardIndex < CARDS_IN_HAND && cardIndex >= 0) {
 		CardView* cardView = &playerCards.cardsInHands[player][cardIndex];
@@ -411,33 +455,21 @@ void TrucoGame::View::TrucoGameView::discardCard()
 				animationSpeed, 
 				cardScale, 
 				0, 
-				deckPosition
+				deckPosition,
+				cardToDiscard.isCovered
 			);
 		}  if (player == 0) {
-			
-			trucoRoundMutex.lock();
-			if (trucoRoundState != TrucoRoundState::ElevenHandRound) {
-				animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, 
-					std::ref(*cardView), 
-					playerCards.getCardTexture(player, cardIndex), 
-					cardTexturePath, 
-					positionToDiscardCards[0], 
-					animationSpeed, 
-					cardScale, 
-					90, 
-					deckPosition
-				);
-			}
-			else {
-				animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardMainPlayerCard, 
-					std::ref(*cardView), 
-					Vector2f(positionToDiscardCards[0].x, positionToDiscardCards[0].y - 1.5*cardView->getCardWidth()),
-					90.0f,
-					animationSpeed,
-					deckPosition
-				);
-			}
-			trucoRoundMutex.unlock();
+			animationThread = new std::thread(&TrucoGame::View::Animator::animationToDiscardCard, 
+				std::ref(*cardView), 
+				playerCards.getCardTexture(player, cardIndex), 
+				cardTexturePath, 
+				positionToDiscardCards[0], 
+				animationSpeed, 
+				cardScale, 
+				90, 
+				deckPosition,
+				cardToDiscard.isCovered
+			);
 		}
 		else if (player == 1) {
 			Vector2f destinationPosition = Vector2f(positionToDiscardCards[1].x, positionToDiscardCards[1].y + cardView->getCardWidth());
@@ -449,7 +481,8 @@ void TrucoGame::View::TrucoGameView::discardCard()
 				animationSpeed, 
 				cardScale, 
 				0, 
-				deckPosition
+				deckPosition,
+				cardToDiscard.isCovered
 			);
 		}
 
@@ -471,37 +504,12 @@ void TrucoGame::View::TrucoGameView::verifyRoundEnded()
 		roundState = RoundState::DistribuiteCards;
 		roundMutex.unlock();
 		std::vector<std::thread*> animationThreads;
-		/*
-		for (size_t player = 0; player < NUM_PLAYERS; player++) {
-			for (size_t card = 0; card < CARDS_IN_HAND; card++) {
-				CardView* cardView = &playerCards.cardsInHands[player][card];
-				float rotation = cardView->getRotation();
-				Texture* cardTexture = playerCards.getCardTexture(player, card);
 
-				if (cardView->getPosition() != deckPosition) {
-					if (player == 0 || player == 2) {
-							animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveSpriteTo,
-								std::ref(*cardView),
-								deckPosition,
-								animationSpeed));
-					}
-				}
-				else 
-				{
-					animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, 
-						std::ref(*cardView), 
-						deckPosition, 
-						-90.0f, 
-						animationSpeed));
-				}
-			}
-		}
-		*/
-			animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::endRoundAndDistribuiteCards,
-				playerCards.cardsInHands,
-				tableView.getCardTurnedFaceUp(),
-				tableView.getDeck()
-			));
+		animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::endRoundAndDistribuiteCards,
+			playerCards.cardsInHands,
+			tableView.getCardTurnedFaceUp(),
+			tableView.getDeck()
+		));
 
 		for (std::thread* t : animationThreads) {
 			t->detach();

@@ -19,8 +19,6 @@ namespace TrucoGame {
             Texture* cardTexture;
             size_t cardIndex;
 
-            void discardCardOnTheTable();
-
         protected:
             void onHover();
             void onPressLeft();

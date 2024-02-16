@@ -34,6 +34,12 @@
 
 using namespace sf;
 
+struct CardToDiscard {
+    std::string textureToDiscardCard;
+    bool isCovered;
+    size_t playerIdState;
+    size_t cardIndex;
+};
 namespace TrucoGame {
     namespace View {
         typedef std::function<void(int, bool)> SelectCardEventHandler;
@@ -55,6 +61,7 @@ namespace TrucoGame {
             std::vector<std::string> texturePathToPartnerHandCards;
             std::string texturePathToturnedFaceUpCard;
             TextView notificationsText;
+            CardToDiscard cardToDiscard;
 
             std::thread* notificationThread = nullptr;
 
@@ -82,6 +89,9 @@ namespace TrucoGame {
             void setTexturePathToMainPlayerCards(std::vector<std::string>& texturePathToMainPlayerCards);
             void setTexturePathToPartnerHandCards(std::vector<std::string>& texturePathToPartnerHandCards);
             void setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard);
+            void setCardToDiscard(std::string& texture, bool isCovered, size_t playerIdState, size_t cardIndex);
+            void setCardToDiscard(bool isCovered, size_t playerIdState, size_t cardIndex);
+            void coverPartnerHandCardsInElevenHandRound();
             void discardCard();
             void verifyRoundEnded();
             void notifyPlayer(std::string message);

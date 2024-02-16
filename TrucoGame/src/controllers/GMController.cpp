@@ -37,6 +37,10 @@ namespace TrucoGame {
 			isPlayerTurnToPlayMutex.lock();
 			isPlayerTurnToPlayState = IsPlayerTurnToPlayState::PlayerTurn;
 			isPlayerTurnToPlayMutex.unlock();
+
+			checkTrucoRequestMutex.lock();
+			checkTrucoRequestState = canRequestTruco ? CheckTrucoRequestState::CAN_TRUCO_REQUEST : CheckTrucoRequestState::CANNOT_TRUCO_REQUEST;
+			checkTrucoRequestMutex.unlock();
 		}
 
 		void GMController::OnAnotherPlayerPlayed(Card card, int playerId, bool isCovered) {
@@ -69,31 +73,19 @@ namespace TrucoGame {
 			
 			int viewPlayerId = ModelIdToViewId(playerId);
 
-			CardStruct cardStructLocal = CardIdToCardView(card);
-			cardStructMutex.lock();
-			cardStructState.rank = cardStructLocal.rank;
-			cardStructState.suit = cardStructLocal.suit;
-			cardStructState.index = CardIndex(currentTurn);
-			cardStructMutex.unlock();
-
-			playerIdMutex.lock();
-			playerIdState = PlayerIdState(viewPlayerId);
-			playerIdMutex.unlock();
-
-			cardMutex.lock();
-			if (isCovered) {
-				cardState = CardState::Covered;
+			std::string texturePath;
+			if (!isCovered) {
+				CardStruct cardStruct = CardIdToCardView(card);
+				std::string texturePath = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
+				gameView->setCardToDiscard(texturePath, isCovered, viewPlayerId, currentTurn);
 			}
 			else {
-				cardState = CardState::TurnedUp;
+				gameView->setCardToDiscard(isCovered, viewPlayerId, currentTurn);
 			}
-
-			cardMutex.unlock();
 
 			discardCardMutex.lock();
 			discardCardState = DiscardCardState::DiscardCard;
 			discardCardMutex.unlock();
-			
 			
 			//std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
 			// TODO: show other card player on the screen
@@ -117,16 +109,13 @@ namespace TrucoGame {
 			}
 
 			gameView->setTexturePathToMainPlayerCards(texturePathToMainPlayerCards);
-			/* Testar mão de ferro
-			gameView->setTexturePathToPartnerHandCards(texturePathToMainPlayerCards);
 
-			roundMutex.lock();
-			roundState = RoundState::ElevenHandRound;
-			roundMutex.unlock();
-			*/
-			
+
 			trucoRoundMutex.lock();
-			trucoRoundState = TrucoRoundState::NormalRound;
+			if (trucoRoundState != TrucoRoundState::IronHandRound)
+			{
+				trucoRoundState = TrucoRoundState::NormalRound;
+			}
 			trucoRoundMutex.unlock();
 			
 			roundMutex.lock();
@@ -172,6 +161,9 @@ namespace TrucoGame {
 			distributeCardsToPlayersMutex.unlock();
 
 			bool result = gameView->tableView.elevenHandReceived();
+			if (!result) {
+				gameView->coverPartnerHandCardsInElevenHandRound();
+			}
 			UserRespondedElevenHand(result);
 		}
 		void GMController::OnIronHandRoundStarted(Card tableCard){
@@ -189,7 +181,7 @@ namespace TrucoGame {
 				gameView->notifyPlayer("Perdemos essa rodada.");
 			}
 
-			this->currentTurn = 0;
+
 
 			gameScoreMutex.lock();
 			gameView->scoreView.changeGameScoreText(IsMyTeam(0) ? team0Score : team1Score, IsMyTeam(1) ? team0Score : team1Score);
@@ -202,9 +194,9 @@ namespace TrucoGame {
 			std::chrono::seconds sleepDuration(2);
 			std::this_thread::sleep_for(sleepDuration);
 
-			//std::chrono::seconds sleepDuration(5);
-			//std::this_thread::sleep_for(sleepDuration);
-			// TODO: update score on the screen, clear cards from hands
+			this->currentTurn = 0;
+			gameScoreMutex.lock(); gameView->scoreView.resetScoreColor();
+			gameScoreMutex.unlock();
 		}
 
 		void GMController::OnTurnEnded(int winnerTeamId, int winnerPlayerId){
@@ -215,17 +207,17 @@ namespace TrucoGame {
 
 			if (winnerTeamId == -1) {
 				gameScoreMutex.lock();
-				gameView->scoreView.changeColor(currentTurn, 0);
+				gameView->scoreView.updateScoreColor(currentTurn, int(TurnResult::DRAW));
 				gameScoreMutex.unlock();
 			}
 			else if (IsMyTeam(winnerTeamId)) {
 				gameScoreMutex.lock();
-				gameView->scoreView.changeColor(currentTurn, 1);
+				gameView->scoreView.updateScoreColor(currentTurn, int(TurnResult::WIN));
 				gameScoreMutex.unlock();
 			}
 			else {
 				gameScoreMutex.lock();
-				gameView->scoreView.changeColor(currentTurn, -1);
+				gameView->scoreView.updateScoreColor(currentTurn, int(TurnResult::LOSS));
 				gameScoreMutex.unlock();
 			}
 			this->currentTurn++;

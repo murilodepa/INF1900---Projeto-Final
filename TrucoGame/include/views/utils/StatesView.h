@@ -33,18 +33,11 @@ enum class DiscardCardState {
 };
 extern DiscardCardState discardCardState;
 
-enum class CardState {
-    TurnedUp,
-    Covered
+enum class TurnResult {
+    DRAW = 0,
+    WIN = 1,
+    LOSS = -1
 };
-extern CardState cardState;
-
-enum class PlayerIdState {
-    Left = 1,
-    Front = 0,
-    Right = 3
-};
-extern PlayerIdState playerIdState;
 
 extern CardStruct cardStructState;
 
@@ -60,6 +53,12 @@ enum class TrucoRoundState {
     IronHandRound
 };
 extern TrucoRoundState trucoRoundState;
+
+enum class CheckTrucoRequestState {
+    CAN_TRUCO_REQUEST,
+    CANNOT_TRUCO_REQUEST
+};
+extern CheckTrucoRequestState checkTrucoRequestState;
 
 extern std::vector<sf::Sprite*> playersCardsOnTheTable;
 #endif // STATE_VIEW_H
