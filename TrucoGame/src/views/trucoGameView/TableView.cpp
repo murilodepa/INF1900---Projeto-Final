@@ -114,10 +114,10 @@ bool TrucoGame::View::TableView::elevenHandReceived() {
 	switch (result)
 	{
 	case IDYES:
-		return 0;
+		return true;
 	case IDNO:
 		//ElevenHand was not accepted
-		return 1;
+		return false;
 	}
 }
 

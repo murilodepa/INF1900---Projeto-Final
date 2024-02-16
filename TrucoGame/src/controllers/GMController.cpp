@@ -161,7 +161,7 @@ namespace TrucoGame {
 			distributeCardsToPlayersMutex.unlock();
 
 			bool result = gameView->tableView.elevenHandReceived();
-			if (!result) {
+			if (result) {
 				gameView->coverPartnerHandCardsInElevenHandRound();
 			}
 			UserRespondedElevenHand(result);
