@@ -152,7 +152,7 @@ namespace TrucoGame {
 			this->currentTurn = 0;
 
 			gameScoreMutex.lock();
-			gameView->scoreView.changeGameScoreText(team0Score, team1Score);
+			gameView->scoreView.changeGameScoreText(IsMyTeam(0) ? team0Score : team1Score, IsMyTeam(1) ? team0Score : team1Score);
 			gameScoreMutex.unlock();
 
 			roundAndTurnMutex.lock();
