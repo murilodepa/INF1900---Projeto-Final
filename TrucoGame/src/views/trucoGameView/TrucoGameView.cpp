@@ -26,6 +26,7 @@ void TrucoGame::View::TrucoGameView::initialize(const std::vector<std::string>& 
 
 	float textAndTableSpacing = windowSize.y * CALCULATE_TEXT_AND_TABLE_SPACING;
 	setNamesPositions(windowSize.x, windowSize.y, textAndTableSpacing);
+	notificationsText.setPosition(windowSize.x / 2 - notificationsText.getHalfTextWidth(), windowSize.y / 2 + notificationsText.getTextHeight()*2);
 	setPositionToDiscardCards();
 	initializeTrucoButton();
 }
@@ -294,7 +295,8 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 TrucoGame::View::TrucoGameView::TrucoGameView(const Vector2f windowSize, const float cardScale, Vector2f& initialDeckPosition, const std::vector<std::string>& playerNames) :
 	tableView(Vector2f(static_cast<float>(windowSize.x), static_cast<float>(windowSize.y)), initialDeckPosition, cardScale),
 	playerCards(NUM_PLAYERS, CARDS_IN_HAND, initialDeckPosition, cardScale),
-	scoreView(windowSize)
+	scoreView(windowSize),
+	notificationsText(TextView("", CALCULATE_SCORE_TEXT_CHARACTER_SIZE, windowSize.x/2, sf::Color::White, Text::Regular))
 {
 	this->cardScale = cardScale;
 	this->animationSpeed = cardScale * CALCULATE_ANIMATION_SPEED;
@@ -339,6 +341,7 @@ void TrucoGame::View::TrucoGameView::drawElementsOnTheWindow(GraphicManager* pGr
 		drawCardsOnTheTable(pGraphicManager);
 		tableView.drawElementsOnTheTable(pGraphicManager);
 		drawPlayerNames(pGraphicManager);
+		pGraphicManager->drawElement(notificationsText);
 		drawScore(pGraphicManager);
 		checkIftheCardHasBeenDiscardedAndDraw(pGraphicManager, mousePosView);
 		
@@ -461,4 +464,17 @@ void TrucoGame::View::TrucoGameView::discardCard()
 			delete animationThread;
 		}
 	}
+}
+
+void TrucoGame::View::TrucoGameView::notifyPlayer(std::string message) {
+	
+	if(notificationThread != nullptr)
+		notificationThread->join();
+	notificationThread = new std::thread([this](std::string message) {
+		notificationsText.setText(message);
+		notificationsText.setPosition(windowSize.x / 2 - notificationsText.getHalfTextWidth(), windowSize.y / 2 + notificationsText.getTextHeight() * 2); 
+		std::chrono::seconds sleepDuration(2);
+		std::this_thread::sleep_for(sleepDuration);
+		notificationsText.setText("");
+		}, message);
 }
