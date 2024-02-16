@@ -191,7 +191,7 @@ namespace TrucoGame {
         }
         void ClientGameManager::PlayCard(int index, bool isCovered) 
         {
-            CardPacket p = CardPacket(player->playerId, player->popCardByIndex(index), isCovered);
+            CardPacket p = CardPacket(player->playerId, player->hand[index], isCovered);
             client.Send(&p);
         }
         void ClientGameManager::RespondTrucoRequest(int trucoResult)

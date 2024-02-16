@@ -153,6 +153,10 @@ namespace TrucoGame {
 			roundAndTurnMutex.lock();
 			roundAndTurnState = RoundAndTurnState::RoundEnded;
 			roundAndTurnMutex.unlock();
+
+			std::chrono::seconds sleepDuration(2);
+			std::this_thread::sleep_for(sleepDuration);
+
 			// TODO: update score on the screen, clear cards from hands
 		}
 
@@ -203,7 +207,6 @@ namespace TrucoGame {
 			gameModel->RequestTruco();
 		}
 		void GMController::UserSelectedCard(int cardIndex, bool isCovered) {
-			// TODO: disable card button
 			gameModel->PlayCard(cardIndex, isCovered);
 		}
 		void GMController::UserRespondedTruco(int trucoResult) {
