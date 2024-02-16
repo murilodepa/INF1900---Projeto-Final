@@ -38,7 +38,7 @@ namespace TrucoGame {
             int nextTurnPlayer = 0;
             int nextRoundPlayer = 0;
         public:
-            void waitForPlayersToConnect();
+            void waitForPlayersToConnect(int numberOfHumanPlayers);
             void startGame();
             int startRound();
             int startElevenHandRound(int team, std::vector<Card> playerHands[], Card tableCard);

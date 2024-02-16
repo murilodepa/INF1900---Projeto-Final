@@ -63,6 +63,7 @@ set(HEADER_FILES
     "views/utils/StakesValueEnum.h"
     "views/utils/StateView.h"
     "views/utils/UtilsView.h"
+    "views/utils/StartInputWindow.h"
 )
 
 # Include directories

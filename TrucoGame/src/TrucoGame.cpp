@@ -9,13 +9,14 @@
 #include "../include/models/Card.h"
 #include "../include/models/server/ServerGameManager.h"
 #include "../include/models/client/ClientGameManager.h"
+#include "../include/views/utils/StartInputWindow.h"
 
-void Server() {
+void Server(int numberOfHumanPlayers) {
     using namespace TrucoGame::Models;
     ServerGameManager gameManager;
 
     //std::thread clientThread(Client);
-    gameManager.waitForPlayersToConnect();
+    gameManager.waitForPlayersToConnect(numberOfHumanPlayers);
 
     int gameWinner = -1;
     int roundWinner = -1;
@@ -43,21 +44,24 @@ void Server() {
     while (true) {}
 }
 
+
+
+
 int main()
 {
-    int choice;
+    using namespace TrucoGame::UtilsView;
+
+    StartInputWindow startInput;
+    int choice = startInput.GetUserServerClientInput();
     std::string ip = "127.0.0.1";
 
-    std::cout << "1 - SERVER \n2 - CLIENT\n";
-    std::cin >> choice;
     if (choice == 1) {
-        std::thread tcpThread(Server);
+        int numberOfPlayers = startInput.GetNumberOfPlayersInput();
+        std::thread tcpThread(Server, numberOfPlayers);
         tcpThread.detach();
     }
     else {
-        std::cin >> ip;
-     //   std::thread tcpThread(Client);
-     //   tcpThread.join();
+        ip = startInput.GetUserIpInput();
     }
 
     TrucoGame::Controller::Application applicationObject(ip);

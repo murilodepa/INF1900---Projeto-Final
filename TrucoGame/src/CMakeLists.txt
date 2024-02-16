@@ -53,6 +53,7 @@ set(SRC_FILES
     "views/utils/MutexView.cpp"
     "views/utils/StatesView.cpp"
     "views/utils/UtilsView.cpp"
+    "views/utils/StartInputWindow.cpp"
 )
 
 # Add source to this project's executable.

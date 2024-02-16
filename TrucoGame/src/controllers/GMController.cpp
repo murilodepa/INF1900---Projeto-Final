@@ -233,7 +233,6 @@ namespace TrucoGame {
 			cardStruct.rank = CardRank(card.getNumber());
 			cardStruct.suit = CardSuit(card.getSuit());
 			return cardStruct;
-
 		}
 	}
 }

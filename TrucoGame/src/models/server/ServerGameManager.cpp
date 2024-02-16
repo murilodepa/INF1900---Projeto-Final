@@ -4,18 +4,17 @@
 
 
 #define NUM_OF_PLAYERS 4
-#define NUM_OF_HUMANS 1
 #define DEFAULT_PORT 59821
 
 namespace TrucoGame {
     namespace Models {
-        void ServerGameManager::waitForPlayersToConnect() {
+        void ServerGameManager::waitForPlayersToConnect(int numberOfHumanPlayers) {
             std::cout << "[SERVER] Starting Server Thread" << std::endl;
             tcpServer.Open(DEFAULT_PORT);
 
-            clients = tcpServer.AcceptPlayers(NUM_OF_HUMANS);
+            clients = tcpServer.AcceptPlayers(numberOfHumanPlayers);
 
-            for (int i = NUM_OF_HUMANS; i < NUM_OF_PLAYERS; i++) {
+            for (int i = numberOfHumanPlayers; i < NUM_OF_PLAYERS; i++) {
                 clients.push_back(new AIPlayer(i, &table));
             }
         }
