@@ -32,6 +32,7 @@ namespace TrucoGame {
 
 		void GMController::OnMyTurnStarted(bool canRequestTruco){
 			// TODO: enable card buttons and truco button if needed
+			gameView->notifyPlayer("Sua vez!");
 
 			isPlayerTurnToPlayMutex.lock();
 			isPlayerTurnToPlayState = IsPlayerTurnToPlayState::PlayerTurn;
@@ -73,7 +74,6 @@ namespace TrucoGame {
 
 		void GMController::OnRoundStarted(Card tableCard, std::vector<Card> handCards){
 			// TODO: show hand cards and table card (keep card buttons disabled)
-
 			roundScoreMutex.lock();
 			gameView->scoreView.changeRoundScoreText(int(1));
 			roundScoreMutex.unlock();
@@ -113,7 +113,8 @@ namespace TrucoGame {
 		void GMController::OnElevenHandRoundStart(Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards){
 			// TODO: show partner cards, show hand cards (keep card buttons disabled)
 			// and show [yes, no] menu: where the response should somehow call for UserRespondedElevenHand
-			
+
+			gameView->notifyPlayer("Mão de onze");
 			std::vector<std::string> texturePathToCards;
 			for (Card& card : handCards)
 			{
@@ -175,12 +176,14 @@ namespace TrucoGame {
 
 		void GMController::OnTrucoAccepted(int currentStakes){
 			// TODO: update stakes on the screen
+			gameView->notifyPlayer("Truco aceito");
+
 			roundScoreMutex.lock();
 			gameView->scoreView.changeRoundScoreText(int(currentStakes));
 			roundScoreMutex.unlock();
 		}
 		void GMController::OnTrucoRefused(){
-			// TODO
+			gameView->notifyPlayer("Truco recusado");
 		}
 		void GMController::OnTrucoResquested(int requesterId, int currentStakes){
 			// TODO: show popup on the screen to responde [yes = 0, no = 1, raise = 2]
@@ -193,10 +196,10 @@ namespace TrucoGame {
 		}
 
 		void GMController::OnGameWon(){
-			// TODO
+			gameView->notifyPlayer("Você venceu!");
 		}
 		void GMController::OnGameLost(){
-			// TODO
+			gameView->notifyPlayer("Você perdeu!");
 		}
 
 		// ---------------------------

@@ -15,6 +15,7 @@
 //#include "buttonsTruco/RefuseTrucoButton.h"
 
 #include <functional> 
+#include <thread>
 
 // Define a constant to calculate the spacing between cards.
 #define CALCULATE_CARDS_SPACING 0.02f
@@ -53,6 +54,9 @@ namespace TrucoGame {
             std::vector<std::string> texturePathToMainPlayerCards;
             std::vector<std::string> texturePathToPartnerHandCards;
             std::string texturePathToturnedFaceUpCard;
+            TextView notificationsText;
+
+            std::thread* notificationThread = nullptr;
 
             void initialize(const std::vector<std::string>& playerNames);
 
@@ -79,6 +83,7 @@ namespace TrucoGame {
             void setTexturePathToPartnerHandCards(std::vector<std::string>& texturePathToPartnerHandCards);
             void setTexturePathToturnedFaceUpCard(std::string& texturePathToturnedFaceUpCard);
             void discardCard();
+            void notifyPlayer(std::string message);
 
             TableView tableView;
             ScoreView scoreView;
