@@ -75,6 +75,9 @@ namespace TrucoGame {
 			
 			CardStruct cardStruct;
 
+			roundScoreMutex.lock();
+			roundScoreState = RoundScoreState::One;
+			roundScoreMutex.unlock();
 			cardStruct.rank = CardRank(tableCard.getNumber());
 			cardStruct.suit = CardSuit(tableCard.getSuit());
 			std::string texturePathToturnedFaceUpCard = UtilsView::findTexturePathByNumberAndSuit(cardStruct);
@@ -126,6 +129,9 @@ namespace TrucoGame {
 
 		void GMController::OnTrucoAccepted(int currentStakes){
 			// TODO: update stakes on the screen
+			roundScoreMutex.lock();
+			roundScoreState = RoundScoreState(currentStakes);
+			roundScoreMutex.unlock();
 		}
 		void GMController::OnTrucoRefused(){
 			// TODO
@@ -133,7 +139,9 @@ namespace TrucoGame {
 		void GMController::OnTrucoResquested(int requesterId, int currentStakes){
 			// TODO: show popup on the screen to responde [yes = 0, no = 1, raise = 2]
 			// where the response should somehow call for UserRespondedTruco
-
+			roundScoreMutex.lock();
+			roundScoreState = RoundScoreState(currentStakes);
+			roundScoreMutex.unlock();
 			int result = gameView->tableView.trucoReceived(currentStakes);
 			UserRespondedTruco(result);
 		}

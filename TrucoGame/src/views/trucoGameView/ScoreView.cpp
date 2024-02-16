@@ -117,12 +117,9 @@ TrucoGame::View::TextView TrucoGame::View::ScoreView::getTheyText()
     return *theyText;
 }
 
-void TrucoGame::View::ScoreView::changeRoundScoreText(size_t newRoundScore)
+void TrucoGame::View::ScoreView::changeRoundScoreText(int newRoundScore)
 {
-    size_t roundScore = std::stoul(getRoundScoreText().getString().toAnsiString());
-    if (roundScore != newRoundScore) {
-        roundScoreText->setString(std::to_string(newRoundScore));
-    }
+    roundScoreText->setString(std::to_string(newRoundScore));
 }
 
 void TrucoGame::View::ScoreView::setTextsFont(const std::string& fontPath)
@@ -132,7 +129,7 @@ void TrucoGame::View::ScoreView::setTextsFont(const std::string& fontPath)
 
 void TrucoGame::View::ScoreView::initializeTexts(const float scoreRectangleWidth)
 {
-    roundScoreText = new TextView(std::to_string(0), CALCULATE_SCORE_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
+    roundScoreText = new TextView(std::to_string(1), CALCULATE_SCORE_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
     weText = new TextView("Nós", CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
     theyText = new TextView("Eles", CALCULATE_WE_AND_THEY_TEXT_CHARACTER_SIZE, scoreRectangleWidth, BORDER_COLOR, Text::Regular);
 }

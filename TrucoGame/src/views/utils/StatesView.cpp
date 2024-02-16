@@ -7,3 +7,4 @@ DiscardCardState discardCardState;
 CardState cardState;
 PlayerIdState playerIdState;
 CardStruct cardStructState;
+RoundScoreState roundScoreState;

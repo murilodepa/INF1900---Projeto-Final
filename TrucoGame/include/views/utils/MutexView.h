@@ -11,4 +11,6 @@ extern std::mutex discardCardMutex;
 extern std::mutex cardMutex;
 extern std::mutex playerIdMutex;
 extern std::mutex cardStructMutex;
+extern std::mutex roundScoreMutex;
+
 #endif // MUTEX_VIEW_H

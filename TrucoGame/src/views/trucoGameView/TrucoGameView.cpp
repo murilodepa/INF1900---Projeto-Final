@@ -137,6 +137,10 @@ void TrucoGame::View::TrucoGameView::drawScore(GraphicManager* pGraphicManager)
 		pGraphicManager->drawElement(scoreView.getTheirCircles(i));
 	}
 
+	roundScoreMutex.lock();
+	scoreView.changeRoundScoreText(int(roundScoreState));
+	roundScoreMutex.unlock();
+
 	pGraphicManager->drawElement(scoreView.getRoundScoreText());
 	pGraphicManager->drawElement(scoreView.getWeText());
 	pGraphicManager->drawElement(scoreView.getTheyText());

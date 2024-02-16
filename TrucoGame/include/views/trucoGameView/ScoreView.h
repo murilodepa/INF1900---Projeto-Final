@@ -85,7 +85,7 @@ namespace TrucoGame {
 			TextView getWeText();
 			TextView getTheyText();
 
-			void changeRoundScoreText(size_t newRoundScore); // TODO Enum 1 - 2 -3
+			void changeRoundScoreText(int newRoundScore); // TODO Enum 1 - 2 -3
 		};
 	}
 }
