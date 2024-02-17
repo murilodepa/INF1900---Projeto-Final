@@ -37,10 +37,9 @@ Na opção de truco, o jogador seguinte receberá um popup sobre aceitar ou não
 
 ![image](https://github.com/murilodepa/INF1900-Projeto-Final/assets/37109251/3e1030af-58e4-4ebf-a7a7-4e14e04a181f)
 
-## Documentação
-Os arquivos de documentação estão anexados ao projeto e encontram-se na pasta Documentos(tcp_INF1900.pdf e Requisitos_INF1900.pdf).
-
-
 Quando um time atingir sozinho 11 pontos no jogo, as cartas da equipe serão reveladas e um popup aparecerá perguntando se o jogador aceita jogar a rodada.   
 
 O time que atingir primeiro os 12 pontos ganha o jogo.
+
+## Documentação
+Os arquivos de documentação estão anexados ao projeto e encontram-se na pasta Documentos(tcp_INF1900.pdf e Requisitos_INF1900.pdf).
