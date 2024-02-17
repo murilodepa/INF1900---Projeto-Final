@@ -14,6 +14,7 @@ void TrucoGame::View::TableView::initialize(Vector2f windowSize, Vector2f& initi
 
 	setTextureFromPath(CARD_BACK_TEXTURE_PATH);
 	
+	this->initialDeckPositionVector2f = initialDeckPositionVector2f;
 	cardTurnedFaceUp = new CardView(initialDeckPositionVector2f, *texture, cardScale);
 	deck = new CardView(initialDeckPositionVector2f, backCardTexture, cardScale);
 
@@ -80,6 +81,46 @@ void TrucoGame::View::TableView::moveDeckAndTurnUpCard(const float cardScale, fl
 	delete animationThread;
 }
 
+int TrucoGame::View::TableView::trucoReceived(int trucoValue) {
+	std::string popupMessage = "Truco de " + std::to_string(trucoValue) + "!";
+	int result = MessageBoxA(NULL, "Aceita o truco?", popupMessage.c_str(), MB_YESNO);
+
+	switch (result)
+	{
+	case IDYES:
+		//Truco accepted
+		result = MessageBoxA(NULL, "Aumenta o valor do Truco?", popupMessage.c_str(), MB_YESNO);
+
+		switch (result)
+		{
+		case IDYES:
+			//Increase Truco's value
+			return 2;
+		case IDNO:
+			break;
+		}
+
+		return 0;
+	case IDNO:
+		//Truco was not accepted
+		return 1;
+	}
+}
+
+bool TrucoGame::View::TableView::elevenHandReceived() {
+	std::string popupMessage = "Mão de 11!";
+	int result = MessageBoxA(NULL, "Aceita o jogo?", popupMessage.c_str(), MB_YESNO);
+
+	switch (result)
+	{
+	case IDYES:
+		return true;
+	case IDNO:
+		//ElevenHand was not accepted
+		return false;
+	}
+}
+
 void TrucoGame::View::TableView::setTurnedFaceUpCardTexture(std::string& texturePath)
 {
 	this->turnedFaceUpCardTexture = UtilsView::loadTexture(texturePath);
@@ -90,4 +131,22 @@ void TrucoGame::View::TableView::setTextureFromPath(const std::string& texturePa
 	this->texture = new Texture(UtilsView::loadTexture(texturePath));
 }
 
+TrucoGame::View::CardView* TrucoGame::View::TableView::getCardTurnedFaceUp()
+{
+	return cardTurnedFaceUp;
+}
 
+TrucoGame::View::CardView* TrucoGame::View::TableView::getDeck()
+{
+	return deck;
+}
+
+Vector2f TrucoGame::View::TableView::getDeckPosition()
+{
+	return cardTurnedFaceUpAndDeck.deckPosition;
+}
+
+float TrucoGame::View::TableView::getDeckRotation()
+{
+	return cardTurnedFaceUpAndDeck.deckRotation;
+}

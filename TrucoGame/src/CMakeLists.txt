@@ -16,6 +16,7 @@ set(SRC_FILES
     # Controllers
     "controllers/Application.cpp"
     "controllers/TableController.cpp"
+    "controllers/GMController.cpp"
 
     # Models
     "models/client/ClientGameManager.cpp"
@@ -35,19 +36,24 @@ set(SRC_FILES
     "views/button/ButtonBase.cpp"
     "views/mouse/MouseState.cpp"
     "views/text/TextView.cpp"
+    "views/trucoGameView/buttonsTruco/AcceptTrucoButton.cpp"
     "views/trucoGameView/buttonsTruco/CardButton.cpp"
-    "views/trucoGameView/buttonsTruco/IncreaseScoreButton.cpp"
-     "views/trucoGameView/buttonsTruco/TrucoButton.cpp"
+    "views/trucoGameView/buttonsTruco/IncreaseStakesButton.cpp"
+    "views/trucoGameView/buttonsTruco/RefuseTrucoButton.cpp"
+    "views/trucoGameView/buttonsTruco/TrucoButton.cpp"
     "views/trucoGameView/player/PlayerCards.cpp"
     "views/trucoGameView/player/PlayerView.cpp"
     "views/trucoGameView/Animator.cpp"
     "views/trucoGameView/CardView.cpp"
+    "views/trucoGameView/PopUpTruco.cpp"
     "views/trucoGameView/ScoreView.cpp"
     "views/trucoGameView/TableView.cpp"
     "views/trucoGameView/TrucoGameView.cpp"
     "views/GraphicManager.cpp"
     "views/utils/MutexView.cpp"
+    "views/utils/StatesView.cpp"
     "views/utils/UtilsView.cpp"
+    "views/utils/StartInputWindow.cpp"
 )
 
 # Add source to this project's executable.

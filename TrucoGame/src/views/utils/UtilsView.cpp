@@ -55,3 +55,10 @@ std::string TrucoGame::UtilsView::findTexturePathByNumberAndSuit(CardStruct& car
     // Construct and return the path to the image file
     return DEFAULT_TEXTURE_PATH + toString(cardStruct.suit) + "/" + cardRankToString(cardStruct.rank) + IMAGE_EXTENSION;
 }
+
+Vector2f TrucoGame::UtilsView::getPositionTextInButton(float x, float y, float width, float height, float textWidth, float textHeight)
+{
+    float textX = x + ((width - textWidth) / 2);
+    float textY = y + ((height - textHeight) / 2) - 0.2f * textHeight;
+    return Vector2f(textX, textY);
+}

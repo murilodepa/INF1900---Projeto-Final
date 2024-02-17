@@ -40,3 +40,10 @@ float TrucoGame::View::TextView::getHalfTextWidth() const
 {
 	return width / 2;
 }
+
+void TrucoGame::View::TextView::setText(std::string text) {
+	setString(text);
+	sf::FloatRect localBounds = this->getLocalBounds();
+	width = localBounds.width;
+	height = localBounds.height;
+}

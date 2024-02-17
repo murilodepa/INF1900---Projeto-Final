@@ -6,6 +6,9 @@
 
 namespace TrucoGame {
     namespace View {
+
+        typedef std::function<void(Sprite*, Vector2f, int, bool)> CardButtonClickEventHandler;
+
         class CardButton : public ButtonBase {
 
         private:
@@ -14,8 +17,7 @@ namespace TrucoGame {
             Vector2f discardOnTheTablePosition;
             float animationSpeed;
             Texture* cardTexture;
-
-            void discardCardOnTheTable();
+            size_t cardIndex;
 
         protected:
             void onHover();
@@ -24,11 +26,12 @@ namespace TrucoGame {
             void onIdle();
 
         public:
-            CardButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture);
+            CardButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture, size_t cardIndex);
             ~CardButton();
 
             bool getAreCardsInTheHandsOfThePlayer();
             void setAreCardsInTheHandsOfThePlayer(bool areCardsInTheHandsOfThePlayer);
+            CardButtonClickEventHandler cardButtonClick;
         };
     }
 }

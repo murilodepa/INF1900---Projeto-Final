@@ -9,21 +9,14 @@
 #include "../include/models/Card.h"
 #include "../include/models/server/ServerGameManager.h"
 #include "../include/models/client/ClientGameManager.h"
+#include "../include/views/utils/StartInputWindow.h"
 
-void Client() {
-    using namespace TrucoGame::Models;
-    ClientGameManager clientGameManager;
-    clientGameManager.Start("127.0.0.1");
-
-    while (true) {}
-}
-
-void Server() {
+void Server(int numberOfHumanPlayers) {
     using namespace TrucoGame::Models;
     ServerGameManager gameManager;
 
-    std::thread clientThread(Client);
-    gameManager.waitForPlayersToConnect();
+    //std::thread clientThread(Client);
+    gameManager.waitForPlayersToConnect(numberOfHumanPlayers);
 
     int gameWinner = -1;
     int roundWinner = -1;
@@ -51,27 +44,28 @@ void Server() {
     while (true) {}
 }
 
-void TestTcp() {
-    int choice;
-    std::cout << "1 - SERVER \n2 - CLIENT\n";
-    std::cin >> choice;
-    if (choice == 1) {
-        std::thread tcpThread(Server);
-        tcpThread.join();
-    }
-    else {
-        std::thread tcpThread(Client);
-        tcpThread.join();
-    }
-}
+
+
 
 int main()
 {
-    std::vector<std::string> names;
-    names = { "Caique", "Laert", "Murilo", "Vitor" };
+    using namespace TrucoGame::UtilsView;
 
-    TrucoGame::Application applicationObject(names);
-    applicationObject.run();
-    TestTcp();
+    StartInputWindow startInput;
+    int choice = startInput.GetUserServerClientInput();
+    std::string ip = "127.0.0.1";
+
+    if (choice == 1) {
+        int numberOfPlayers = startInput.GetNumberOfPlayersInput();
+        std::thread tcpThread(Server, numberOfPlayers);
+        tcpThread.detach();
+    }
+    else {
+        ip = startInput.GetUserIpInput();
+    }
+
+    TrucoGame::Controller::Application applicationObject(ip);
+    applicationObject.drawGameScreen();
+
     return 0;
 }

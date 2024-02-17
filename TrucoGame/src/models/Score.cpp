@@ -13,8 +13,6 @@ namespace TrucoGame {
         int Score::getStakes() { return stakes; }
         int Score::getTeam0TurnsWon() { return team0TurnsWon; }
         int Score::getTeam1TurnsWon() { return team1TurnsWon; }
-        int Score::getTeam0GameScore() { return team0GameScore; }
-        int Score::getTeam1GameScore() { return team1GameScore; }
 
         void Score::increaseStakes() 
         {

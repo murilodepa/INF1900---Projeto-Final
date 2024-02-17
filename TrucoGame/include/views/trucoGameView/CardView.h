@@ -16,6 +16,8 @@ namespace TrucoGame {
             float cardWidth;
             float cardHeight;
 
+            bool isCardBeingDiscarded;
+
         public:
             CardView() = default;
             CardView(Vector2f& cardPositionOnTable, Texture& texture, const float cardScale);
@@ -24,6 +26,9 @@ namespace TrucoGame {
             float getCardWidth() const;
             float getCardHeight() const;
             float getHalfCardWidth() const;
+
+            bool getIsCardBeingDiscarded();
+            void setIsCardBeingDiscarded(bool sCardBeingDiscarded);
         };
     }
 }

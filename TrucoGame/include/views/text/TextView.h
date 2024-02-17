@@ -22,6 +22,7 @@ namespace TrucoGame {
             TextView(const std::string& text, float constantToCalculateCharacterSize, float referenceMeasureToCalculateCharacterSize, Color textColor, Uint32 style);
             ~TextView();
 
+            void setText(std::string text);
             float getTextWidth() const;
             float getTextHeight() const;
             float getHalfTextWidth() const;

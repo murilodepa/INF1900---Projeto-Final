@@ -31,11 +31,16 @@ namespace TrucoGame {
             Packet* packetB;
 
             std::thread threadPlayerA([this, &packetA, players]() {
-                packetA = players[0]->WaitForPacket();
+                do {
+                    packetA = players[0]->WaitForPacket();
+                } while (!packetA);
+                
             });
 
             std::thread threadPlayerB([this, &packetB, players]() {
-                packetB = players[1]->WaitForPacket();
+                do{
+                    packetB = players[1]->WaitForPacket();
+                } while (!packetB);
             });
 
             threadPlayerA.join();

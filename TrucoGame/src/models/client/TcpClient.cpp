@@ -112,11 +112,15 @@ namespace TrucoGame {
                         case EndRound:
                         {
                             EndRoundPacket endRoundPacket(receivedPacket.payload);
+                            if (endRoundPacketReceived)
+                                endRoundPacketReceived(endRoundPacket);
                             break;
                         }
                         case EndTurn:
                         {
                             EndTurnPacket endTurn(receivedPacket.payload);
+                            if (endTurnPacketReceived)
+                                endTurnPacketReceived(endTurn);
                             break;
                         }
                         case PlayerPlay:
@@ -129,18 +133,22 @@ namespace TrucoGame {
                         case PlayerCard:
                         {
                             CardPacket cardPacket(receivedPacket.payload);
+                            if (cardPacketReceived)
+                                cardPacketReceived(cardPacket);
                             break;
                         }
                         case Truco:
                         {
                             TrucoPacket truco(receivedPacket.payload);
-                            trucoPacketReceived(truco);
+                            if(trucoPacketReceived)
+                                trucoPacketReceived(truco);
                             break;
                         }
                         case ElevenHand:
                         {
                             ElevenHandPacket elevenHandPacket(receivedPacket.payload);
-                            elevenHandPacketReceived(elevenHandPacket);
+                            if(elevenHandPacketReceived)
+                                elevenHandPacketReceived(elevenHandPacket);
                             break;
                         }
                         default:

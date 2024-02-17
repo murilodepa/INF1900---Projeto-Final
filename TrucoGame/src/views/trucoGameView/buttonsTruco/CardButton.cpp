@@ -1,51 +1,58 @@
 #include "../../../../include/views/trucoGameView/buttonsTruco/CardButton.h"
 #include "../../../../include/views/trucoGameView/Animator.h"
-#include "../../../../include/views/utils/MutexView.h"
 
 #include <thread>
-
-void TrucoGame::View::CardButton::discardCardOnTheTable()
-{
-	if (areCardsInTheHandsOfThePlayer) {
-		areCardsInTheHandsOfThePlayer = false;
-		std::thread* animationThread;
-
-		animationThread = new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo,
-			std::ref(*card),
-			discardOnTheTablePosition,
-			90.0f,
-			animationSpeed);
-
-		animationThread->detach();
-
-		delete animationThread;
-	}
-}
 
 
 void TrucoGame::View::CardButton::onPressLeft() 
 {
-	discardCardOnTheTable();
+	isPlayerTurnToPlayMutex.lock();
+	if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn) {
+		isPlayerTurnToPlayState = IsPlayerTurnToPlayState::NotPlayerTurn;
+		areCardsInTheHandsOfThePlayer = false;
+		cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, false);
+	}
+	isPlayerTurnToPlayMutex.unlock();
 }
 
 void TrucoGame::View::CardButton::onPressRight()
 {
-	uIThreadMutex.lock();
-	*cardTexture = UtilsView::loadTextureBack();
-	uIThreadMutex.unlock();
-	discardCardOnTheTable();
+	trucoRoundMutex.lock();
+	TrucoRoundState trucoRoundStateLocal = trucoRoundState;
+	trucoRoundMutex.unlock();
+
+	if (trucoRoundStateLocal != TrucoRoundState::IronHandRound)
+	{
+		isPlayerTurnToPlayMutex.lock();
+		if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn) {
+			isPlayerTurnToPlayState = IsPlayerTurnToPlayState::NotPlayerTurn;
+
+			uIThreadMutex.lock();
+			*cardTexture = UtilsView::loadTextureBack();
+			uIThreadMutex.unlock();
+			areCardsInTheHandsOfThePlayer = false;
+			cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, true);
+		}
+		isPlayerTurnToPlayMutex.unlock();
+	}
 }
 
 void TrucoGame::View::CardButton::onHover() {
-	this->setOutlineThickness(4);
+
+	isPlayerTurnToPlayMutex.lock();
+	if (isPlayerTurnToPlayState == IsPlayerTurnToPlayState::PlayerTurn) {
+		this->setOutlineThickness(4);
+	}
+	isPlayerTurnToPlayMutex.unlock();
 }
 
 void TrucoGame::View::CardButton::onIdle() {
 	this->setOutlineThickness(0);
 }
 
-TrucoGame::View::CardButton::CardButton(float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture) :
-	ButtonBase(x, y, width, height, hoverColor)
+TrucoGame::View::CardButton::CardButton(
+	float x, float y, float width, float height, Color hoverColor, Sprite* card, Vector2f& windowSize, float animationSpeed, Vector2f& discardOnTheTablePosition, Texture* cardTexture, size_t cardIndex) :
+	ButtonBase(x, y, width, height)
 {
 	this->setFillColor(Color::Transparent);
 	this->setOutlineColor(Color::Transparent);
@@ -56,6 +63,7 @@ TrucoGame::View::CardButton::CardButton(float x, float y, float width, float hei
 	this->discardOnTheTablePosition = discardOnTheTablePosition;
 	this->animationSpeed = animationSpeed;
 	this->cardTexture = cardTexture;
+	this->cardIndex = cardIndex;
 }
 
 TrucoGame::View::CardButton::~CardButton()

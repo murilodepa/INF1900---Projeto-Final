@@ -1,84 +1,46 @@
 # TrucoGame - Grupo 1
 
 ## Descrição do Projeto
-Neste projeto final, você deve criar um jogo de Truco em C++ que incorpora e demonstra de forma abrangente os princípios da Programação Orientada a Objetos (OO). O jogo de Truco deve ser totalmente funcional, com suporte para dois jogadores humanos e implementar todas as regras do jogo de Truco.
+Este projeto tem por objetivo a criação de um jogo virtual de Truco Paulista entre 2 ou 4 jogadores. Para o desenvolvimento foram utilizados a linguagem C++, biblioteca SFML para desenvolvimento da interface e o padrão de projeto MVC. 
 
-## Integrantes:
+
+## Integrantes
 * Murilo de Paula Araujo;
 * Caique Novaes Tsurumaki Pereira;
 * Laert Espagnoli Neto;
 * Vitor Luiz Bortoloti Pereira.
 
-## Conceitos de OO
-### 1. Classes e Herança:
-* Organize o projeto em classes que representem os elementos do jogo, como jogadores, cartas, rodadas, entre outros. Utilize herança quando aplicável para modelar relações de especialização entre as classes, como classes para diferentes tipos de cartas.
 
-### 2. Polimorfismo:
-* Aplique o polimorfismo para permitir o tratamento genérico de objetos, como cartas. Isso pode ser feito através de funções virtuais em classes base, permitindo diferentes implementações em classes derivadas, se necessário.
+## Primeiros Passos
+Primeiro, copie o repositório. Em seguida, entre na sua IDE favorita e faça a build do projeto. Execute pela IDE ou pelo executavel na pasta bin. 
+> git clone https://github.com/murilodepa/INF1900-Projeto-Final.git
 
-### 3. Encapsulamento:
-* Mantenha os detalhes de implementação ocultos e forneça interfaces bem definidas para interagir com as classes. Isso inclui o acesso aos membros de classe (utilize modificadores de acesso como public, private e protected) e o uso de getters e setters quando apropriado.
 
-### 4. Abstração:
-* Abstraia os conceitos do jogo de Truco em classes que representem entidades reais, como jogadores, cartas e partidas. Isso permite que o código seja mais fácil de entender e manter.
+## Como jogar?
+Ao executar o programa o jogador é apresentado a um popup com as opções Server e Client.
 
-## Concorrência e Multithreading
+![image](https://github.com/murilodepa/INF1900-Projeto-Final/assets/37109251/14ff80bb-f5a7-4fd1-8003-7e7681123265)
 
-### 5. Integração de Threads:
-* Integre threads de maneira significativa para realizar operações em paralelo, como a execução das ações dos jogadores e a contagem de pontos, demonstrando a aplicação dos conceitos de multithreading. Por exemplo, permita que os jogadores façam suas escolhas simultaneamente.
+A opção de Server permite o jogador definir o número de pessoas esperadas para o jogo, os demais jogadores serão bots e integraram o jogo para compor os 4 jogadores necessários.
 
-### 6. Técnicas de Sincronização:
-* Utilize técnicas de sincronização e exclusão mútua para garantir a integridade dos dados compartilhados entre threads, evitando problemas como condições de corrida. Analise cuidadosamente seu código em busca de possíveis condições de corrida, onde duas ou mais threads podem acessar os mesmos dados simultaneamente. Utilize exclusão mútua para evitar essas condições de corrida, garantindo que as operações críticas sejam feitas de forma segura e ordenada.
+![image](https://github.com/murilodepa/INF1900-Projeto-Final/assets/37109251/c2e459c5-68fb-49f1-9d72-cacf3c6e89a5)
 
-## Tratamento de Exceção.
+Na opção de Client, é requerido o número de IP do servidor(utilizamos como base 127.0.0.1).
 
-### 7. Implementação de Tratamento de Exceções:
-* Implemente tratamento de exceções para lidar com erros e situações excepcionais durante a execução do jogo, como movimentos inválidos dos jogadores ou problemas de alocação de memória.
+![image](https://github.com/murilodepa/INF1900-Projeto-Final/assets/37109251/4fd3d0ed-a429-4976-bf44-2e7ddc5f2b4d)
 
-## Interface de Usuário.
+É possível conectar varias instnâncias do jogo em um mesmo computador connectando via loopback ou em diferentes máquinas conetadas na mesma rede utilizando o IP do host ou em redes diferentes utilizando programas auxiliares como Hamachi ou ZeroTier. Nos testes realizados conseguimos conectar e jogar com 4 jogadores em redes diferentes utilizando ZeroTier.
 
-### 8. Criação de Interface de Usuário:
-* Crie uma interface de usuário amigável que permita aos jogadores interagirem com o jogo de Truco de forma intuitiva. Utilize a Win32 API (ou MFC) para criar e gerenciar janelas, controles e eventos, fornecendo uma experiência de usuário agradável. Isso inclui a representação gráfica das cartas, placar e mensagens informativas.
 
-## Utilização Adequada de Smart Pointers.
+A distribuição de cartas aleatória inicia automaticamente após a entrada dos jogadores e formação dos times(os times são formados pela ordem de entrada de cada participante). As interações de click e botão de truco possuem regras de apresentação e sua interação é feita pelo click do mouse. Nas cartas, o botão esquerdo do mouse define a ação de jogar a carta escolhida virada para baixo enquanto que o botão direito joga a carta normalmente na mesa.
 
-### 9. Utilização de Smart Pointers:
-* Utilize smart pointers para gerenciar objetos que requerem alocação dinâmica de memória, como instâncias de jogadores ou recursos dinâmicos. Garanta que a utilização dos smart pointers seja aplicada de forma apropriada para gerenciar a vida útil dos objetos, evitando vazamentos de memória e garantindo a liberação automática de recursos quando não mais necessários.
+Na opção de truco, o jogador seguinte receberá um popup sobre aceitar ou não o truco. No caso de aceitar outro popup aparecerá na tela perguntando sobre aumentar o valor do truco ou não. 
 
-## Serialização e Persistência.
+![image](https://github.com/murilodepa/INF1900-Projeto-Final/assets/37109251/3e1030af-58e4-4ebf-a7a7-4e14e04a181f)
 
-### 10. Serialização e Persistência:
-* Implemente a serialização de dados do jogo para permitir que os jogadores salvem e carreguem partidas de Truco em qualquer ponto do jogo. Utilize técnicas de serialização para gravar e ler dados do jogo em arquivos, garantindo a capacidade de persistência. Utilize std::filesystem para eventuais manipulações de diretórios, como salvar e carregar partidas em pastas específicas.
+Quando um time atingir sozinho 11 pontos no jogo, as cartas da equipe serão reveladas e um popup aparecerá perguntando se o jogador aceita jogar a rodada.   
 
-## Padrão arquitetural.
-
-### 11. Implementação de padrão arquitetural:
-* Implemente um padrão arquitetural em sua solução de forma a organizar o código visando potencializar propriedades importantes de OO. Espera-se aqui que seja implementado ou o padrão arquitetural MVC ou MVVM.
+O time que atingir primeiro os 12 pontos ganha o jogo.
 
 ## Documentação
-### 12. Geração de documentação:
-* Deve ser gerado um documento descrevendo os requisitos do sistema. O documento deve seguir o template disponibilizado no arquivo anexo a essa atividade (ExemploRequisitosProjetoFinal.docx)
-* Além da documentação interna do código e o documento de requisitos, vocês devem gerar diagramas e esquemáticos do projeto. Pelo menos deve ser entregue o diagrama de classes do projeto. Também é recomendada a entrega de fluxograma e/ou diagramas de sequência de partes específicas do projeto.
-* Toda a documentação deve estar identificada no README.md do repositório.
-
-## Grupos
-* O projeto deverá ser realizado em grupo de 4 pessoas.
-* Os grupos previamente definidos estão no arquivoGrupos.pdftambém junto a essa atividade.
-* Os grupos foram definidos pelo SiDi de forma a balancear a experiência da equipe.
-* Os líderes de cada grupo estão marcados em verde e serão responsáveis pela criação do repositório, bem como o envio do link do projeto no Github que será usado para a entrega.
-
-## Critérios de Avaliação
-* Seu projeto será avaliado com base nos seguintes critérios:
-* Organização e estrutura do código, demonstrando a aplicação efetiva dos princípios da Programação Orientada a Objetos.
-* Utilização apropriada dos conceitos de C++ aprendidos no curso, com ênfase em multithreading, tratamento de exceção, interface de usuário, smart pointers e serialização.
-* Eficiência do código para garantir um desempenho significativo, demonstrando a aplicação prática dos conceitos de threads e smart pointers.
-* Comentários explicativos ao longo do código, destacando a aplicação dos tópicos aprendidos no curso.
-
-## Entrega
-* Deve ser criado um repositório para o projeto no Github. A entrega final deve ser identificada por uma Github tag.
-* As informações relevantes sobre o software, bem como o número do grupo e o nome dos membros que realizaram a entrega devem estar no arquivo README.md.
-* O repositório deve estar acessível para a nossa correção.
-* A planilha com o link do projeto no Github deverá ser preenchida até a data de entrega **apenas pelo líder da equipe.**
-* A data da tag será checada para avaliar o momento da entrega.
-
-**Data de entrega: 26/01/2024 até 23h59.**
+Os arquivos de documentação estão anexados ao projeto e encontram-se na pasta Documentos(tcp_INF1900.pdf e Requisitos_INF1900.pdf).

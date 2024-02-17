@@ -12,6 +12,7 @@ set(HEADER_FILES
     # Controllers
     "controllers/Application.h"
     "controllers/TableController.h"
+    "controllers/GMController.h"
 
     # Models
     "models/client/TcpClient.h"
@@ -41,21 +42,28 @@ set(HEADER_FILES
     "views/button/ButtonBase.h"
     "views/mouse/MouseState.h"
     "views/text/TextView.h"
+
+    "views/trucoGameView/buttonsTruco/AcceptTrucoButton.h"
     "views/trucoGameView/buttonsTruco/CardButton.h"
-    "views/trucoGameView/buttonsTruco/IncreaseScoreButton.h"
+    "views/trucoGameView/buttonsTruco/IncreaseStakesButton.h"
+    "views/trucoGameView/buttonsTruco/RefuseTrucoButton.h"
     "views/trucoGameView/buttonsTruco/TrucoButton.h"
     "views/trucoGameView/player/PlayerCards.h"
     "views/trucoGameView/player/PlayerView.h"
     "views/trucoGameView/Animator.h"
     "views/trucoGameView/CardDeck.h"
     "views/trucoGameView/CardView.h"
+    "views/trucoGameView/PopUpTruco.h"
     "views/trucoGameView/ScoreView.h"
     "views/trucoGameView/TableView.h"
     "views/trucoGameView/TrucoGameView.h"
     "views/GraphicManager.h"
     "views/utils/CardsEnum.h"
     "views/utils/MutexView.h"
+    "views/utils/StakesValueEnum.h"
+    "views/utils/StateView.h"
     "views/utils/UtilsView.h"
+    "views/utils/StartInputWindow.h"
 )
 
 # Include directories

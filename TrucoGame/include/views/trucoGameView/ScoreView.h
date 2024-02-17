@@ -54,12 +54,15 @@ namespace TrucoGame {
 			RectangleShape rectangleDivWidth;
 			RectangleShape rectangleDivHeight;
 
-			std::vector<sf::CircleShape> ourCircles;
-			std::vector<sf::CircleShape> theirCircles;
+			Vector2f roundScoreTextPosition;
+			float spacingScoreTextWidth;
 
-			TextView *roundScoreText, *weText, *theyText;
+			TextView *roundScoreText, *weScoreText, *theyScoreText, *weText, *theyText;
 			Font textsFont;
 			size_t numRounds = 3;
+
+			std::vector<sf::CircleShape> ourCircles;
+			std::vector<sf::CircleShape> theirCircles;
 
 			void createScoreRectangle(float rectangleScoreXPosition, float rectangleScoreYPosition, 
 				Vector2f& scoreRectangleDimensions, std::shared_ptr<float>& rectangleScoreWidth, 
@@ -74,6 +77,10 @@ namespace TrucoGame {
 			ScoreView(const Vector2f& windowSize);
 			~ScoreView();
 
+			void updateScoreColor(int turn, int verifyColor);
+			void resetScoreColor();
+
+
 			RectangleShape getScoreRectangle();
 			RectangleShape getRectangleDivWidth();
 			RectangleShape getRectangleDivHeight();
@@ -82,10 +89,13 @@ namespace TrucoGame {
 			CircleShape getTheirCircles(size_t index);
 
 			TextView getRoundScoreText();
+			TextView getWeScoreText();
+			TextView getTheyScoreText();
 			TextView getWeText();
 			TextView getTheyText();
 
-			void changeRoundScoreText(size_t newRoundScore); // TODO Enum 1 - 2 -3
+			void changeGameScoreText(int team0Score, int team1Score);
+			void changeRoundScoreText(int newRoundScore); // TODO Enum 1 - 2 -3
 		};
 	}
 }

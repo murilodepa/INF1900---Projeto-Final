@@ -7,17 +7,20 @@ namespace TrucoGame {
         class PlayerPlayPacket : public Packet {
         public:
             int playerId;
+            int canRequestTruco;
 
         public:
             PlayerPlayPacket(const nlohmann::json& j) :
                 Packet(j),
-                playerId(j["payload"]["playerId"].get<int>())
+                playerId(j["payload"]["playerId"].get<int>()),
+                canRequestTruco(j["payload"]["canRequestTruco"].get<int>())
             {
             }
 
-            PlayerPlayPacket(int playerId) :
+            PlayerPlayPacket(int playerId, int canRequestTruco) :
                 Packet(PacketType::PlayerPlay),
-                playerId(playerId)
+                playerId(playerId),
+                canRequestTruco(canRequestTruco)
             {
                 ToJson(payload);
             }
@@ -25,6 +28,7 @@ namespace TrucoGame {
             void ToJson(nlohmann::json& j) const override {
                 Packet::ToJson(j);
                 j["payload"]["playerId"] = playerId;
+                j["payload"]["canRequestTruco"] = canRequestTruco;
             }
         };
     }
