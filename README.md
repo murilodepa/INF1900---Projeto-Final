@@ -1,7 +1,8 @@
 # TrucoGame - Grupo 1
 
 ## Descrição do Projeto
-Neste projeto final, você deve criar um jogo de Truco em C++ que incorpora e demonstra de forma abrangente os princípios da Programação Orientada a Objetos (OO). O jogo de Truco deve ser totalmente funcional, com suporte para dois jogadores humanos e implementar todas as regras do jogo de Truco.
+Este projeto tem por objetivo a criação de um jogo virtual de Truco Paulista entre 2 ou 4 jogadores. Para o desenvolvimento foram utilizados a linguagem C++, biblioteca SFML para desenvolvimento da interface e o padrão de projeto MVC. 
+
 
 ## Integrantes
 * Murilo de Paula Araujo;
