@@ -31,7 +31,7 @@ void TrucoGame::View::CardButton::onPressRight()
 			*cardTexture = UtilsView::loadTextureBack();
 			uIThreadMutex.unlock();
 			areCardsInTheHandsOfThePlayer = false;
-			cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, false);
+			cardButtonClick(card, discardOnTheTablePosition, this->cardIndex, true);
 		}
 		isPlayerTurnToPlayMutex.unlock();
 	}
