@@ -8,6 +8,7 @@ TrucoGame::View::CardView::CardView(Vector2f& cardPositionOnTable, Texture& text
 	this->setScale(cardScale, cardScale);
 	this->setPosition(cardPositionOnTable);
 	this->setTexture(texture);
+	this->isCardBeingDiscarded = false;
 }
 
 TrucoGame::View::CardView::~CardView()
@@ -28,4 +29,14 @@ float TrucoGame::View::CardView::getCardHeight() const
 float TrucoGame::View::CardView::getHalfCardWidth() const
 {
 	return this->getGlobalBounds().width / 2;
+}
+
+bool TrucoGame::View::CardView::getIsCardBeingDiscarded()
+{
+	return isCardBeingDiscarded;
+}
+
+void TrucoGame::View::CardView::setIsCardBeingDiscarded(bool isCardBeingDiscarded)
+{
+	this->isCardBeingDiscarded = isCardBeingDiscarded;
 }

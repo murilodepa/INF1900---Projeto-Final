@@ -52,27 +52,59 @@ namespace TrucoGame {
         }
 
         void GraphicManager::drawElement(sf::Sprite& sprite) {
-            window->draw(sprite);
+            try {
+                window->draw(sprite);
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         void GraphicManager::drawElement(CardView& cardView) {
-            window->draw(cardView);
+            try {
+                window->draw(cardView);
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
         }
         
         void GraphicManager::drawElement(ButtonBase& button) {
-            window->draw(button);
+            try {
+                window->draw(button);
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         void GraphicManager::drawElement(sf::RectangleShape& rectangleShape) {
-            window->draw(rectangleShape);
+            try {
+                window->draw(rectangleShape);
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         void GraphicManager::drawElement(sf::CircleShape& circleShape) {
-            window->draw(circleShape);
+            try
+            {
+                window->draw(circleShape);
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         void GraphicManager::drawElement(sf::Text& text) {
-            window->draw(text);
+            try
+            {
+                window->draw(text);
+            }
+            catch (const std::exception& e) {
+                std::cerr << e.what() << std::endl;
+            }
         }
 
         void GraphicManager::showElements() {

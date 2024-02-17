@@ -8,5 +8,6 @@ TrucoRoundState trucoRoundState;
 CheckTrucoRequestState checkTrucoRequestState;
 TurnState turnState;
 RoundState roundState;
+CheckSetupGameState checkSetupGameState;
 std::vector<sf::Sprite*> playersCardsOnTheTable;
 

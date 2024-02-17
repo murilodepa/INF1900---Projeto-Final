@@ -60,6 +60,12 @@ enum class CheckTrucoRequestState {
 };
 extern CheckTrucoRequestState checkTrucoRequestState;
 
+enum class CheckSetupGameState {
+    SetupGameHasBeenConfigured,
+    SetupGameHasNotBeenConfigured
+};
+extern CheckSetupGameState checkSetupGameState;
+
 extern std::vector<sf::Sprite*> playersCardsOnTheTable;
 #endif // STATE_VIEW_H
 

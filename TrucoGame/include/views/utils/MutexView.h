@@ -15,5 +15,7 @@ extern std::mutex roundScoreMutex;
 extern std::mutex trucoRoundMutex;
 extern std::mutex changePlayersCardsOnTheTableMutex;
 extern std::mutex checkTrucoRequestMutex;
+extern std::mutex setupGameMutex;
+extern std::mutex cardIsBeingDiscarded;
 
 #endif // MUTEX_VIEW_H

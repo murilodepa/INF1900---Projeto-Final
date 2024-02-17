@@ -36,6 +36,18 @@ namespace TrucoGame {
 				std::cerr << "Exception caught: " << e.what() << std::endl;
 			}
 		}
+		void Animator::protectMoveAndRotateSpriteTo(CardView& sprite, const Vector2f& destinationPosition, float finalRotation, float speed)
+		{
+			cardIsBeingDiscarded.lock();
+			sprite.setIsCardBeingDiscarded(true);
+			cardIsBeingDiscarded.unlock();
+
+			moveAndRotateSpriteTo(sprite, destinationPosition, finalRotation, speed);
+
+			cardIsBeingDiscarded.lock();
+			sprite.setIsCardBeingDiscarded(false);
+			cardIsBeingDiscarded.unlock();
+		}
 
 		void Animator::moveAndRotateSpriteTo(Sprite& sprite, const Vector2f& destinationPosition, float finalRotation, float speed)
 		{
@@ -107,7 +119,6 @@ namespace TrucoGame {
 
 		void Animator::moveAndFlipCardTurnedFaceUpTo(Sprite& sprite, Texture* texture, const std::string& newTexturePath, const Vector2f& destinationPosition, float speed, const float cardScale)
 		{
-
 			moveSpriteTo(sprite, destinationPosition, speed);
 			flipCard(sprite, 0.5f, texture, newTexturePath, cardScale, true);
 		}
@@ -244,6 +255,23 @@ namespace TrucoGame {
 				cardTurnedFaceUp->setPosition(Vector2f(0, 0));
 				deck->setRotation(0);
 				deck->setPosition(Vector2f(0, 0));
+
+				// Blocking wait state
+				while (true)
+				{
+					setupGameMutex.lock();
+					if (checkSetupGameState == CheckSetupGameState::SetupGameHasBeenConfigured)
+					{
+						setupGameMutex.unlock();
+						break;
+					}
+					setupGameMutex.unlock();
+					std::this_thread::sleep_for(std::chrono::seconds(1));
+				}
+
+				setupGameMutex.lock();
+				checkSetupGameState == CheckSetupGameState::SetupGameHasNotBeenConfigured;
+				setupGameMutex.unlock();
 
 				distributeCardsToPlayersMutex.lock();
 				distributeCardsToPlayersState = DistributeCardsToPlayersState::Distribute;

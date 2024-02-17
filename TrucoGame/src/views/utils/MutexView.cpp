@@ -13,3 +13,5 @@ std::mutex roundScoreMutex;
 std::mutex trucoRoundMutex;
 std::mutex changePlayersCardsOnTheTableMutex;
 std::mutex checkTrucoRequestMutex;
+std::mutex setupGameMutex;
+std::mutex cardIsBeingDiscarded;

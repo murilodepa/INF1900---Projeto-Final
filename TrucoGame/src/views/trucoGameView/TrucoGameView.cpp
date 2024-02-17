@@ -4,6 +4,7 @@
 #include "../../../include/views/utils/StatesView.h"
 
 #include <thread>
+#include <iostream>
 
 void TrucoGame::View::TrucoGameView::initialize(const std::vector<std::string>& playerNames)
 {
@@ -209,6 +210,7 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 	for (size_t player = 0; player < NUM_PLAYERS; player++) {
 		for (size_t card = 0; card < CARDS_IN_HAND; card++) {
 			CardView* cardView = &playerCards.cardsInHands[player][card];
+
 			float rotation = cardView->getRotation();
 			Texture* cardTexture = playerCards.getCardTexture(player, card);
 
@@ -297,7 +299,7 @@ void TrucoGame::View::TrucoGameView::distributeCardsToPlayers()
 			}
 			else {
 				*cardTexture = UtilsView::loadTextureBack();
-				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::moveAndRotateSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), 90.0f, animationSpeed));
+				animationThreads.push_back(new std::thread(&TrucoGame::View::Animator::protectMoveAndRotateSpriteTo, std::ref(*cardView), players[player]->getCardPosition(card), 90.0f, animationSpeed));
 			}
 		}
 	}
@@ -440,6 +442,20 @@ void TrucoGame::View::TrucoGameView::discardCard()
 	
 	if (player < NUM_PLAYERS && player >= 0 && cardIndex < CARDS_IN_HAND && cardIndex >= 0) {
 		CardView* cardView = &playerCards.cardsInHands[player][cardIndex];
+
+		// Blocking wait state
+		while (true)
+		{
+			cardIsBeingDiscarded.lock();
+			if (!cardView->getIsCardBeingDiscarded())
+			{
+				cardIsBeingDiscarded.unlock();
+				break;
+			}
+			cardIsBeingDiscarded.unlock();
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+		}
+
 		std::thread* animationThread;
 
 		changePlayersCardsOnTheTableMutex.lock();
@@ -519,14 +535,23 @@ void TrucoGame::View::TrucoGameView::verifyRoundEnded()
 }
 
 void TrucoGame::View::TrucoGameView::notifyPlayer(std::string message) {
-	
-	if(notificationThread != nullptr)
-		notificationThread->join();
-	notificationThread = new std::thread([this](std::string message) {
-		notificationsText.setText(message);
-		notificationsText.setPosition(windowSize.x / 2 - notificationsText.getHalfTextWidth(), windowSize.y / 2 + notificationsText.getTextHeight() * 2); 
-		std::chrono::seconds sleepDuration(2);
-		std::this_thread::sleep_for(sleepDuration);
-		notificationsText.setText("");
-		}, message);
+	try {
+		if (notificationThread != nullptr)
+			notificationThread->join();
+		notificationThread = new std::thread([this](std::string message) {
+			notificationsText.setText(message);
+			notificationsText.setPosition(windowSize.x / 2 - notificationsText.getHalfTextWidth(), windowSize.y / 2 + notificationsText.getTextHeight() * 2);
+			std::chrono::seconds sleepDuration(2);
+			std::this_thread::sleep_for(sleepDuration);
+			notificationsText.setText("");
+			}, message);
+	}
+	catch (const std::exception& e) {
+		// Handle the exception here, such as logging or displaying an error message.
+		std::cerr << "Exception caught: " << e.what() << std::endl;
+	}
+	catch (...) {
+		// Catch all other exceptions (not recommended, but can be used for generic handling)
+		std::cerr << "Unknown exception caught" << std::endl;
+	}
 }

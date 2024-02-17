@@ -127,10 +127,10 @@ namespace TrucoGame {
 				roundState = RoundState::RoundRunning;
 				turnState = TurnState::TurnRunning;
 			}
-			//if (roundAndTurnState != RoundAndTurnState::RoundEnded) {
-			//	roundAndTurnState = RoundAndTurnState::RoundAndTurnRunning;
-			//}
 			roundMutex.unlock();
+			setupGameMutex.lock();
+			checkSetupGameState = CheckSetupGameState::SetupGameHasBeenConfigured;
+			setupGameMutex.unlock();
 		}
 		void GMController::OnElevenHandRoundStart(Card tableCard, std::vector<Card> handCards, std::vector<Card> partnerHandCards){
 			// TODO: show partner cards, show hand cards (keep card buttons disabled)
@@ -165,12 +165,18 @@ namespace TrucoGame {
 				gameView->coverPartnerHandCardsInElevenHandRound();
 			}
 			UserRespondedElevenHand(result);
+			setupGameMutex.lock();
+			checkSetupGameState = CheckSetupGameState::SetupGameHasBeenConfigured;
+			setupGameMutex.unlock();
 		}
 		void GMController::OnIronHandRoundStarted(Card tableCard){
 			// TODO: just show table card (keep card buttons disabled)
 			trucoRoundMutex.lock();
 			trucoRoundState = TrucoRoundState::IronHandRound;
 			trucoRoundMutex.unlock();
+			setupGameMutex.lock();
+			checkSetupGameState = CheckSetupGameState::SetupGameHasBeenConfigured;
+			setupGameMutex.unlock();
 		}
 
 		void GMController::OnRoundEnded(int winnerTeamId, int team0Score, int team1Score){
